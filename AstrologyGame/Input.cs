@@ -78,31 +78,6 @@ namespace AstrologyGame
             return controls;
         }
 
-
-        /// <summary>
-        /// Used to increment or decrement a selected index, usually when the player is in a menu where they make a selection.
-        /// </summary>
-        /// <param name="controls">A list of controls currently being pressed.</param>
-        /// <param name="currentIndex">The current selected index.</param>
-        /// <param name="maxIndex">The highest index that can be selected.</param>
-        /// <param name="incrementControl">The Control that causes the index to increment.</param>
-        /// <param name="decrementControl">The Control that causes the index to decrement.</param>
-        /// <returns></returns>
-        public static int PickIndex(List<Control> controls, int currentIndex, int maxIndex, Control incrementControl = Control.Down, Control decrementControl = Control.Up)
-        {
-            int newIdx = currentIndex;
-
-            if (controls.Contains(incrementControl))
-                newIdx++;
-            else if (controls.Contains(decrementControl))
-                newIdx--;
-
-            if (newIdx < 0 || newIdx >= maxIndex)
-                return currentIndex;
-
-            return newIdx;
-        }
-
         public static OrderedPair ControlsToMovePair(List<Control> controls)
         {
             int x = 0;

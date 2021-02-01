@@ -12,7 +12,7 @@ namespace AstrologyGame.DynamicObjects
         public int Count { get; set; } = 1;
         public Item()
         {
-            interactions.Add(Interaction.PickUp);
+            interactions.Add(Interaction.Get);
         }
     }
 

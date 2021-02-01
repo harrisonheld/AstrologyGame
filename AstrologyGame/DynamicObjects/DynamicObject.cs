@@ -64,7 +64,7 @@ namespace AstrologyGame.DynamicObjects
                 case Interaction.Attack:
                     Attack(interactor);
                     return;
-                case Interaction.PickUp:
+                case Interaction.Get:
                     PickUp(interactor);
                     return;
             }
@@ -87,13 +87,5 @@ namespace AstrologyGame.DynamicObjects
         {
             // things like changing the texture, changing color, etc.
         }
-    }
-
-    public enum Interaction
-    {
-        Read, // read a book/paper
-        Open, // open a container
-        Attack, // attack this object
-        PickUp, // another object picks up this object
     }
 }

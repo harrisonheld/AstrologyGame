@@ -87,6 +87,7 @@ namespace AstrologyGame
         {
             PauseWhenOpened = true;
             rect = new Rectangle(5, 5, 300, 9*64); // also an arbitrary size
+            Text = "";
         }
 
         public virtual void Draw()
@@ -111,6 +112,98 @@ namespace AstrologyGame
         }
     }
 
+    // a menu where you can select one thing in a vertical list
+    abstract class SelectMenu : Menu
+    {
+        protected int selectedIndex = 0;
+        protected int maxIndex = -1;
+        // what controls are used to move the selection
+        public Control IncrementControl { get; set; } = Control.Down;
+        public Control DecrementControl { get; set; } = Control.Up;
+        public Control SelectControl { get; set; } = Control.Enter;
+
+        // the user has pressed enter (or whatever key is used to signify selecting)
+        public abstract void SelectionMade();
+
+        public override void HandleInput(List<Control> controls)
+        {
+            base.HandleInput(controls);
+
+            // if maxIndex hasn't been reassigned yet
+            if (maxIndex == -1)
+                return;
+
+            // increment or decrement index
+            if (controls.Contains(IncrementControl))
+                selectedIndex++;
+            else if (controls.Contains(DecrementControl))
+                selectedIndex--;
+            // clamp index in case it went negative or went too high
+            selectedIndex = Math.Clamp(selectedIndex, 0, maxIndex);
+
+            if (controls.Contains(SelectControl))
+                SelectionMade();
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            // coords to draw the select cursor at
+            OrderedPair coords = IndexToCoords(selectedIndex);
+            spriteBatch.Draw(cursorTexture, new Rectangle(coords.X, coords.Y, 20, 20), Color.White);
+        }
+
+        protected OrderedPair IndexToCoords(int index)
+        {
+            int x = Position.X + 160;
+            int y = Position.Y + index * 22 + 28;
+            return (x, y);
+        }
+    }
+
+    class InventoryMenu : SelectMenu
+    {
+        private DynamicObject container; // the object whose inventory we are examining
+        public InventoryMenu(DynamicObject _container)
+        {
+            container = _container;
+
+            // add all the item names to the text
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"[{container.Name}]\n");
+            foreach (Item item in container.Children)
+            {
+                sb.Append(item.Name);
+                // add item count if its more than 1
+                if (item.Count > 1)
+                    sb.Append($" (x{item.Count})");
+
+                sb.Append("\n");
+            }
+
+            Text = sb.ToString();
+            maxIndex = _container.Children.Count - 1;
+        }
+
+        public override void SelectionMade()
+        {
+            List<Interaction> forbiddenInteractions = new List<Interaction>();
+            // if this is the players inventory...
+            if(container == Zone.Player)
+            {
+                // ...forbid getting the item. It makes no sense for the player to get an item from their OWN inventory.
+                forbiddenInteractions.Add(Interaction.Get);
+            }
+
+            InteractionMenu menu = new InteractionMenu(container.Children[selectedIndex], forbiddenInteractions);
+            OrderedPair coords = IndexToCoords(selectedIndex);
+            menu.Position = coords;
+
+            Game1.OpenMenu(menu);
+        }
+    }
+
     class LookMenu : Menu
     {
         public LookMenu(DynamicObject o)
@@ -123,71 +216,6 @@ namespace AstrologyGame
                 Position = new OrderedPair(Game1.ScreenSize.X - Size.X, Position.Y);
             else
                 Position = new OrderedPair(0, Position.Y);
-        }
-    }
-    class InventoryMenu : Menu
-    {
-        private int selectedIdx = 0;
-        private readonly int itemCount; // how many Item() objects
-
-        private DynamicObject container; // the object whose inventory we are examining
-        public InventoryMenu(DynamicObject _container)
-        {
-            container = _container;
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[" + container.Name + "]\n");
-
-            foreach (Item item in container.Children)
-            {
-                itemCount++;
-
-                sb.Append(item.Name);
-                if (item.Count > 1)
-                    sb.Append(" x" + item.Count);
-
-                sb.Append("\n");
-            }
-
-            Text = sb.ToString();
-        }
-
-        public override void HandleInput(List<Control> controls)
-        {
-            base.HandleInput(controls);
-
-            selectedIdx = Input.PickIndex(controls, selectedIdx, itemCount);
-
-            if(controls.Contains(Control.Enter))
-            {
-                /* CODE TO TRANSFER AN ITEM TO THE OTHER CONTAINER
-                DynamicObject item = container1.children[selectedIdx];
-                container1.children.RemoveAt(selectedIdx);
-                container2.children.Add(item);
-                */
-
-                // CODE TO OPEN INTERACTIONS MENU
-                InteractionMenu m = new InteractionMenu(container.Children[selectedIdx]);
-                (int, int) coords = IndexToCoords(selectedIdx);
-                m.Position = new OrderedPair(coords.Item1, coords.Item2);
-                
-                Game1.OpenMenu(m);
-            }
-        }
-
-        public override void Draw()
-        {
-            base.Draw();
-
-            (int, int) coords = IndexToCoords(selectedIdx);
-            spriteBatch.Draw(cursorTexture, new Rectangle(coords.Item1, coords.Item2, 20, 20), Color.White);
-        }
-
-        private (int, int) IndexToCoords(int index)
-        {
-            int x = (int)Position.X + 160;
-            int y = (int)Position.Y + selectedIdx * 22 + 28;
-            return (x, y);
         }
     }
     class NearbyObjectsMenu : Menu
@@ -223,18 +251,44 @@ namespace AstrologyGame
             Text = t;
         }
     }
-    class InteractionMenu : Menu
+    class InteractionMenu : SelectMenu
     {
         DynamicObject objectToInteractWith;
-        public InteractionMenu(DynamicObject _objectToInteractWith)
+        List<Interaction> interactions;
+
+        /// <param name="forbiddenInteraction">A list of interactions that will not be included in this menu, even if the object to interact with has them available.</param>
+        public InteractionMenu(DynamicObject _objectToInteractWith, List<Interaction> forbiddenInteraction = null)
         {
             BackgroundColor = Color.DarkGreen;
             objectToInteractWith = _objectToInteractWith;
+            interactions = objectToInteractWith.Interactions;
 
-            foreach(Interaction i in objectToInteractWith.Interactions)
+            // if there are any forbidden interactions
+            if(forbiddenInteraction != null)
             {
-                Text += i.ToString() + "\n";
+                // remove them from this menu's interactions
+                foreach (Interaction forbidden in forbiddenInteraction)
+                    interactions.Remove(forbidden);
             }
+
+            // add interactions to the text
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[Interactions]\n");
+            foreach(Interaction i in interactions)
+            {
+                sb.Append($"{i}\n");
+            }
+            Text = sb.ToString();
+
+            maxIndex = interactions.Count - 1;
+        }
+
+        public override void SelectionMade()
+        {
+            // close this menu when a selection is made
+            Game1.CloseMenu(this);
+            // use Zone.Player as interactor because only a Player could have opened an InteractionMenu
+            objectToInteractWith.Interact(interactions[selectedIndex], Zone.Player);
         }
     }
     class BookMenu : Menu
@@ -265,7 +319,7 @@ namespace AstrologyGame
             base.HandleInput(controls);
 
             // change the page if the player presses the right controls
-            currentPageIdx = Input.PickIndex(controls, currentPageIdx, pageCount, Control.Right, Control.Left);
+            //currentPageIdx = Input.PickIndex(controls, currentPageIdx, pageCount, Control.Right, Control.Left);
             Text = GetPageText(currentPageIdx);
         }
         private int GetPageCount()
