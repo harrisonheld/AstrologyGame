@@ -1,0 +1,507 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using AstrologyGame.MapData;
+using AstrologyGame.DynamicObjects;
+using System.Diagnostics;
+using System.Linq;
+
+namespace AstrologyGame
+{
+    public class Game1 : Game
+    {
+        // things for drawing
+        private static GraphicsDeviceManager _graphics;
+        private static SpriteBatch _spriteBatch;
+        private static SpriteFont font;
+        // how many pixels should each tile be
+        public const int SCALE = 32 * 2;
+        private static OrderedPair screenSize = new OrderedPair(1024, 576);
+        public static OrderedPair ScreenSize
+        {
+            get
+            {
+                return screenSize;
+            }
+            set
+            {
+                screenSize = value;
+
+                _graphics.PreferredBackBufferWidth = screenSize.X;
+                _graphics.PreferredBackBufferHeight = screenSize.Y;
+            }
+        }
+
+        // for input
+        private const int INPUT_STAGGER = 1000 / 8; // the input stagger in milliseconds
+        private int timeSinceLastInput = 0; // in milliseconds
+        private List<Control> controls; // list of all controls pressed this frame
+        private bool inputLastFrame = false; // did the player do any input the frame prior?
+        private Vector2 moveVector = new Vector2();
+
+        // menu
+        private static List<Menu> menus = new List<Menu>();
+        private static NearbyObjectsMenu nearbyObjectsMenu;
+        private static LookMenu lookMenu;
+        // an easy way to get the last menu in the list, which is the only one that should accept input
+        private static Menu CurrentMenu
+        {
+            get
+            {
+                if (menus.Count == 0)
+                    return null;
+
+                // return the last element in menus
+                return menus.Last();
+            }
+        }
+
+        // the look cursor
+        private static Texture2D cursor;
+        private static int cursorX = 0;
+        private static int cursorY = 0;
+        public static Vector2 CursorPosition
+        {
+            get
+            {
+                return new Vector2(cursorX, cursorY);
+            }
+        }
+
+        private static GameState gameState = GameState.FreeRoam;
+        private bool doTick = false; // should the zone do a tick this frame
+
+        // dev stuff
+        Color DEBUG_COLOR = Color.Red;
+
+        public Game1()
+        {
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+        }
+
+        protected override void Initialize()
+        {
+            Utility.Initialize(Content);
+            Zone.Initialize();
+
+            World.GenerateCurrentZone();
+
+            DynamicObject knight = new Humanoid();
+            knight.color = Color.Goldenrod;
+            knight.Name = "Wanderer";
+            knight.TextureName = "human";
+            knight.X = 1;
+            knight.Y = 0;
+            knight.Children.Add(new Flintlock());
+            knight.Children.Add(new Book("test"));
+            Zone.objects.Add(knight);
+            Zone.Player = knight;
+
+            // is the game fullscreen
+            _graphics.PreferredBackBufferWidth = ScreenSize.X;
+            _graphics.PreferredBackBufferHeight = ScreenSize.Y;
+            _graphics.IsFullScreen = false;
+            _graphics.ApplyChanges();
+
+            base.Initialize();
+        }
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            cursor = Utility.TryLoadTexture("cursor1");
+            font = Content.Load<SpriteFont>("font1");
+
+            Menu.Initalize(GraphicsDevice, _spriteBatch, font);
+        }
+
+        protected override void UnloadContent()
+        {
+            Content.Unload();
+            Content.Dispose();
+
+            base.UnloadContent();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            controls = Input.GetInput();
+
+            timeSinceLastInput += gameTime.ElapsedGameTime.Milliseconds;
+            
+
+            // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
+            // and if the user pressed a control
+            if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && controls.Count != 0)
+            {
+                // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING
+                moveVector = GetMoveVector();
+
+                switch (gameState)
+                {
+                    case GameState.FreeRoam:
+                        Update_FreeRoam();
+                        break;
+
+                    case GameState.InMenu:
+                        Update_InMenu();
+                        break;
+
+                    case GameState.Interacting:
+                        Update_Interacting();
+                        break;
+
+                    case GameState.Looking:
+                        Update_Looking();
+                        break;
+                }
+
+                // Toggle fullscreen
+                if (controls.Contains(Control.Fullscreen))
+                {
+                    if (_graphics.IsFullScreen)
+                    {
+                        ScreenSize = (1024, 576);
+                    }
+                    else
+                    {
+                        ScreenSize = (1920, 1080);
+                    }
+
+                    _graphics.ToggleFullScreen();
+                }
+
+                // tick the level
+                if (doTick)
+                {
+                    Zone.Tick();
+                    doTick = false;
+                }
+
+                timeSinceLastInput = 0;
+            }
+
+            if (controls.Count == 0)
+                inputLastFrame = false;
+            else
+                inputLastFrame = true;
+
+            base.Update(gameTime);
+        }
+
+        private void Update_FreeRoam()
+        {
+            if (controls.Contains(Control.Interact))
+            {
+                gameState = GameState.Interacting;
+                return;
+            }
+            else if(controls.Contains(Control.Get))
+            {
+                List<Item> itemsHere = new List<Item>();
+
+                foreach(DynamicObject o in Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y))
+                {
+                    if(o is Item)
+                        itemsHere.Add(o as Item);
+                }
+
+                Menu getMenu = new GetMenu(itemsHere);
+                OpenMenu(getMenu);
+            }
+            else if (controls.Contains(Control.Look))
+            {
+                cursorX = Zone.Player.X;
+                cursorY = Zone.Player.Y;
+                gameState = GameState.Looking;
+                return;
+            }
+            else if (controls.Contains(Control.Inventory))
+            {
+                // open inventory here
+                Menu menu = new InventoryMenu(Zone.Player);
+                OpenMenu(menu);
+
+                return;
+            }
+            else if (controls.Contains(Control.Here))
+            {
+                doTick = true;
+                return;
+            }
+
+            Vector2 moveVector = GetMoveVector();
+
+            int newX = Zone.Player.X + (int)moveVector.X;
+            int newY = Zone.Player.Y + (int)moveVector.Y;
+
+            bool moveSuccessful = ((Creature)(Zone.Player)).AttemptMove(newX, newY);
+
+            if (moveSuccessful)
+            {
+                // THIS CODE IS EXECUTED WHEN THE PLAYER SUCCESSFULLY MOVES TO A NEW TILE
+                doTick = true;
+                CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
+
+                List<DynamicObject> nearbyObjects = Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y);
+                nearbyObjects.Remove(Zone.Player);
+
+                if(nearbyObjects.Count > 0)
+                {
+                    nearbyObjectsMenu = new NearbyObjectsMenu(nearbyObjects);
+                    OpenMenu(nearbyObjectsMenu);
+                }
+            }
+
+            if (Zone.Player.X >= Zone.WIDTH)
+            {
+                Zone.Player.X = 0;
+                World.ZoneX = (World.ZoneX + 1);
+                World.GenerateCurrentZone();
+            }
+            if (Zone.Player.X < 0)
+            {
+                Zone.Player.X = Zone.WIDTH - 1;
+                World.ZoneX = (World.ZoneX - 1);
+                World.GenerateCurrentZone();
+            }
+
+            if (controls.Contains(Control.Back))
+                // TODO: pause
+                ;
+        }
+
+        private void Update_InMenu()
+        {
+            CurrentMenu.HandleInput(controls);
+        }
+
+        private void Update_Interacting()
+        {
+            // the player hit escape, so change player state to free roam and break
+            if (controls.Contains(Control.Back))
+            {
+                gameState = GameState.FreeRoam;
+                return;
+            }
+
+            // if the player didnt use a directional key, or select his current space, do nothing and break
+            if (moveVector.X == 0 && moveVector.Y == 0 && !(controls.Contains(Control.Here)) )
+            {
+                return;
+            }
+
+            int interactX = Zone.Player.X + (int)moveVector.X;
+            int interactY = Zone.Player.Y + (int)moveVector.Y;
+
+            foreach (DynamicObject o in Zone.objects)
+            {
+                if (o.X == interactX && o.Y == interactY)
+                {
+                    if (o != Zone.Player)
+                    {
+                        o.Interact(Zone.Player);
+                        break;
+                    }
+                    // TODO
+                    // currently, most objects interact methods will set the gameState to InMenu
+                    // however, if not, you may remain in the state Interacting. So fix this some time
+                }
+            }
+        }
+
+        private void Update_Looking()
+        {
+            if(controls.Contains(Control.Back))
+            {
+                CloseMenu(lookMenu); // close the menu in case there is a LookMenu open
+                gameState = GameState.FreeRoam;
+                return;
+            }
+
+            cursorX += (int)moveVector.X;
+            cursorY += (int)moveVector.Y;
+
+            // if the cursor is outside the bounds of map, put it back inside.
+            if (cursorX >= Zone.WIDTH)
+                cursorX = Zone.WIDTH - 1;
+            else if (cursorX < 0)
+                cursorX = 0;
+            if (cursorY >= Zone.HEIGHT)
+                cursorY = Zone.HEIGHT - 1;
+            else if (cursorY < 0)
+                cursorY = 0;
+
+            // this boolean will be true if the cursor moved this input frame
+            bool moved = !(moveVector == Vector2.Zero);
+
+            if (moved)
+            {
+                CloseMenu(lookMenu); // close the Look Menu because the cursor moved off whatever it was looking at
+
+                // TODO: pick an object to look at
+                DynamicObject objectToLookAt = null;
+
+                foreach (DynamicObject o in Zone.objects)
+                {
+                    if (o.X == cursorX && o.Y == cursorY)
+                    {
+                        objectToLookAt = o;
+                        break;
+                    }
+                }
+
+                // look at the tile if there are no objects
+                if(objectToLookAt is null)
+                {
+                    objectToLookAt = Zone.tiles[cursorX, cursorY];
+                }
+
+                Look(objectToLookAt);
+            }
+        }
+        /// <summary>
+        /// Create and open a LookMenu for the given object.
+        /// </summary>
+        /// <param name="o"></param>
+        private void Look(DynamicObject o)
+        {
+            lookMenu = new LookMenu(o);
+            OpenMenu(lookMenu);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _spriteBatch.Begin(default, default, SamplerState.PointClamp);
+
+            // draw the zone
+            for (int y = 0; y < Zone.HEIGHT; y++)
+            {
+                for (int x = 0; x < Zone.WIDTH; x++)
+                {
+                    Tile tile = Zone.tiles[x, y];
+                    DrawObject(tile, x, y);
+                }
+            }
+
+            foreach (DynamicObject o in Zone.objects)
+            {
+                DrawObject(o, o.X, o.Y);
+            }
+
+            // draw the look cursor
+            if (gameState == GameState.Looking)
+            {
+                Rectangle destinationRectangle = new Rectangle(cursorX * SCALE, cursorY*SCALE, SCALE, SCALE);
+                _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
+            }
+
+            // draw all the menus
+            foreach (Menu m in menus)
+                m.Draw();
+
+            // draw debug info
+            _spriteBatch.DrawString(font, "Menu count: " + menus.Count, new Vector2(576-16, 20), DEBUG_COLOR);
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+        private void DrawObject(DynamicObject o, int x, int y)
+        {
+            int drawX = x * SCALE;
+            int drawY = y * SCALE;
+
+            Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
+            _spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.color);
+        }
+
+        private Vector2 GetMoveVector()
+        {
+            int x = 0;
+            int y = 0;
+
+            // cardinal directions
+            if ( controls.Contains(Control.Down) )
+                y++;
+            if ( controls.Contains(Control.Up) )
+                y--;
+            if ( controls.Contains(Control.Right) )
+                x++;
+            if ( controls.Contains(Control.Left) )
+                x--;
+
+            // diagonal directions
+            if (controls.Contains(Control.UpRight))
+            {
+                x++;
+                y--;
+            }
+            if (controls.Contains(Control.UpLeft))
+            {
+                x--;
+                y--;
+            }
+            if (controls.Contains(Control.DownRight))
+            {
+                x++;
+                y++;
+            }
+            if (controls.Contains(Control.DownLeft))
+            {
+                x--;
+                y++;
+            }
+
+            // make corrections in case more than one directional key is pressed
+            if (x > 1)
+                x = 1;
+            if (x < -1)
+                x = -1;
+            if (y > 1)
+                y = 1;
+            if (y < -1)
+                y = -1;
+
+            return new Vector2(x, y);
+        }
+
+        public static void OpenMenu(Menu newMenu)
+        {
+            menus.Add(newMenu);
+
+            if (newMenu.PauseWhenOpened)
+                gameState = GameState.InMenu;
+        }
+        public static void CloseMenu(Menu menuToClose)
+        {
+            menus.Remove(menuToClose);
+
+            // if none of the remaining open menus have .pauseWhenOpened, set gamestate to FreeRoam.
+            if(gameState == GameState.InMenu)
+            {
+                foreach (Menu m in menus)
+                    if (m.PauseWhenOpened)
+                        return;
+
+                gameState = GameState.FreeRoam;
+            }
+        }
+
+        public enum GameState
+        {
+            FreeRoam, //the player is walking around
+            InMenu, // the player is in a menu and must exit it before doing anything else
+            Interacting, // the player wants to interact with an adjacent tile
+            Looking // the player is looking at things
+        }
+    }
+}
