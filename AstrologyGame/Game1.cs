@@ -93,7 +93,7 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             DynamicObject knight = new Humanoid();
-            knight.color = Color.Goldenrod;
+            knight.Color = Color.Goldenrod;
             knight.Name = "Wanderer";
             knight.TextureName = "human";
             knight.X = 1;
@@ -153,11 +153,11 @@ namespace AstrologyGame
                         Update_InMenu();
                         break;
 
-                    case GameState.Interacting:
+                    case GameState.InteractMode:
                         Update_Interacting();
                         break;
 
-                    case GameState.Looking:
+                    case GameState.LookMode:
                         Update_Looking();
                         break;
                 }
@@ -199,7 +199,7 @@ namespace AstrologyGame
         {
             if (controls.Contains(Control.Interact))
             {
-                gameState = GameState.Interacting;
+                gameState = GameState.InteractMode;
                 return;
             }
             else if(controls.Contains(Control.Get))
@@ -219,7 +219,7 @@ namespace AstrologyGame
             {
                 cursorX = Zone.Player.X;
                 cursorY = Zone.Player.Y;
-                gameState = GameState.Looking;
+                gameState = GameState.LookMode;
                 return;
             }
             else if (controls.Contains(Control.Inventory))
@@ -398,7 +398,7 @@ namespace AstrologyGame
             }
 
             // draw the look cursor
-            if (gameState == GameState.Looking)
+            if (gameState == GameState.LookMode)
             {
                 Rectangle destinationRectangle = new Rectangle(cursorX * SCALE, cursorY*SCALE, SCALE, SCALE);
                 _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
@@ -421,7 +421,7 @@ namespace AstrologyGame
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            _spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.color);
+            _spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.Color);
         }
 
         public static void OpenMenu(Menu newMenu)
@@ -450,8 +450,8 @@ namespace AstrologyGame
         {
             FreeRoam, //the player is walking around
             InMenu, // the player is in a menu and must exit it before doing anything else
-            Interacting, // the player wants to interact with an adjacent tile
-            Looking // the player is looking at things
+            InteractMode, // the player wants to interact with an adjacent tile
+            LookMode // the player is looking at things
         }
     }
 }

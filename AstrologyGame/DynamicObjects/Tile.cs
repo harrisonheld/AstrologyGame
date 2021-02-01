@@ -19,7 +19,7 @@ namespace AstrologyGame.DynamicObjects
             Name = "debug tile";
             Lore = "It's pure black, and very easy to read debug text on.";
             TextureName = "debugTile";
-            color = new Color(25, 25, 25);
+            Color = new Color(25, 25, 25);
         }
     }
 
@@ -29,7 +29,7 @@ namespace AstrologyGame.DynamicObjects
         {
             Name = "stone";
             Lore = "Nonmetallic mineral matter.";
-            color = new Color(86, 72, 67);
+            Color = new Color(86, 72, 67);
         }
     }
     class Sand : Tile
@@ -38,7 +38,7 @@ namespace AstrologyGame.DynamicObjects
         {
             Name = "sand";
             Lore = "sand";
-            color = Color.LightYellow;
+            Color = Color.LightYellow;
         }
     }
     class BleachedSand : Sand
@@ -46,7 +46,7 @@ namespace AstrologyGame.DynamicObjects
         public BleachedSand()
         {
             TextureName = "dots2x2";
-            color = new Color(color.R + 10, color.G + 10, color.B + 10);
+            Color = new Color(Color.R + 10, Color.G + 10, Color.B + 10);
         }
     }
 
@@ -59,12 +59,12 @@ namespace AstrologyGame.DynamicObjects
             Lore = "A gratuitous mess of blood and guts. Occasionally, it gives rise to something resembling life. " +
                 "The majority of these 'somethings' are amorphous blobs or single body parts, " +
                 "but some are so unfortunate as to be viable.";
-            color = Color.Red;
+            Color = Color.Red;
         }
 
         public override void AnimationTurn()
         {
-            color = RandomRed();
+            Color = RandomRed();
         }
         // generate a random shade of red
         private Color RandomRed()

@@ -124,7 +124,7 @@ namespace AstrologyGame.DynamicObjects
             Name = "zodiac frog";
             Lore = "White spots adorn its black skin. " +
                 "The asterism is distorted as the creature ungulates.";
-            color = Color.DarkGray;
+            Color = Color.DarkGray;
         }
     }
 
@@ -137,7 +137,7 @@ namespace AstrologyGame.DynamicObjects
             Lore = "This wretched anatomy was spawned by Abhoth. Extremeties jut out from the central mass " +
                 "in no particular order. A limb here, a lobe there. It makes no difference." +
                 "\n\nIt meanders mindlessly.";
-            color = Color.IndianRed;
+            Color = Color.IndianRed;
         }
 
         public override void AiTurn()
@@ -163,7 +163,7 @@ namespace AstrologyGame.DynamicObjects
             Name = "catboy";
             Lore = "Precious black marbles oggle you lovingly. Meow, meow.";
 
-            color = Color.Pink;
+            Color = Color.Pink;
         }
     }
 }

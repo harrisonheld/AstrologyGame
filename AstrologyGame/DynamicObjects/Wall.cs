@@ -12,7 +12,7 @@ namespace AstrologyGame.DynamicObjects
                 "Fable attributes its invention to a race of giants led by a one-eyed king named Cyclops.";
             TextureName = "bricks";
             Solid = true;
-            color = Color.Gray;
+            Color = Color.Gray;
         }
     }
 }

@@ -26,9 +26,10 @@ namespace AstrologyGame.DynamicObjects
         public int X { get; set; }
         public int Y { get; set; }
         public bool Solid { get; set; } // can you walk through the thing
-        public Color color { get; set; } = Color.White;
-        public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
+        public Color Color { get; set; } = Color.White;
+        public string SignText { get; set; }
 
+        public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
         // list of things you can do to the object. The first thing in the list will be the default interaction
         protected readonly List<Interaction> interactions = new List<Interaction>();
         public List<Interaction> Interactions
@@ -55,7 +56,7 @@ namespace AstrologyGame.DynamicObjects
             switch (interaction)
             {
                 case Interaction.Read:
-                    Read();
+                    Read(interactor);
                     return;
                 case Interaction.Open:
                     Open(interactor);
@@ -74,7 +75,7 @@ namespace AstrologyGame.DynamicObjects
             Interact(interactions[0], interactor);
         }
 
-        protected virtual void Read() { }
+        protected virtual void Read(DynamicObject reader) { }
         protected virtual void Open(DynamicObject opener) { }
         protected virtual void Attack(DynamicObject attacker) { }
         protected virtual void PickUp(DynamicObject pickerUpper)

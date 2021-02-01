@@ -19,7 +19,7 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "pisces";
             Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each nail is painted a different pastel color. " +
                 "Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.";
-            color = Color.LightSkyBlue;
+            Color = Color.LightSkyBlue;
 
             Quickness = 7;
         }

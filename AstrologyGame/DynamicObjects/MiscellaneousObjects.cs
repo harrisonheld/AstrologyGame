@@ -6,24 +6,28 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using AstrologyGame.MapData;
+
 namespace AstrologyGame.DynamicObjects
 {
     public class Sign : DynamicObject
     {
-        public string signText { get; set; }
         public Sign()
         {
             TextureName = "sign";
             Name = "sign";
             Lore = "It's a rickety old wooden sign.";
-            color = Color.Chocolate;
+            Color = Color.Chocolate;
 
-            signText = "[DEV] This is the default contents of a sign.";
+            SignText = "[DEV] This is the default contents of a sign.";
         }
-        protected override void Read()
+        protected override void Read(DynamicObject reader)
         {
-            Menu m = new Menu();
-            m.Text = signText;
+            if(reader == Zone.Player)
+            {
+                Menu m = new Menu();
+                m.Text = SignText;
+            }
         }
     }
     public class Chest : Item
@@ -34,7 +38,7 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "chest";
             Name = "chest";
             Lore = "a container";
-            color = Color.Chocolate;
+            Color = Color.Chocolate;
         }
 
         protected override void Open(DynamicObject opener)

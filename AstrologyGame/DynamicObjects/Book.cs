@@ -4,6 +4,8 @@ using System.Text;
 
 using System.Xml;
 
+using AstrologyGame.MapData;
+
 namespace AstrologyGame.DynamicObjects
 {
     class Book : Item
@@ -18,10 +20,13 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "book1";
         }
 
-        protected override void Read()
+        protected override void Read(DynamicObject reader)
         {
-            BookMenu menu = new BookMenu(bookId);
-            Game1.OpenMenu(menu);
+            if(reader == Zone.Player)
+            {
+                BookMenu menu = new BookMenu(bookId);
+                Game1.OpenMenu(menu);
+            }
         }
     }
 }
