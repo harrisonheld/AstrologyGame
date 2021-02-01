@@ -10,5 +10,6 @@ namespace AstrologyGame.DynamicObjects
         Open, // open a container
         Attack, // attack this object
         Get, // another object picks up this object
+        Drop, // drop the object on the ground
     }
 }

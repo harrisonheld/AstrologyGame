@@ -30,7 +30,7 @@ namespace AstrologyGame.DynamicObjects
         public string SignText { get; set; }
 
         public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
-        // list of things you can do to the object. The first thing in the list will be the default interaction
+        // list of things you can do to the object
         protected readonly List<Interaction> interactions = new List<Interaction>();
         public List<Interaction> Interactions
         {
@@ -39,7 +39,6 @@ namespace AstrologyGame.DynamicObjects
                 return interactions;
             }
         }
-
 
         public DynamicObject()
         {
@@ -65,23 +64,29 @@ namespace AstrologyGame.DynamicObjects
                     Attack(interactor);
                     return;
                 case Interaction.Get:
-                    PickUp(interactor);
+                    Get(interactor);
+                    return;
+                case Interaction.Drop:
+                    Drop(interactor);
                     return;
             }
-        }
-        public void Interact(DynamicObject interactor)
-        {
-            // do the first interaction in this objects list of interactions
-            Interact(interactions[0], interactor);
         }
 
         protected virtual void Read(DynamicObject reader) { }
         protected virtual void Open(DynamicObject opener) { }
         protected virtual void Attack(DynamicObject attacker) { }
-        protected virtual void PickUp(DynamicObject pickerUpper)
+        protected virtual void Get(DynamicObject pickerUpper)
         {
             pickerUpper.Children.Add(this);
-            Zone.objects.Remove(this);
+            Zone.Objects.Remove(this);
+        }
+        protected virtual void Drop(DynamicObject dropper)
+        {
+            Debug.WriteLine("dropped");
+            dropper.Children.Remove(this);
+            this.X = dropper.X;
+            this.Y = dropper.Y;
+            Zone.Objects.Add(this);
         }
         public virtual void AnimationTurn()
         {

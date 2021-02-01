@@ -13,9 +13,11 @@ namespace AstrologyGame.DynamicObjects
     public abstract class Creature : DynamicObject
     {
         // the cost for various actions
-        public const int COST_MOVE = 10;
-        public const int COST_ATTACK = 10;
-        public int Quickness { get; set; } = 10; // how much AP does this creature get per turn
+        public const int COST_MOVE = 100;
+        public const int COST_ATTACK = 100;
+        public const int AP_CAP = 200;
+
+        public int Quickness { get; set; } = 100; // how much AP does this creature get per turn
         public int ActionPoints { get; set; } = 0; // a.k.a. AP
         public Creature()
         {
@@ -35,8 +37,7 @@ namespace AstrologyGame.DynamicObjects
             ActionPoints += Quickness;
 
             // cap the action points so the creature can't wait around and accumulate a massive amount of AP
-            if (ActionPoints > Quickness * 2)
-                ActionPoints = Quickness * 2;
+            ActionPoints = Math.Clamp(ActionPoints, 0, AP_CAP);
         }
 
         /// <summary>
@@ -54,10 +55,10 @@ namespace AstrologyGame.DynamicObjects
             ActionPoints = newActionPointCount;
             return true;
         }
-        public bool AttemptMove(int targetX, int targetY)
+        public bool TryMove(int targetX, int targetY)
         {
             // if there is a solid object in the way, return false
-            foreach (DynamicObject o in Zone.objects)
+            foreach (DynamicObject o in Zone.Objects)
             {
                 if (o.X == targetX && o.Y == targetY && o.Solid)
                     return false;
@@ -72,7 +73,7 @@ namespace AstrologyGame.DynamicObjects
             return true;
         }
 
-        public bool MoveTowards(DynamicObject target)
+        public bool TryMoveTowards(DynamicObject target)
         {
             int targetX = target.X;
             int targetY = target.Y;
@@ -89,7 +90,7 @@ namespace AstrologyGame.DynamicObjects
             else if (Y < targetY)
                 relMoveY = 1;
 
-            return AttemptMove(X + relMoveX, Y + relMoveY);
+            return TryMove(X + relMoveX, Y + relMoveY);
         }
 
         /// <summary>
@@ -100,8 +101,9 @@ namespace AstrologyGame.DynamicObjects
         {
             while (ActionPoints >= Creature.COST_MOVE)
             {
-                bool successfulMove = MoveTowards(target);
+                bool successfulMove = TryMoveTowards(target);
 
+                // if the move fails, most likely because there is a wall in the way, just quit trying.
                 if (!successfulMove)
                     break;
             }
@@ -134,24 +136,18 @@ namespace AstrologyGame.DynamicObjects
         {
             TextureName = "frog";
             Name = "child of Abhoth";
-            Lore = "This wretched anatomy was spawned by Abhoth. Extremeties jut out from the central mass " +
-                "in no particular order. A limb here, a lobe there. It makes no difference." +
-                "\n\nIt meanders mindlessly.";
+            Lore = "This wretched thing is \"alive\" only in the most abstract meaning of the word. " +
+                "Extremeties jut out from the central mass in no particular order. " +
+                "A limb here, or a lobe there - it makes no difference. Lacking a face " +
+                "with which to divulge the true magnitude of its suffering, it locomotes silently. ";
             Color = Color.IndianRed;
+            Quickness = 20;
         }
 
         public override void AiTurn()
         {
-            int newY = (Y + 1) % Zone.HEIGHT;
-
-            // check if desired position has a solid object
-            foreach(DynamicObject o in Zone.objects)
-            {
-                if (o.X == this.X && o.Y == newY && o.Solid)
-                    return;
-            }
-
-            Y = newY;
+            Seek(Zone.Player);
+            base.AiTurn();
         }
     }
 

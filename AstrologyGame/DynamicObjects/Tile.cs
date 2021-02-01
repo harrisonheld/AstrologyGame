@@ -56,8 +56,8 @@ namespace AstrologyGame.DynamicObjects
         {
             TextureName = "dots3x3";
             Name = "boiling offal";
-            Lore = "A gratuitous mess of blood and guts. Occasionally, it gives rise to something resembling life. " +
-                "The majority of these 'somethings' are amorphous blobs or single body parts, " +
+            Lore = "A gratuitous mess of blood and guts. Occasionally, it gives rise to something organic. " +
+                "The majority of these 'somethings' are amorphous giblets or lone body parts, " +
                 "but some are so unfortunate as to be viable.";
             Color = Color.Red;
         }

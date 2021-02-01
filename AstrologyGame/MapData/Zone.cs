@@ -25,19 +25,8 @@ namespace AstrologyGame.MapData
         //Declare new layers
         public static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
         // list of all objects (that aren't tiles) in the zone
-        public static ObservableCollection<DynamicObject> objects { get; set; } = new ObservableCollection<DynamicObject>() { };
-        private static DynamicObject player;
-        public static DynamicObject Player
-        {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
-        }
+        public static ObservableCollection<DynamicObject> Objects { get; set; } = new ObservableCollection<DynamicObject>() { };
+        public static DynamicObject Player { get; set; }
 
         /// <summary>
         /// Clears all tiles and remove all objects
@@ -45,13 +34,13 @@ namespace AstrologyGame.MapData
         public static void Clear()
         {
             tiles = new Tile[WIDTH, HEIGHT];
-            objects.Clear();
+            Objects.Clear();
             textureDict.Clear();
         }
 
         public static void Initialize()
         {
-            objects.CollectionChanged += ObjectsChanged;
+            Objects.CollectionChanged += ObjectsChanged;
         }
 
         private static void AddStringToTextureDict(string texName)
@@ -94,7 +83,7 @@ namespace AstrologyGame.MapData
                     string type = (tiles[x, y].GetType().Name);
                     xmlWriter.WriteAttributeString("Type", type);
 
-                    foreach (DynamicObject o in objects)
+                    foreach (DynamicObject o in Objects)
                     {
                         if (o.X == x && o.Y == y)
                         {
@@ -140,7 +129,7 @@ namespace AstrologyGame.MapData
                         foreach (XmlNode dynamicObjectNode in tileNode.ChildNodes)
                         {
                             DynamicObject o = DynamicObjectFromXmlNode(dynamicObjectNode, assembly);
-                            objects.Add(o);
+                            Objects.Add(o);
                         }
 
                         x++;
@@ -175,12 +164,12 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-            foreach (DynamicObject o in objects)
+            foreach (DynamicObject o in Objects)
             {
                 if (o is Creature)
                 {
                     Creature c = o as Creature;
-                    if (c == player)
+                    if (c == Player)
                     {
                         c.RechargeAP();
                     }
@@ -227,26 +216,30 @@ namespace AstrologyGame.MapData
             }
 
             // if there was a player in the zone prior, include him in the new one
-            if (player != null)
+            if (Player != null)
             {
-                objects.Add(player);
+                Objects.Add(Player);
             }
 
             Chest chest = new Chest();
             chest.X = 1;
             chest.Y = 5;
-            objects.Add(chest);
+            Objects.Add(chest);
 
             chest.Children.Add(new TeaPot() { Count = 4 });
             chest.Children.Add(new MaidDress());
             chest.Children.Add(new CatEars());
 
-            Book b = new Book("test");
-            objects.Add(b);
+            Book b = new Book("Master of the Moon");
+            b.Color = Color.DodgerBlue;
+            Objects.Add(b);
 
-            objects.Add(new TeaPot() { X = 5, Y = 5 });
-            objects.Add(new Flintlock() { X = 5, Y = 5 });
-            objects.Add(new MaidDress() { X = 5, Y = 5 });
+            Objects.Add(new TeaPot() { X = 5, Y = 5 });
+            Objects.Add(new Flintlock() { X = 5, Y = 5 });
+            Objects.Add(new MaidDress() { X = 5, Y = 5 });
+
+            Objects.Add(new Pisces() { X = 10, Y = 6 });
+            Objects.Add(new ChildOfAbhoth { X = 10, Y = 7 });
 
             /*
             Sign sign = new Sign();
@@ -261,7 +254,7 @@ namespace AstrologyGame.MapData
         {
             List<DynamicObject> objectsAtPos = new List<DynamicObject>();
 
-            foreach (DynamicObject o in objects)
+            foreach (DynamicObject o in Objects)
             {
                 if (o.X == x && o.Y == y)
                 {

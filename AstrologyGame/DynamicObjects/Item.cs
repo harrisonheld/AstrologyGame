@@ -10,9 +10,11 @@ namespace AstrologyGame.DynamicObjects
     public abstract class Item : DynamicObject
     {
         public int Count { get; set; } = 1;
+
         public Item()
         {
             interactions.Add(Interaction.Get);
+            interactions.Add(Interaction.Drop);
         }
     }
 
@@ -29,7 +31,7 @@ namespace AstrologyGame.DynamicObjects
     {
         public TeaPot()
         {
-            Name = "tea-pot";
+            Name = "tea pot";
             Lore = "You can have a tea party!";
             TextureName = "teacup";
         }
@@ -39,7 +41,7 @@ namespace AstrologyGame.DynamicObjects
     {
         public Teacup()
         {
-            Name = "tea-cup";
+            Name = "tea cup";
             Lore = "You can have a tea party!";
             TextureName = "teacup";
         }

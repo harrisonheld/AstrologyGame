@@ -33,20 +33,24 @@ namespace AstrologyGame
             float lineWidth = 0f;
             float spaceWidth = spriteFont.MeasureString(" ").X;
 
-            foreach (string word in words)
+            for (int i = 0; i < words.Length; i++)
             {
-                Vector2 size = spriteFont.MeasureString(word);
+                Vector2 size = spriteFont.MeasureString(words[i]);
 
                 if (lineWidth + size.X < maxLineWidth)
                 {
-                    sb.Append(word + " ");
+                    sb.Append(words[i] + " ");
                     lineWidth += size.X + spaceWidth;
                 }
                 else
                 {
-                    sb.Append("\n" + word + " ");
+                    sb.Append("\n" + words[i] + " ");
                     lineWidth = size.X + spaceWidth;
                 }
+
+                // if the word contains a newline and isnt the last word in the string
+                if (words[i].Contains("\n") && i != (words.Length - 1) )
+                    lineWidth = words[i+1].Length;
             }
 
             return sb.ToString();

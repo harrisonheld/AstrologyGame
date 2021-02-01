@@ -16,18 +16,18 @@ namespace AstrologyGame.DynamicObjects
         public Pisces()
         {
             Name = "Pisces";
-            TextureName = "pisces";
-            Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each nail is painted a different pastel color. " +
+            TextureName = "pisces2";
+            Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. " +
                 "Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.";
             Color = Color.LightSkyBlue;
 
-            Quickness = 7;
+            Quickness = 70;
         }
 
         public override void AiTurn()
         {
-            base.AiTurn();
             Seek(Zone.Player);
+            base.AiTurn();
         }
     }
 

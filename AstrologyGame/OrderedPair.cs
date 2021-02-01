@@ -37,11 +37,11 @@ namespace AstrologyGame
             => new OrderedPair(-a.X, -a.Y);
         // Addition
         public static OrderedPair operator +(OrderedPair a, OrderedPair b)
-            => new OrderedPair(a.X + b.X, a.Y - b.Y);
+            => new OrderedPair(a.X + b.X, a.Y + b.Y);
         // Subtraction
         public static OrderedPair operator -(OrderedPair a, OrderedPair b)
             => a + (-b);
 
-        public override string ToString() => "({X}, {Y})";
+        public override string ToString() => $"({X}, {Y})";
     }
 }

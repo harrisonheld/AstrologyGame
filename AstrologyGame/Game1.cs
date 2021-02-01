@@ -18,8 +18,9 @@ namespace AstrologyGame
         private static GraphicsDeviceManager _graphics;
         private static SpriteBatch _spriteBatch;
         private static SpriteFont font;
-        // how many pixels should each tile be
-        public const int SCALE = 32 * 2;
+
+        private const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
+
         private static OrderedPair screenSize = new OrderedPair(1024, 576);
         public static OrderedPair ScreenSize
         {
@@ -99,8 +100,8 @@ namespace AstrologyGame
             knight.X = 1;
             knight.Y = 0;
             knight.Children.Add(new Flintlock());
-            knight.Children.Add(new Book("test"));
-            Zone.objects.Add(knight);
+            knight.Children.Add(new Book("Poets to Come"));
+            Zone.Objects.Add(knight);
             Zone.Player = knight;
 
             // is the game fullscreen
@@ -241,7 +242,7 @@ namespace AstrologyGame
             int newX = Zone.Player.X + movePair.X;
             int newY = Zone.Player.Y + movePair.Y;
 
-            bool moveSuccessful = ((Creature)(Zone.Player)).AttemptMove(newX, newY);
+            bool moveSuccessful = ((Creature)(Zone.Player)).TryMove(newX, newY);
 
             if (moveSuccessful)
             {
@@ -300,13 +301,13 @@ namespace AstrologyGame
             int interactX = Zone.Player.X + movePair.X;
             int interactY = Zone.Player.Y + movePair.Y;
 
-            foreach (DynamicObject o in Zone.objects)
+            foreach (DynamicObject o in Zone.Objects)
             {
                 if (o.X == interactX && o.Y == interactY)
                 {
                     if (o != Zone.Player)
                     {
-                        o.Interact(Zone.Player);
+                        o.Interact(Interaction.Get, Zone.Player);
                         break;
                     }
                     // TODO
@@ -348,7 +349,7 @@ namespace AstrologyGame
                 // TODO: pick an object to look at
                 DynamicObject objectToLookAt = null;
 
-                foreach (DynamicObject o in Zone.objects)
+                foreach (DynamicObject o in Zone.Objects)
                 {
                     if (o.X == cursorX && o.Y == cursorY)
                     {
@@ -392,7 +393,7 @@ namespace AstrologyGame
                 }
             }
 
-            foreach (DynamicObject o in Zone.objects)
+            foreach (DynamicObject o in Zone.Objects)
             {
                 DrawObject(o, o.X, o.Y);
             }
@@ -409,7 +410,7 @@ namespace AstrologyGame
                 m.Draw();
 
             // draw debug info
-            _spriteBatch.DrawString(font, "Menu count: " + menus.Count, new Vector2(576-16, 20), DEBUG_COLOR);
+            _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(576-16, 20), DEBUG_COLOR);
 
             _spriteBatch.End();
 
@@ -444,6 +445,12 @@ namespace AstrologyGame
 
                 gameState = GameState.FreeRoam;
             }
+        }
+        public static void RegenerateMenus()
+        {
+            // regenerate the text in case it changed
+            foreach (Menu menu in menus)
+                menu.RegenerateText();
         }
 
         public enum GameState

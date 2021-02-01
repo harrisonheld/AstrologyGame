@@ -10,7 +10,7 @@ namespace AstrologyGame.DynamicObjects
 {
     class Book : Item
     {
-        public string bookId;
+        private string bookId;
         public Book(string _bookId)
         {
             interactions.Add(Interaction.Read);

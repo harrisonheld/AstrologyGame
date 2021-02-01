@@ -67,7 +67,7 @@ namespace AstrologyGame
             set
             {
                 text = value;
-                wrappedText = Utility.WrapText(font, text, rect.Width);
+                wrappedText = Utility.WrapText(font, text, Size.X);
             }
         }
 
@@ -87,7 +87,10 @@ namespace AstrologyGame
         {
             PauseWhenOpened = true;
             rect = new Rectangle(5, 5, 300, 9*64); // also an arbitrary size
-            Text = "";
+        }
+        public virtual void RegenerateText()
+        {
+            // do nothing. menus that are procedurally generated (like inventories) should override this to refresh their text
         }
 
         public virtual void Draw()
@@ -165,10 +168,16 @@ namespace AstrologyGame
     class InventoryMenu : SelectMenu
     {
         private DynamicObject container; // the object whose inventory we are examining
+
         public InventoryMenu(DynamicObject _container)
         {
             container = _container;
+            maxIndex = _container.Children.Count - 1;
 
+            RegenerateText();
+        }
+        public override void RegenerateText()
+        {
             // add all the item names to the text
             StringBuilder sb = new StringBuilder();
             sb.Append($"[{container.Name}]\n");
@@ -183,9 +192,7 @@ namespace AstrologyGame
             }
 
             Text = sb.ToString();
-            maxIndex = _container.Children.Count - 1;
         }
-
         public override void SelectionMade()
         {
             List<Interaction> forbiddenInteractions = new List<Interaction>();
@@ -259,9 +266,11 @@ namespace AstrologyGame
         /// <param name="forbiddenInteraction">A list of interactions that will not be included in this menu, even if the object to interact with has them available.</param>
         public InteractionMenu(DynamicObject _objectToInteractWith, List<Interaction> forbiddenInteraction = null)
         {
-            BackgroundColor = Color.DarkGreen;
+            BackgroundColor = Color.Black;
             objectToInteractWith = _objectToInteractWith;
-            interactions = objectToInteractWith.Interactions;
+            /* make a copy of the list so we can mess with it and not worry about messing up 
+             * the interactions inside objectToInteractWith.Interactions */
+            interactions = new List<Interaction>(objectToInteractWith.Interactions);
 
             // if there are any forbidden interactions
             if(forbiddenInteraction != null)
@@ -289,6 +298,8 @@ namespace AstrologyGame
             Game1.CloseMenu(this);
             // use Zone.Player as interactor because only a Player could have opened an InteractionMenu
             objectToInteractWith.Interact(interactions[selectedIndex], Zone.Player);
+            // regenerate the menus incase this interaction changed them
+            Game1.RegenerateMenus();
         }
     }
     class BookMenu : Menu
@@ -296,10 +307,14 @@ namespace AstrologyGame
         private int currentPageIdx = 0; // what page the player is looking at
         private readonly string bookId;
         private readonly int pageCount;
+
         public BookMenu(string _bookId)
         {
             bookId = _bookId;
             pageCount = GetPageCount();
+
+            Size = new OrderedPair(500, 500);
+
             Text = GetPageText(0);
         }
 
@@ -309,10 +324,13 @@ namespace AstrologyGame
 
             // draw the page number in the top right
             string pageNumString = (currentPageIdx + 1).ToString() + " / " + pageCount;
+            OrderedPair pageNumPadding = new OrderedPair(5, 5);
 
             OrderedPair pageNumSize = (OrderedPair)font.MeasureString(pageNumString);
-            OrderedPair pageNumPos = Position + new OrderedPair(Size.X, 0) - pageNumSize;
+            OrderedPair pageNumPos = Position + new OrderedPair(Size.X, Size.Y) - pageNumSize;
+            pageNumPos -= pageNumPadding;
             spriteBatch.DrawString(font, pageNumString, pageNumPos, Color.White);
+
         }
         public override void HandleInput(List<Control> controls)
         {
