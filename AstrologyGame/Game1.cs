@@ -41,7 +41,7 @@ namespace AstrologyGame
         private int timeSinceLastInput = 0; // in milliseconds
         private List<Control> controls; // list of all controls pressed this frame
         private bool inputLastFrame = false; // did the player do any input the frame prior?
-        private Vector2 moveVector = new Vector2();
+        private OrderedPair movePair;
 
         // menu
         private static List<Menu> menus = new List<Menu>();
@@ -141,7 +141,7 @@ namespace AstrologyGame
             if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && controls.Count != 0)
             {
                 // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING
-                moveVector = GetMoveVector();
+                movePair = Input.ControlsToMovePair(controls);
 
                 switch (gameState)
                 {
@@ -236,10 +236,10 @@ namespace AstrologyGame
                 return;
             }
 
-            Vector2 moveVector = GetMoveVector();
+            OrderedPair orderedPair = Input.ControlsToMovePair(controls);
 
-            int newX = Zone.Player.X + (int)moveVector.X;
-            int newY = Zone.Player.Y + (int)moveVector.Y;
+            int newX = Zone.Player.X + movePair.X;
+            int newY = Zone.Player.Y + movePair.Y;
 
             bool moveSuccessful = ((Creature)(Zone.Player)).AttemptMove(newX, newY);
 
@@ -292,13 +292,13 @@ namespace AstrologyGame
             }
 
             // if the player didnt use a directional key, or select his current space, do nothing and break
-            if (moveVector.X == 0 && moveVector.Y == 0 && !(controls.Contains(Control.Here)) )
+            if (movePair.X == 0 && movePair.Y == 0 && !(controls.Contains(Control.Here)) )
             {
                 return;
             }
 
-            int interactX = Zone.Player.X + (int)moveVector.X;
-            int interactY = Zone.Player.Y + (int)moveVector.Y;
+            int interactX = Zone.Player.X + movePair.X;
+            int interactY = Zone.Player.Y + movePair.Y;
 
             foreach (DynamicObject o in Zone.objects)
             {
@@ -325,8 +325,8 @@ namespace AstrologyGame
                 return;
             }
 
-            cursorX += (int)moveVector.X;
-            cursorY += (int)moveVector.Y;
+            cursorX += movePair.X;
+            cursorY += movePair.Y;
 
             // if the cursor is outside the bounds of map, put it back inside.
             if (cursorX >= Zone.WIDTH)
@@ -339,7 +339,7 @@ namespace AstrologyGame
                 cursorY = 0;
 
             // this boolean will be true if the cursor moved this input frame
-            bool moved = !(moveVector == Vector2.Zero);
+            bool moved = !(movePair.Equals(OrderedPair.Zero));
 
             if (moved)
             {
@@ -422,56 +422,6 @@ namespace AstrologyGame
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
             _spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.color);
-        }
-
-        private Vector2 GetMoveVector()
-        {
-            int x = 0;
-            int y = 0;
-
-            // cardinal directions
-            if ( controls.Contains(Control.Down) )
-                y++;
-            if ( controls.Contains(Control.Up) )
-                y--;
-            if ( controls.Contains(Control.Right) )
-                x++;
-            if ( controls.Contains(Control.Left) )
-                x--;
-
-            // diagonal directions
-            if (controls.Contains(Control.UpRight))
-            {
-                x++;
-                y--;
-            }
-            if (controls.Contains(Control.UpLeft))
-            {
-                x--;
-                y--;
-            }
-            if (controls.Contains(Control.DownRight))
-            {
-                x++;
-                y++;
-            }
-            if (controls.Contains(Control.DownLeft))
-            {
-                x--;
-                y++;
-            }
-
-            // make corrections in case more than one directional key is pressed
-            if (x > 1)
-                x = 1;
-            if (x < -1)
-                x = -1;
-            if (y > 1)
-                y = 1;
-            if (y < -1)
-                y = -1;
-
-            return new Vector2(x, y);
         }
 
         public static void OpenMenu(Menu newMenu)

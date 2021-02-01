@@ -102,6 +102,56 @@ namespace AstrologyGame
 
             return newIdx;
         }
+
+        public static OrderedPair ControlsToMovePair(List<Control> controls)
+        {
+            int x = 0;
+            int y = 0;
+
+            // cardinal directions
+            if (controls.Contains(Control.Down))
+                y++;
+            if (controls.Contains(Control.Up))
+                y--;
+            if (controls.Contains(Control.Right))
+                x++;
+            if (controls.Contains(Control.Left))
+                x--;
+
+            // diagonal directions
+            if (controls.Contains(Control.UpRight))
+            {
+                x++;
+                y--;
+            }
+            if (controls.Contains(Control.UpLeft))
+            {
+                x--;
+                y--;
+            }
+            if (controls.Contains(Control.DownRight))
+            {
+                x++;
+                y++;
+            }
+            if (controls.Contains(Control.DownLeft))
+            {
+                x--;
+                y++;
+            }
+
+            // make corrections in case more than one directional key is pressed
+            if (x > 1)
+                x = 1;
+            if (x < -1)
+                x = -1;
+            if (y > 1)
+                y = 1;
+            if (y < -1)
+                y = -1;
+
+            return new OrderedPair(x, y);
+        }
     }
 
     public enum Control

@@ -52,7 +52,7 @@ namespace AstrologyGame.DynamicObjects
                 return;
             }
 
-            switch(interaction)
+            switch (interaction)
             {
                 case Interaction.Read:
                     Read();
@@ -77,7 +77,7 @@ namespace AstrologyGame.DynamicObjects
         protected virtual void Read() { }
         protected virtual void Open(DynamicObject opener) { }
         protected virtual void Attack(DynamicObject attacker) { }
-        protected virtual void PickUp(DynamicObject pickerUpper) 
+        protected virtual void PickUp(DynamicObject pickerUpper)
         {
             pickerUpper.Children.Add(this);
             Zone.objects.Remove(this);
@@ -89,7 +89,7 @@ namespace AstrologyGame.DynamicObjects
     }
 
     public enum Interaction
-    { 
+    {
         Read, // read a book/paper
         Open, // open a container
         Attack, // attack this object

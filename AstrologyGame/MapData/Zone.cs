@@ -27,8 +27,8 @@ namespace AstrologyGame.MapData
         // list of all objects (that aren't tiles) in the zone
         public static ObservableCollection<DynamicObject> objects { get; set; } = new ObservableCollection<DynamicObject>() { };
         private static DynamicObject player;
-        public static DynamicObject Player 
-        { 
+        public static DynamicObject Player
+        {
             get
             {
                 return player;
@@ -36,7 +36,7 @@ namespace AstrologyGame.MapData
             set
             {
                 player = value;
-            } 
+            }
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace AstrologyGame.MapData
         private static void AddStringToTextureDict(string texName)
         {
             // if key not in the dictionary, add it
-            if(!textureDict.ContainsKey(texName))
+            if (!textureDict.ContainsKey(texName))
             {
                 textureDict.Add(texName, Utility.TryLoadTexture(texName));
             }
@@ -94,9 +94,9 @@ namespace AstrologyGame.MapData
                     string type = (tiles[x, y].GetType().Name);
                     xmlWriter.WriteAttributeString("Type", type);
 
-                    foreach(DynamicObject o in objects)
+                    foreach (DynamicObject o in objects)
                     {
-                        if(o.X == x && o.Y == y)
+                        if (o.X == x && o.Y == y)
                         {
                             // TODO: save all the objects here
                         }
@@ -127,7 +127,7 @@ namespace AstrologyGame.MapData
 
             foreach (XmlNode itemNode in xmlDoc.ChildNodes)
             {
-                if(itemNode.Name == "tiles")
+                if (itemNode.Name == "tiles")
                 {
                     int x = 0;
                     int y = 0;
@@ -137,7 +137,7 @@ namespace AstrologyGame.MapData
                         Tile tile = (Tile)DynamicObjectFromXmlNode(tileNode, assembly);
                         tiles[x, y] = tile;
 
-                        foreach(XmlNode dynamicObjectNode in tileNode.ChildNodes)
+                        foreach (XmlNode dynamicObjectNode in tileNode.ChildNodes)
                         {
                             DynamicObject o = DynamicObjectFromXmlNode(dynamicObjectNode, assembly);
                             objects.Add(o);
@@ -153,7 +153,7 @@ namespace AstrologyGame.MapData
                 }
             }
         }
-        
+
         /// <summary>
         /// Take an XML node representing an Dynamic Object and make a Dynamic Object of that type.
         /// Provide the assembly in which that class is found.
@@ -175,12 +175,12 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-            foreach(DynamicObject o in objects)
+            foreach (DynamicObject o in objects)
             {
                 if (o is Creature)
                 {
                     Creature c = o as Creature;
-                    if(c == player)
+                    if (c == player)
                     {
                         c.RechargeAP();
                     }
@@ -211,13 +211,13 @@ namespace AstrologyGame.MapData
                     double r = rand.NextDouble();
                     double chance = 0.0;
 
-                    for(int i = 0; i < biome.TileWeights.Length; i++)
+                    for (int i = 0; i < biome.TileWeights.Length; i++)
                     {
                         chance += biome.TileWeights[i];
 
-                        if(r < chance)
+                        if (r < chance)
                         {
-                            tiles[x,y] = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
+                            tiles[x, y] = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
                             break;
                         }
                     }
@@ -237,14 +237,14 @@ namespace AstrologyGame.MapData
             chest.Y = 5;
             objects.Add(chest);
 
-            chest.Children.Add(new TeaPot() { Count = 4 } );
+            chest.Children.Add(new TeaPot() { Count = 4 });
             chest.Children.Add(new MaidDress());
             chest.Children.Add(new CatEars());
 
             Book b = new Book("test");
             objects.Add(b);
 
-            objects.Add(new TeaPot() { X = 5, Y = 5} );
+            objects.Add(new TeaPot() { X = 5, Y = 5 });
             objects.Add(new Flintlock() { X = 5, Y = 5 });
             objects.Add(new MaidDress() { X = 5, Y = 5 });
 
@@ -263,7 +263,7 @@ namespace AstrologyGame.MapData
 
             foreach (DynamicObject o in objects)
             {
-                if(o.X == x && o.Y == y)
+                if (o.X == x && o.Y == y)
                 {
                     objectsAtPos.Add(o);
                 }
@@ -276,7 +276,7 @@ namespace AstrologyGame.MapData
             // add textures for new objects
             if (args.NewItems != null)
                 foreach (object o in args.NewItems)
-                    AddStringToTextureDict( (o as DynamicObject).TextureName);
+                    AddStringToTextureDict((o as DynamicObject).TextureName);
 
             // remove textures for objects removed
             if (args.OldItems != null)

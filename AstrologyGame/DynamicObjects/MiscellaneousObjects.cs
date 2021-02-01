@@ -26,7 +26,7 @@ namespace AstrologyGame.DynamicObjects
             m.Text = signText;
         }
     }
-    public class Chest: Item
+    public class Chest : Item
     {
         public Chest()
         {

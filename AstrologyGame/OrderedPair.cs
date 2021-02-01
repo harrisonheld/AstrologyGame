@@ -14,6 +14,8 @@ namespace AstrologyGame
         public int X { get; set; }
         public int Y { get; set; }
 
+        public static OrderedPair Zero { get { return new OrderedPair(0, 0); } }
+
         public OrderedPair(int _x, int _y)
         {
             X = _x;
@@ -21,7 +23,7 @@ namespace AstrologyGame
         }
         public bool Equals(OrderedPair other)
         {
-            return other.X == X && other.Y == Y;
+            return X == other.X && Y == other.Y;
         }
 
         // conversions
