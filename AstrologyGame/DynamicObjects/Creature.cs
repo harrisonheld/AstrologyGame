@@ -72,7 +72,6 @@ namespace AstrologyGame.DynamicObjects
 
             return true;
         }
-
         public bool TryMoveTowards(DynamicObject target)
         {
             int targetX = target.X;

@@ -73,6 +73,8 @@ namespace AstrologyGame
                 controls.Add(Control.Fullscreen);
             if (kbState.IsKeyDown(Keys.Enter))
                 controls.Add(Control.Enter);
+            if (kbState.IsKeyDown(Keys.Tab))
+                controls.Add(Control.Tab);
             #endregion
 
             return controls;
@@ -159,5 +161,6 @@ namespace AstrologyGame
         // misc
         Fullscreen,
         Enter,
+        Tab,
     }
 }

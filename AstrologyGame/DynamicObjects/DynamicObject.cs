@@ -74,7 +74,10 @@ namespace AstrologyGame.DynamicObjects
 
         protected virtual void Read(DynamicObject reader) { }
         protected virtual void Open(DynamicObject opener) { }
-        protected virtual void Attack(DynamicObject attacker) { }
+        protected virtual void Attack(DynamicObject attacker)
+        {
+            Debug.WriteLine("Ouch!");
+        }
         protected virtual void Get(DynamicObject pickerUpper)
         {
             pickerUpper.Children.Add(this);

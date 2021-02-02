@@ -88,7 +88,7 @@ namespace AstrologyGame
             PauseWhenOpened = true;
             rect = new Rectangle(5, 5, 300, 9*64); // also an arbitrary size
         }
-        public virtual void RegenerateText()
+        public virtual void Refresh()
         {
             // do nothing. menus that are procedurally generated (like inventories) should override this to refresh their text
         }
@@ -119,7 +119,10 @@ namespace AstrologyGame
     abstract class SelectMenu : Menu
     {
         protected int selectedIndex = 0;
-        protected int maxIndex = -1;
+        protected int selectionCount = 1; // how many things are there to select?
+
+        protected OrderedPair cursorCoords;
+
         // what controls are used to move the selection
         public Control IncrementControl { get; set; } = Control.Down;
         public Control DecrementControl { get; set; } = Control.Up;
@@ -132,36 +135,43 @@ namespace AstrologyGame
         {
             base.HandleInput(controls);
 
-            // if maxIndex hasn't been reassigned yet
-            if (maxIndex == -1)
-                return;
-
             // increment or decrement index
             if (controls.Contains(IncrementControl))
                 selectedIndex++;
             else if (controls.Contains(DecrementControl))
                 selectedIndex--;
             // clamp index in case it went negative or went too high
-            selectedIndex = Math.Clamp(selectedIndex, 0, maxIndex);
-
-            if (controls.Contains(SelectControl))
+            ClampSelection();
+            // make a selection if user hits select, and there is something to select
+            if (controls.Contains(SelectControl) && selectionCount != 0)
                 SelectionMade();
         }
-
+        private void ClampSelection()
+        {
+            if (selectionCount != 0)
+                selectedIndex = Math.Clamp(selectedIndex, 0, selectionCount - 1);
+        }
+        public override void Refresh()
+        {
+            ClampSelection();
+            base.Refresh();
+        }
         public override void Draw()
         {
             base.Draw();
 
-            // coords to draw the select cursor at
-            OrderedPair coords = IndexToCoords(selectedIndex);
-            spriteBatch.Draw(cursorTexture, new Rectangle(coords.X, coords.Y, 20, 20), Color.White);
+            if(selectionCount != 0)
+            {
+                CalculateCursorCoords();
+                spriteBatch.Draw(cursorTexture, new Rectangle(cursorCoords.X, cursorCoords.Y, 20, 20), Color.White);
+            }
         }
 
-        protected OrderedPair IndexToCoords(int index)
+        protected void CalculateCursorCoords()
         {
             int x = Position.X + 160;
-            int y = Position.Y + index * 22 + 28;
-            return (x, y);
+            int y = Position.Y + selectedIndex * 22 + 28;
+            cursorCoords = new OrderedPair(x, y);
         }
     }
 
@@ -172,11 +182,11 @@ namespace AstrologyGame
         public InventoryMenu(DynamicObject _container)
         {
             container = _container;
-            maxIndex = _container.Children.Count - 1;
+            selectionCount = _container.Children.Count;
 
-            RegenerateText();
+            Refresh();
         }
-        public override void RegenerateText()
+        public override void Refresh()
         {
             // add all the item names to the text
             StringBuilder sb = new StringBuilder();
@@ -191,7 +201,9 @@ namespace AstrologyGame
                 sb.Append("\n");
             }
 
+            selectionCount = container.Children.Count;
             Text = sb.ToString();
+            base.Refresh();
         }
         public override void SelectionMade()
         {
@@ -204,8 +216,7 @@ namespace AstrologyGame
             }
 
             InteractionMenu menu = new InteractionMenu(container.Children[selectedIndex], forbiddenInteractions);
-            OrderedPair coords = IndexToCoords(selectedIndex);
-            menu.Position = coords;
+            menu.Position = cursorCoords;
 
             Game1.OpenMenu(menu);
         }
@@ -244,18 +255,55 @@ namespace AstrologyGame
             Position = new OrderedPair(Game1.ScreenSize.X - (Size.X + 5), Game1.ScreenSize.Y - (Size.Y + 5) );
         }
     }
-    class GetMenu : Menu
+    class GetMenu : SelectMenu
     {
-        public GetMenu(List<Item> items)
-        {
-            string t = "Get\n";
+        private List<Item> items;
 
-            foreach (DynamicObject o in items)
+        public GetMenu(List<Item> _items)
+        {
+            items = _items;
+            Refresh();
+        }
+        public override void Refresh()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[Get]\n");
+
+            foreach (Item i in items)
             {
-                t += o.Name + "\n";
+                sb.Append($"{i.Name}");
+                if (i.Count > 1)
+                    sb.Append($" x{i.Count}");
+                sb.Append("\n");
             }
 
-            Text = t;
+            Text = sb.ToString();
+
+            // update maxIndex in case item count changed
+            selectionCount = items.Count;
+
+            base.Refresh();
+        }
+
+        public override void HandleInput(List<Control> controls)
+        {
+            base.HandleInput(controls);
+
+            // if player hits tab, get all items
+            if(controls.Contains(Control.Tab))
+            {
+                foreach (Item i in items)
+                    i.Interact(Interaction.Get, Zone.Player);
+
+                Game1.CloseMenu(this);
+            }
+        }
+
+        public override void SelectionMade()
+        {
+            items[selectedIndex].Interact(Interaction.Get, Zone.Player);
+            items.RemoveAt(selectedIndex);
+            Refresh();
         }
     }
     class InteractionMenu : SelectMenu
@@ -289,7 +337,7 @@ namespace AstrologyGame
             }
             Text = sb.ToString();
 
-            maxIndex = interactions.Count - 1;
+            selectionCount = interactions.Count;
         }
 
         public override void SelectionMade()
@@ -299,7 +347,7 @@ namespace AstrologyGame
             // use Zone.Player as interactor because only a Player could have opened an InteractionMenu
             objectToInteractWith.Interact(interactions[selectedIndex], Zone.Player);
             // regenerate the menus incase this interaction changed them
-            Game1.RegenerateMenus();
+            Game1.QueueRefreshAllMenus();
         }
     }
     class BookMenu : Menu

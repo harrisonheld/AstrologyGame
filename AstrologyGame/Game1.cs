@@ -60,6 +60,7 @@ namespace AstrologyGame
                 return menus.Last();
             }
         }
+        private static bool refreshAllMenusQueued = false;
 
         // the look cursor
         private static Texture2D cursor;
@@ -307,7 +308,7 @@ namespace AstrologyGame
                 {
                     if (o != Zone.Player)
                     {
-                        o.Interact(Interaction.Get, Zone.Player);
+                        o.Interact(Interaction.Attack, Zone.Player);
                         break;
                     }
                     // TODO
@@ -379,6 +380,9 @@ namespace AstrologyGame
 
         protected override void Draw(GameTime gameTime)
         {
+            if(refreshAllMenusQueued)
+                RefreshAllMenus();
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
@@ -446,11 +450,16 @@ namespace AstrologyGame
                 gameState = GameState.FreeRoam;
             }
         }
-        public static void RegenerateMenus()
+        public static void QueueRefreshAllMenus()
         {
-            // regenerate the text in case it changed
+            refreshAllMenusQueued = true;
+        }
+        private static void RefreshAllMenus()
+        {
             foreach (Menu menu in menus)
-                menu.RegenerateText();
+                menu.Refresh();
+
+            refreshAllMenusQueued = false;
         }
 
         public enum GameState
