@@ -95,9 +95,9 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             DynamicObject knight = new Humanoid();
-            knight.Color = Color.Goldenrod;
-            knight.Name = "Wanderer";
-            knight.TextureName = "human";
+            knight.Color = Color.Bisque;
+            knight.Name = "Knight";
+            knight.TextureName = "human2";
             knight.X = 1;
             knight.Y = 0;
             knight.Children.Add(new Flintlock());
@@ -380,7 +380,7 @@ namespace AstrologyGame
 
         protected override void Draw(GameTime gameTime)
         {
-            if(refreshAllMenusQueued)
+            if (refreshAllMenusQueued)
                 RefreshAllMenus();
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -405,7 +405,7 @@ namespace AstrologyGame
             // draw the look cursor
             if (gameState == GameState.LookMode)
             {
-                Rectangle destinationRectangle = new Rectangle(cursorX * SCALE, cursorY*SCALE, SCALE, SCALE);
+                Rectangle destinationRectangle = new Rectangle(cursorX * SCALE, cursorY * SCALE, SCALE, SCALE);
                 _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
             }
 
@@ -414,7 +414,11 @@ namespace AstrologyGame
                 m.Draw();
 
             // draw debug info
-            _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(576-16, 20), DEBUG_COLOR);
+            if (controls.Contains(Control.DevFunc1))
+            {
+                _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(576 - 16, 0), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(576 - 16, 20), DEBUG_COLOR);
+            }
 
             _spriteBatch.End();
 

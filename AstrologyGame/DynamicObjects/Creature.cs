@@ -22,6 +22,7 @@ namespace AstrologyGame.DynamicObjects
         public Creature()
         {
             Solid = true;
+            Interactions.Add(Interaction.Attack);
         }
         public void GetAttacked(DynamicObject attacker)
         {

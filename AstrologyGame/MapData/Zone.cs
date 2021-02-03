@@ -184,14 +184,21 @@ namespace AstrologyGame.MapData
                 for (int x = 0; x < WIDTH; x++)
                     tiles[x, y].AnimationTurn();
         }
-        // the main Generate method
+
         public static void Generate(int seed)
         {
             Random rand = new Random(seed);
             Clear();
 
             // what biome should this zone generate as
-            Biome biome = BiomeInfo.FontOfMiscreation;
+            double s = rand.NextDouble();
+            Biome biome;
+            if (s > 0.5)
+                biome = BiomeInfo.CydonianSands;
+            else
+                biome = BiomeInfo.DebugLand;
+
+            Debug.WriteLine($"seed: {seed}\nfirst double: { Math.Truncate(s * 100) / 100}\n> 0.5 ? {s > 0.5}");
 
             for (int y = 0; y < HEIGHT; y++)
             {
@@ -250,6 +257,22 @@ namespace AstrologyGame.MapData
             objects.Add(sign);
             */
         }
+
+        // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
+        public static bool RemoveObject(DynamicObject toRemove)
+        {
+            if (Objects.Remove(toRemove))
+                return true;
+
+            foreach(DynamicObject o in Objects)
+            {
+                if (o.RemoveFromDescendants(toRemove))
+                    return true;
+            }
+
+            return false;
+        }
+
         public static List<DynamicObject> ObjectsAtPosition(int x, int y)
         {
             List<DynamicObject> objectsAtPos = new List<DynamicObject>();
@@ -264,6 +287,7 @@ namespace AstrologyGame.MapData
 
             return objectsAtPos;
         }
+
         private static void ObjectsChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             // add textures for new objects

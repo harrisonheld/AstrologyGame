@@ -44,6 +44,33 @@ namespace AstrologyGame.DynamicObjects
         {
             TextureName = "";
         }
+
+        /// <summary>
+        /// Using this DynamicObject as a root node, remove the given DynamicObject from any of it's descendants.
+        /// </summary>
+        /// <param name="toRemove">The object to remove from the tree.</param>
+        /// <returns>True if the removal was successful, False if the given object wasn't in the tree to begin with.</returns>
+        public bool RemoveFromDescendants(DynamicObject toRemove)
+        {
+            Stack<DynamicObject> stack = new Stack<DynamicObject>();
+            stack.Push(this);
+
+            while(stack.Count > 0)
+            {
+                DynamicObject node = stack.Pop();
+
+                foreach(DynamicObject child in node.Children)
+                {
+                    if (child.Children.Remove(toRemove))
+                        return true;
+                    else
+                        stack.Push(child);
+                }
+            }
+
+            return false; 
+        }
+
         public void Interact(Interaction interaction, DynamicObject interactor)
         {
             if (!interactions.Contains(interaction))
@@ -80,8 +107,9 @@ namespace AstrologyGame.DynamicObjects
         }
         protected virtual void Get(DynamicObject pickerUpper)
         {
+            Zone.RemoveObject(this);
             pickerUpper.Children.Add(this);
-            Zone.Objects.Remove(this);
+            //Zone.Objects.Remove(this);
         }
         protected virtual void Drop(DynamicObject dropper)
         {
@@ -91,6 +119,7 @@ namespace AstrologyGame.DynamicObjects
             this.Y = dropper.Y;
             Zone.Objects.Add(this);
         }
+
         public virtual void AnimationTurn()
         {
             // things like changing the texture, changing color, etc.

@@ -38,15 +38,18 @@ namespace AstrologyGame.MapData
             /* TODO: REPLACE THIS MATH LATER
                 Ideally, you would want even a small change in the World Seed to drastically change the world. With the current math,
                 small changes in the World Seed will cause identical Zone Seeds to appear, just in different places. 
-                For example, assuming HEIGHT = 5,
+                For example, assuming WIDTH = 5,
                 if worldSeed = 100, ZoneX = 1, and ZoneY = 1, then the Zone Seed will be 106.
                 if worldSeed = 101, ZoneX = 0, and ZoneY = 1, then the Zone Seed will be 106.
-                If the user decides to test numeric seeds sequentially, they are likely to notice this.
+                If the user decides to test numeric seeds sequentially (for some reason), they are likely to notice this.
 
                 ALSO: Increasing the seed by only one cases strange behavior when moving between zones. With two possible 
-                biome options, is extremely noticible that the biome just alternates as you move across zones. The first number of a new
-                Random with an even seed is heavily biased and tends to be < 0.5. For odd seeds, the result is usually > 0.5.
+                biome options, is extremely noticible that the biome just alternates back and forth as 
+                you move across zones. I suppose this is just a consequence of incrementing seeds by 1?
             */
+
+            // This should be some function of ZoneY, ZoneX, worldSeedInt that returns a different value for all inputs.
+
             return ZoneY * WIDTH + ZoneX + worldSeedInt;
         }
         public static void GenerateCurrentZone()

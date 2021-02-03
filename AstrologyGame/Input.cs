@@ -154,6 +154,7 @@ namespace AstrologyGame
         Back, // leave a menu
 
         // dev functions
+        DevInfo, // kinda like the F3 key in Minecraft
         DevFunc1,
         DevFunc2,
         DevFunc3,
