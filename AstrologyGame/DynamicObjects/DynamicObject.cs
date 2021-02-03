@@ -59,6 +59,9 @@ namespace AstrologyGame.DynamicObjects
             {
                 DynamicObject node = stack.Pop();
 
+                if (node.Children.Remove(toRemove))
+                    return true;
+
                 foreach(DynamicObject child in node.Children)
                 {
                     if (child.Children.Remove(toRemove))
@@ -109,7 +112,6 @@ namespace AstrologyGame.DynamicObjects
         {
             Zone.RemoveObject(this);
             pickerUpper.Children.Add(this);
-            //Zone.Objects.Remove(this);
         }
         protected virtual void Drop(DynamicObject dropper)
         {

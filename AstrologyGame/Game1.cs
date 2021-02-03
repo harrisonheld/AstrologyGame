@@ -308,7 +308,7 @@ namespace AstrologyGame
                 {
                     if (o != Zone.Player)
                     {
-                        o.Interact(Interaction.Attack, Zone.Player);
+                        o.Interact(Interaction.Open, Zone.Player);
                         break;
                     }
                     // TODO
@@ -456,6 +456,7 @@ namespace AstrologyGame
         }
         public static void QueueRefreshAllMenus()
         {
+            // i wrote this method to prevent RefreshAllMenus from being called multiple times a frame
             refreshAllMenusQueued = true;
         }
         private static void RefreshAllMenus()

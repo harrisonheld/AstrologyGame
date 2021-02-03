@@ -74,5 +74,11 @@ namespace AstrologyGame
 
             return tex;
         }
+
+        public static int SHA1Hash(string str)
+        {
+            using var algo = System.Security.Cryptography.SHA1.Create();
+            return BitConverter.ToInt32(algo.ComputeHash(System.Text.Encoding.UTF8.GetBytes(str)));
+        }
     }
 }

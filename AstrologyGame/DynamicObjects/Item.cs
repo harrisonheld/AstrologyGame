@@ -36,7 +36,6 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "teacup";
         }
     }
-
     public class Teacup : Item
     {
         public Teacup()
@@ -51,7 +50,7 @@ namespace AstrologyGame.DynamicObjects
     {
         public MaidDress()
         {
-            Name = "maid-outfit";
+            Name = "maid outfit";
             Lore = "You can have a tea party!";
             TextureName = "teacup";
         }
@@ -61,7 +60,7 @@ namespace AstrologyGame.DynamicObjects
     {
         public CatEars()
         {
-            Name = "cat-ears";
+            Name = "cat ears";
             Lore = "You can have a tea party!";
             TextureName = "teacup";
         }

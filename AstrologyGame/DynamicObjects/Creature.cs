@@ -92,7 +92,27 @@ namespace AstrologyGame.DynamicObjects
 
             return TryMove(X + relMoveX, Y + relMoveY);
         }
+        public bool TryMoveAway(DynamicObject target)
+        {
+            int targetX = target.X;
+            int targetY = target.Y;
 
+            int relMoveX = 0;
+            int relMoveY = 0;
+
+            if (X > targetX)
+                relMoveX = -1;
+            else if (X < targetX)
+                relMoveX = 1;
+            if (Y > targetY)
+                relMoveY = -1;
+            else if (Y < targetY)
+                relMoveY = 1;
+
+            return TryMove(X - relMoveX, Y - relMoveY);
+        }
+
+        // learn how to use delegates and use them here! these functions are so similar its redunant
         /// <summary>
         /// Spend all this creature's action points seeking a target.
         /// </summary>
@@ -102,6 +122,17 @@ namespace AstrologyGame.DynamicObjects
             while (ActionPoints >= Creature.COST_MOVE)
             {
                 bool successfulMove = TryMoveTowards(target);
+
+                // if the move fails, most likely because there is a wall in the way, just quit trying.
+                if (!successfulMove)
+                    break;
+            }
+        }
+        public void Flee(DynamicObject target)
+        {
+            while (ActionPoints >= Creature.COST_MOVE)
+            {
+                bool successfulMove = TryMoveAway(target);
 
                 // if the move fails, most likely because there is a wall in the way, just quit trying.
                 if (!successfulMove)
@@ -146,7 +177,7 @@ namespace AstrologyGame.DynamicObjects
 
         public override void AiTurn()
         {
-            Seek(Zone.Player);
+            Flee(Zone.Player);
             base.AiTurn();
         }
     }

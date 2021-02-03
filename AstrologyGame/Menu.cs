@@ -214,6 +214,11 @@ namespace AstrologyGame
                 // ...forbid getting the item. It makes no sense for the player to get an item from their OWN inventory.
                 forbiddenInteractions.Add(Interaction.Get);
             }
+            else
+            {
+                // otherwise, forbid dropping, as it is someone or something else's inventory
+                forbiddenInteractions.Add(Interaction.Drop);
+            }
 
             InteractionMenu menu = new InteractionMenu(container.Children[selectedIndex], forbiddenInteractions);
             menu.Position = cursorCoords;

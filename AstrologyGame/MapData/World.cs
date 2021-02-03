@@ -29,8 +29,6 @@ namespace AstrologyGame.MapData
 
                 // Using .GetHashCode() is inconsistent across application restarts.
                 // The following will yield the same number for the same string every time.
-                using var algo = System.Security.Cryptography.SHA1.Create();
-                worldSeedInt = BitConverter.ToInt32(algo.ComputeHash(System.Text.Encoding.UTF8.GetBytes(worldSeedString)));
             }
         }
         public static int GetZoneSeed()
@@ -48,9 +46,9 @@ namespace AstrologyGame.MapData
                 you move across zones. I suppose this is just a consequence of incrementing seeds by 1?
             */
 
-            // This should be some function of ZoneY, ZoneX, worldSeedInt that returns a different value for all inputs.
-
-            return ZoneY * WIDTH + ZoneX + worldSeedInt;
+            // temporary solution is to just take the hash
+            string s = (ZoneY * WIDTH + ZoneX + worldSeedInt).ToString();
+            return Utility.SHA1Hash(s);
         }
         public static void GenerateCurrentZone()
         {
