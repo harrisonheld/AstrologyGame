@@ -27,42 +27,4 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "flintlock";
         }
     }
-    public class TeaPot : Item
-    {
-        public TeaPot()
-        {
-            Name = "tea pot";
-            Lore = "You can have a tea party!";
-            TextureName = "teacup";
-        }
-    }
-    public class Teacup : Item
-    {
-        public Teacup()
-        {
-            Name = "tea cup";
-            Lore = "You can have a tea party!";
-            TextureName = "teacup";
-        }
-    }
-
-    public class MaidDress : Item
-    {
-        public MaidDress()
-        {
-            Name = "maid outfit";
-            Lore = "You can have a tea party!";
-            TextureName = "teacup";
-        }
-    }
-
-    public class CatEars : Item
-    {
-        public CatEars()
-        {
-            Name = "cat ears";
-            Lore = "You can have a tea party!";
-            TextureName = "teacup";
-        }
-    }
 }

@@ -22,6 +22,8 @@ namespace AstrologyGame.DynamicObjects
 
         public Creature()
         {
+            MaxHealth = 10;
+            Health = 10;
             Quickness = 100;
             Solid = true;
             Interactions.Add(Interaction.Attack);
@@ -30,6 +32,7 @@ namespace AstrologyGame.DynamicObjects
         {
 
         }
+
         public virtual void AiTurn()
         {
             RechargeAP();

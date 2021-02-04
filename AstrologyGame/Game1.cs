@@ -96,10 +96,11 @@ namespace AstrologyGame
             knight.Color = Color.Bisque;
             knight.Name = "Knight";
             knight.TextureName = "human2";
+            knight.Stats = new DynamicObjectStats(0, 10, 0, 0);
             knight.X = 1;
             knight.Y = 0;
             knight.Children.Add(new Flintlock());
-            knight.Children.Add(new Book("Poets to Come"));
+            knight.Children.Add(new Book("Master of the Moon"));
             Zone.Objects.Add(knight);
             Zone.Player = knight;
 

@@ -27,13 +27,24 @@ namespace AstrologyGame.DynamicObjects
         // x and y position of the object
         public int X { get; set; }
         public int Y { get; set; }
+        public int MaxHealth { get; set; }
+        public int Health { get; set; }
         public bool Solid { get; set; } // can you walk through the thing
         public Color Color { get; set; } = Color.White;
         public string SignText { get; set; }
 
+        // the 4 stats
+        public DynamicObjectStats Stats { get; set; } = new DynamicObjectStats
+        {
+            Vigor = 0,
+            Prowess = 0,
+            Faith = 0,
+            Some4thThing = 0
+        };
+
         public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
         // list of things you can do to the object
-        protected readonly List<Interaction> interactions = new List<Interaction>();
+        protected List<Interaction> interactions = new List<Interaction>();
         public List<Interaction> Interactions
         {
             get

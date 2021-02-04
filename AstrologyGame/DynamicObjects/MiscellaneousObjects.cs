@@ -51,16 +51,16 @@ namespace AstrologyGame.DynamicObjects
 
     public class MortarStrike : Creature
     {
-        private readonly int radius;
-        public MortarStrike(int _radius)
+        public MortarStrike(int radius)
         {
-            Quickness = 50;
-            radius = _radius;
-
+            Quickness = 30;
+            Solid = false;
             ShouldRender = false;
+            // no interactions.
+            interactions = new List<Interaction>();
 
             // generate indicators
-            for(int y = -radius; y <= radius; y++)
+            for (int y = -radius; y <= radius; y++)
             {
                 for(int x = -radius; x <= radius; x++)
                 {
@@ -94,7 +94,7 @@ namespace AstrologyGame.DynamicObjects
             relY = _relY;
 
             Color = Color.Red;
-            TextureName = "stoop poop";
+            TextureName = "speckled2";
         }
     }
 }

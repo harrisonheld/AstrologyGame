@@ -163,12 +163,13 @@ namespace AstrologyGame.MapData
             Clear();
 
             // what biome should this zone generate as
-            double s = rand.NextDouble();
+            Biome biome = BiomeInfo.DebugLand;
+            /*double s = rand.NextDouble();
             Biome biome;
             if (s > 0.5)
                 biome = BiomeInfo.CydonianSands;
             else
-                biome = BiomeInfo.FontOfMiscreation;
+                biome = BiomeInfo.FontOfMiscreation;*/
 
             for (int y = 0; y < HEIGHT; y++)
             {
@@ -199,36 +200,7 @@ namespace AstrologyGame.MapData
                 Objects.Add(Player);
             }
 
-            Chest chest = new Chest();
-            chest.X = 1;
-            chest.Y = 5;
-            Objects.Add(chest);
-
-            chest.Children.Add(new TeaPot() { Count = 4 });
-            chest.Children.Add(new MaidDress());
-            chest.Children.Add(new CatEars());
-
-            Book b = new Book("Master of the Moon");
-            b.Color = Color.DodgerBlue;
-            Objects.Add(b);
-
-            Objects.Add(new TeaPot() { X = 5, Y = 5 });
-            Objects.Add(new Flintlock() { X = 5, Y = 5 });
-            Objects.Add(new MaidDress() { X = 5, Y = 5 });
-
-            Objects.Add(new Pisces() { X = 10, Y = 6 });
-            Objects.Add(new ChildOfAbhoth { X = 10, Y = 7 });
-
-            Objects.Add(new MortarStrike(1) { X = 3, Y = 6 });
-
-            /*
-            Sign sign = new Sign();
-            sign.signText = "Abhoth, the ultimate source of all miscreation and abomination";
-            sign.x = 3;
-            sign.y = 1;
-            sign.color = Color.Gray;
-            objects.Add(sign);
-            */
+            Objects.Add(new ChildOfAbhoth());
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
