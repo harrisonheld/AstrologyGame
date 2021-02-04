@@ -51,6 +51,42 @@ namespace AstrologyGame.DynamicObjects
 
     public class MortarStrike : DynamicObject
     {
+        private readonly int radius;
+        public MortarStrike(int _radius)
+        {
+            radius = _radius;
 
+            // generate indicators
+            for(int y = -radius; y <= radius; y++)
+            {
+                for(int x = -radius; x <= radius; x++)
+                {
+                    Children.Add(new MortarIndicator(x, y));
+                }
+            }
+
+            Zone.AddStringToTextureDict("box");
+        }
+
+        public override void Draw()
+        {
+            // draw all indicators
+            foreach(MortarIndicator indicator in Children)
+            {
+                Utility.DrawDynamicObject(indicator, this.X + indicator.relX, this.Y + indicator.relY);
+            }
+        }
+    }
+    public class MortarIndicator : DynamicObject
+    {
+        public int relX, relY; // position relative to the center of the strike
+        public MortarIndicator(int _relX, int _relY)
+        {
+            relX = _relX;
+            relY = _relY;
+
+            Color = Color.Red;
+            TextureName = "box";
+        }
     }
 }

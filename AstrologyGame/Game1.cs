@@ -36,7 +36,7 @@ namespace AstrologyGame
         }
 
         // for input
-        private const int INPUT_STAGGER = 0; // the input stagger in milliseconds
+        private const int INPUT_STAGGER = 1000 / 8; // the input stagger in milliseconds
         private int timeSinceLastInput = 0; // in milliseconds
         private List<Control> controls; // list of all controls pressed this frame
         private bool inputLastFrame = false; // did the player do any input the frame prior?

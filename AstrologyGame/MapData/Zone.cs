@@ -16,7 +16,7 @@ namespace AstrologyGame.MapData
 {
     public static class Zone
     {
-        public const int WIDTH = 10;
+        public const int WIDTH = 16;
         public const int HEIGHT = 10;
 
         // go from string to texture2d
@@ -43,7 +43,7 @@ namespace AstrologyGame.MapData
             Objects.CollectionChanged += ObjectsChanged;
         }
 
-        private static void AddStringToTextureDict(string texName)
+        public static void AddStringToTextureDict(string texName)
         {
             // if key not in the dictionary, add it
             if (!textureDict.ContainsKey(texName))
@@ -55,7 +55,7 @@ namespace AstrologyGame.MapData
         /// Removes a string-Texture2D pair from the texture dictionary ONLY if no tiles or objects use it.
         /// </summary>
         /// <param name="texName"></param>
-        private static void RemoveStringFromTextureDict(string texName)
+        public static void RemoveStringFromTextureDict(string texName)
         {
             // TODO: IMPLEMENT THIS
             // if no objects use this texture, remove it
@@ -248,6 +248,8 @@ namespace AstrologyGame.MapData
 
             Objects.Add(new Pisces() { X = 10, Y = 6 });
             Objects.Add(new ChildOfAbhoth { X = 10, Y = 7 });
+
+            Objects.Add(new MortarStrike(2) { X = 3, Y = 6 });
 
             /*
             Sign sign = new Sign();
