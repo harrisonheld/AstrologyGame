@@ -26,9 +26,7 @@ namespace AstrologyGame.MapData
             set
             {
                 worldSeedString = value;
-
-                // Using .GetHashCode() is inconsistent across application restarts.
-                // The following will yield the same number for the same string every time.
+                worldSeedInt = Utility.SHA1Hash(worldSeedString);
             }
         }
         public static int GetZoneSeed()

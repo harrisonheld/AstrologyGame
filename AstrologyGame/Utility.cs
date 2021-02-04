@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +28,8 @@ namespace AstrologyGame
         public static ContentManager Content { get { return content; } }
         public static GraphicsDevice Graphics { get { return graphics; } }
         public static SpriteBatch SpriteBatch { get { return spriteBatch; } }
+
+        public static SpriteFont Font { get; set; }
 
         // go from string to texture2d
         private static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
@@ -133,10 +137,77 @@ namespace AstrologyGame
             spriteBatch.Draw(GetTexture(o.TextureName), destinationRectangle, o.Color);
         }
 
+        // Using .GetHashCode() is inconsistent across application restarts.
+        // The following will yield the same number for the same string every time.
         public static int SHA1Hash(string str)
         {
             using var algo = System.Security.Cryptography.SHA1.Create();
             return BitConverter.ToInt32(algo.ComputeHash(System.Text.Encoding.UTF8.GetBytes(str)));
+        }
+
+        public static void RenderMarkupText(string markup, Vector2 position)
+        {
+            Color defaultColor = Color.White;
+
+            // only bother if we have color commands involved
+            if (markup.Contains("<c:"))
+            {
+                // how far in x to offset from position
+                int currentOffset = 0;
+
+                // example:
+                // string.Format("You attempt to hit the [color:#FFFF0000]{0}[/color] but [color:{1}]MISS[/color]!",
+                // currentMonster.Name, Color.Red.ToHex(true));
+                string[] splits = markup.Split(new string[] { "<c:" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var str in splits)
+                {
+                    // if this section starts with a color
+                    if (str.StartsWith("#"))
+                    {
+                        // #123456789
+                        string hexString = str.Substring(0, 7);
+
+                        // any subsequent msgs after the [/color] tag are defaultColor
+                        string[] msgs = str.Substring(8).Split(new string[] { "</c>" }, StringSplitOptions.RemoveEmptyEntries);
+
+                        // always draw [0] there should be at least one
+                        spriteBatch.DrawString(Font, msgs[0], position + new Vector2(currentOffset, 0), ColorFromString(hexString));
+                        currentOffset += (int)Font.MeasureString(msgs[0]).X;
+
+                        // there should only ever be one other string or none
+                        if (msgs.Length == 2)
+                        {
+                            spriteBatch.DrawString(Font, msgs[1], position + new Vector2(currentOffset, 0), defaultColor);
+                            currentOffset += (int)Font.MeasureString(msgs[1]).X;
+                        }
+                    }
+                    else
+                    {
+                        spriteBatch.DrawString(Font, str, position + new Vector2(currentOffset, 0), defaultColor);
+                        currentOffset += (int)Font.MeasureString(str).X;
+                    }
+                }
+            }
+            else
+            {
+                // just draw the string as ordered
+                spriteBatch.DrawString(Font, markup, position, defaultColor);
+            }
+        }
+
+        private static Color ColorFromString(string str)
+        {
+            // if its a hex code
+            if(str[0] == '#')
+            {
+                int r = int.Parse(str.Substring(1, 2), NumberStyles.HexNumber);
+                int g = int.Parse(str.Substring(3, 2), NumberStyles.HexNumber);
+                int b = int.Parse(str.Substring(5, 2), NumberStyles.HexNumber);
+
+                return new Color(r, g, b);
+            }
+
+            return Color.White;
         }
     }
 }

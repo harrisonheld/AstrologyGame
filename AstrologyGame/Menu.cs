@@ -72,10 +72,8 @@ namespace AstrologyGame
         // should opening this menu cause the GameState to change to InMenu
         public bool PauseWhenOpened { get; set; } = true;
 
-        public static void Initalize(SpriteFont _font)
+        public static void Initialize()
         {
-            Font = _font;
-
             cursorTexture = Utility.GetTexture(CURSOR_TEXTURE_NAME);
             backgroundTexture = Utility.GetTexture(BACKGROUND_TEXTURE_NAME);
         }

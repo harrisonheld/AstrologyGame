@@ -96,11 +96,11 @@ namespace AstrologyGame
             knight.Color = Color.Bisque;
             knight.Name = "Knight";
             knight.TextureName = "human2";
-            knight.Stats = new DynamicObjectStats(0, 10, 0, 0);
+            knight.Stats = new DynamicObjectStats(10, 10, 10, 10);
             knight.X = 1;
             knight.Y = 0;
             knight.Children.Add(new Flintlock());
-            knight.Children.Add(new Book("Master of the Moon"));
+            knight.Children.Add(new Book("Master of the Moon") { Color = Color.Blue });
             Zone.Objects.Add(knight);
             Zone.Player = knight;
 
@@ -119,7 +119,11 @@ namespace AstrologyGame
             Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             cursor = Utility.GetTexture("cursor1");
             font = Content.Load<SpriteFont>("font1");
-            Menu.Initalize(font);
+
+            Menu.Font = font;
+            Utility.Font = font;
+
+            Menu.Initialize();
         }
 
         protected override void UnloadContent()
@@ -415,8 +419,11 @@ namespace AstrologyGame
             // draw debug info
             if (controls.Contains(Control.DevInfo))
             {
-                _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(576 - 16, 0), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(576 - 16, 20), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(0, 20), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Gamestate: ({gameState})", new Vector2(0, 40), DEBUG_COLOR);
+
+                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 60));
             }
 
             _spriteBatch.End();
