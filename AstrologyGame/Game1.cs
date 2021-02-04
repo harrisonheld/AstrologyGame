@@ -19,8 +19,6 @@ namespace AstrologyGame
         private static SpriteBatch _spriteBatch;
         private static SpriteFont font;
 
-        private const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
-
         private static OrderedPair screenSize = new OrderedPair(1024, 576);
         public static OrderedPair ScreenSize
         {
@@ -117,11 +115,10 @@ namespace AstrologyGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             cursor = Utility.TryLoadTexture("cursor1");
             font = Content.Load<SpriteFont>("font1");
-
-            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
-            Menu.Initalize(GraphicsDevice, _spriteBatch, font);
+            Menu.Initalize(font);
         }
 
         protected override void UnloadContent()
@@ -387,27 +384,15 @@ namespace AstrologyGame
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
 
             // draw the zone
-            for (int y = 0; y < Zone.HEIGHT; y++)
-            {
-                for (int x = 0; x < Zone.WIDTH; x++)
-                {
-                    Tile tile = Zone.tiles[x, y];
-                    DrawObject(tile, x, y);
-                }
-            }
-
-            foreach (DynamicObject o in Zone.Objects)
-            {
-                DrawObject(o, o.X, o.Y);
-            }
+            Zone.Draw();
 
             // draw the look cursor
             if (gameState == GameState.LookMode)
             {
-                Rectangle destinationRectangle = new Rectangle(cursorX * SCALE, cursorY * SCALE, SCALE, SCALE);
+                Rectangle destinationRectangle = new Rectangle(
+                    cursorX * Utility.SCALE, cursorY * Utility.SCALE, Utility.SCALE, Utility.SCALE);
                 _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
             }
-
             // draw all the menus
             foreach (Menu m in menus)
                 m.Draw();
@@ -422,14 +407,6 @@ namespace AstrologyGame
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-        private void DrawObject(DynamicObject o, int x, int y)
-        {
-            int drawX = x * SCALE;
-            int drawY = y * SCALE;
-
-            Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            _spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.Color);
         }
 
         public static void OpenMenu(Menu newMenu)

@@ -22,9 +22,7 @@ namespace AstrologyGame
         public const string BACKGROUND_TEXTURE_NAME = "black";
         private const string CURSOR_TEXTURE_NAME = "marble";
 
-        public static GraphicsDevice graphicsDevice { get; set; }
-        public static SpriteFont font { get; set; }
-        public static SpriteBatch spriteBatch { get; set; }
+        public static SpriteFont Font { get; set; }
 
         protected static Texture2D cursorTexture;
         protected static Texture2D backgroundTexture;
@@ -67,18 +65,16 @@ namespace AstrologyGame
             set
             {
                 text = value;
-                wrappedText = Utility.WrapText(font, text, Size.X);
+                wrappedText = Utility.WrapText(Font, text, Size.X);
             }
         }
 
         // should opening this menu cause the GameState to change to InMenu
         public bool PauseWhenOpened { get; set; } = true;
 
-        public static void Initalize(GraphicsDevice _graphicsDevice, SpriteBatch _spriteBatch, SpriteFont _font)
+        public static void Initalize(SpriteFont _font)
         {
-            graphicsDevice = _graphicsDevice;
-            spriteBatch = _spriteBatch;
-            font = _font;
+            Font = _font;
 
             cursorTexture = Utility.TryLoadTexture(CURSOR_TEXTURE_NAME);
             backgroundTexture = Utility.TryLoadTexture(BACKGROUND_TEXTURE_NAME);
@@ -96,10 +92,10 @@ namespace AstrologyGame
         public virtual void Draw()
         {
             // draw the background
-            spriteBatch.Draw(backgroundTexture, rect, BackgroundColor);
+            Utility.SpriteBatch.Draw(backgroundTexture, rect, BackgroundColor);
             // draw the text
             Vector2 textPos = new Vector2(rect.X, rect.Y);
-            spriteBatch.DrawString(font, wrappedText, textPos, Color.White);
+            Utility.SpriteBatch.DrawString(Font, wrappedText, textPos, Color.White);
         }
 
         public void Center()
@@ -163,7 +159,7 @@ namespace AstrologyGame
             if(selectionCount != 0)
             {
                 CalculateCursorCoords();
-                spriteBatch.Draw(cursorTexture, new Rectangle(cursorCoords.X, cursorCoords.Y, 20, 20), Color.White);
+                Utility.SpriteBatch.Draw(cursorTexture, new Rectangle(cursorCoords.X, cursorCoords.Y, 20, 20), Color.White);
             }
         }
 
@@ -256,7 +252,7 @@ namespace AstrologyGame
 
             Text = t;
 
-            Size = (OrderedPair)font.MeasureString(wrappedText);
+            Size = (OrderedPair)Font.MeasureString(wrappedText);
             Position = new OrderedPair(Game1.ScreenSize.X - (Size.X + 5), Game1.ScreenSize.Y - (Size.Y + 5) );
         }
     }
@@ -379,10 +375,10 @@ namespace AstrologyGame
             string pageNumString = (currentPageIdx + 1).ToString() + " / " + pageCount;
             OrderedPair pageNumPadding = new OrderedPair(5, 5);
 
-            OrderedPair pageNumSize = (OrderedPair)font.MeasureString(pageNumString);
+            OrderedPair pageNumSize = (OrderedPair)Font.MeasureString(pageNumString);
             OrderedPair pageNumPos = Position + new OrderedPair(Size.X, Size.Y) - pageNumSize;
             pageNumPos -= pageNumPadding;
-            spriteBatch.DrawString(font, pageNumString, pageNumPos, Color.White);
+            Utility.SpriteBatch.DrawString(Font, pageNumString, pageNumPos, Color.White);
 
         }
         public override void HandleInput(List<Control> controls)

@@ -8,11 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
+using AstrologyGame.MapData;
+using AstrologyGame.DynamicObjects;
+
 namespace AstrologyGame
 {
     // this is a helper class. it contains miscellaneous functions that are helpful everywhere
     public static class Utility
     {
+        public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
+
         private static ContentManager content;
         private static GraphicsDevice graphics;
         private static SpriteBatch spriteBatch;
@@ -82,6 +87,15 @@ namespace AstrologyGame
             }
 
             return tex;
+        }
+
+        public static void DrawDynamicObject(DynamicObject o, int x, int y)
+        {
+            int drawX = x * SCALE;
+            int drawY = y * SCALE;
+
+            Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
+            spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.Color);
         }
 
         public static int SHA1Hash(string str)

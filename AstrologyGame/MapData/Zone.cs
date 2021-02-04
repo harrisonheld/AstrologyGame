@@ -300,5 +300,23 @@ namespace AstrologyGame.MapData
                 foreach (object o in args.OldItems)
                     RemoveStringFromTextureDict(o.ToString());
         }
+
+        public static void Draw()
+        {
+            // draw the tiles
+            for (int y = 0; y < HEIGHT; y++)
+            {
+                for (int x = 0; x < WIDTH; x++)
+                {
+                    Utility.DrawDynamicObject(tiles[x, y], x, y);
+                }
+            }
+
+            // draw the objects
+            foreach (DynamicObject o in Objects)
+            {
+                Utility.DrawDynamicObject(o, o.X, o.Y);
+            }
+        }
     }
 }
