@@ -115,7 +115,6 @@ namespace AstrologyGame.DynamicObjects
         }
         protected virtual void Drop(DynamicObject dropper)
         {
-            Debug.WriteLine("dropped");
             dropper.Children.Remove(this);
             this.X = dropper.X;
             this.Y = dropper.Y;
@@ -125,6 +124,11 @@ namespace AstrologyGame.DynamicObjects
         public virtual void AnimationTurn()
         {
             // things like changing the texture, changing color, etc.
+        }
+
+        public virtual void Draw()
+        {
+            Utility.DrawDynamicObject(this, this.X, this.Y);
         }
     }
 }

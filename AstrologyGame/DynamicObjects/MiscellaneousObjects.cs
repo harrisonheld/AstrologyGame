@@ -48,4 +48,9 @@ namespace AstrologyGame.DynamicObjects
             Game1.OpenMenu(menu);
         }
     }
+
+    public class MortarStrike : DynamicObject
+    {
+
+    }
 }

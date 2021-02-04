@@ -16,8 +16,8 @@ namespace AstrologyGame.MapData
 {
     public static class Zone
     {
-        public const int WIDTH = 16;
-        public const int HEIGHT = 9;
+        public const int WIDTH = 10;
+        public const int HEIGHT = 10;
 
         // go from string to texture2d
         public static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
@@ -196,9 +196,7 @@ namespace AstrologyGame.MapData
             if (s > 0.5)
                 biome = BiomeInfo.CydonianSands;
             else
-                biome = BiomeInfo.DebugLand;
-
-            Debug.WriteLine($"seed: {seed}\nfirst double: { Math.Truncate(s * 100) / 100}\n> 0.5 ? {s > 0.5}");
+                biome = BiomeInfo.FontOfMiscreation;
 
             for (int y = 0; y < HEIGHT; y++)
             {
@@ -213,7 +211,10 @@ namespace AstrologyGame.MapData
 
                         if (r < chance)
                         {
-                            tiles[x, y] = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
+                            Tile newTile = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
+                            newTile.X = x;
+                            newTile.Y = y;
+                            tiles[x, y] = newTile;
                             break;
                         }
                     }
@@ -308,14 +309,14 @@ namespace AstrologyGame.MapData
             {
                 for (int x = 0; x < WIDTH; x++)
                 {
-                    Utility.DrawDynamicObject(tiles[x, y], x, y);
+                    tiles[x, y].Draw();
                 }
             }
 
             // draw the objects
             foreach (DynamicObject o in Objects)
             {
-                Utility.DrawDynamicObject(o, o.X, o.Y);
+                o.Draw();
             }
         }
     }

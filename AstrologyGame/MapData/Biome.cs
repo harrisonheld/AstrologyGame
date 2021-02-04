@@ -22,7 +22,7 @@ namespace AstrologyGame.MapData
 
         public readonly static Biome CydonianSands = new Biome()
         {
-            TileTypes = new Type[] { typeof(Sand), typeof(BleachedSand), typeof(Stone) },
+            TileTypes = new Type[] { typeof(CydonianSand), typeof(CydonianSand2), typeof(Stone) },
             TileWeights = new double[] {0.8, 0.05, 0.15}
         };
 

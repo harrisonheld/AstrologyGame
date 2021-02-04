@@ -33,19 +33,21 @@ namespace AstrologyGame.DynamicObjects
             Color = new Color(86, 72, 67);
         }
     }
-    class Sand : Tile
+    class CydonianSand : Tile
     {
-        public Sand()
+        public CydonianSand()
         {
-            Name = "sand";
+            Name = "Cydonian sand";
             Lore = "sand";
-            Color = Color.LightYellow;
+            Color = new Color(230, 150, 105);
         }
     }
-    class BleachedSand : Sand
+    // bleached sand variant
+    class CydonianSand2 : CydonianSand
     {
-        public BleachedSand()
+        public CydonianSand2()
         {
+            Name = "sunbleached Cydonian sand";
             TextureName = "dots2x2";
             Color = new Color(Color.R + 10, Color.G + 10, Color.B + 10);
         }

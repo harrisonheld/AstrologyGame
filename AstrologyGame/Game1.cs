@@ -36,7 +36,7 @@ namespace AstrologyGame
         }
 
         // for input
-        private const int INPUT_STAGGER = 1000 / 8; // the input stagger in milliseconds
+        private const int INPUT_STAGGER = 0; // the input stagger in milliseconds
         private int timeSinceLastInput = 0; // in milliseconds
         private List<Control> controls; // list of all controls pressed this frame
         private bool inputLastFrame = false; // did the player do any input the frame prior?
@@ -140,7 +140,7 @@ namespace AstrologyGame
             // and if the user pressed a control
             if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && controls.Count != 0)
             {
-                // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING
+                // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING!
                 movePair = Input.ControlsToMovePair(controls);
 
                 switch (gameState)
@@ -259,16 +259,30 @@ namespace AstrologyGame
                 }
             }
 
-            if (Zone.Player.X >= Zone.WIDTH)
+            // generate a new zone if the player exits the current one
+            if (Zone.Player.X >= Zone.WIDTH || Zone.Player.X < 0 || Zone.Player.Y >= Zone.HEIGHT || Zone.Player.Y < 0)
             {
-                Zone.Player.X = 0;
-                World.ZoneX = (World.ZoneX + 1);
-                World.GenerateCurrentZone();
-            }
-            if (Zone.Player.X < 0)
-            {
-                Zone.Player.X = Zone.WIDTH - 1;
-                World.ZoneX = (World.ZoneX - 1);
+                if (Zone.Player.X >= Zone.WIDTH)
+                {
+                    Zone.Player.X = 0;
+                    World.ZoneX += 1;
+                }
+                else if (Zone.Player.X < 0)
+                {
+                    Zone.Player.X = Zone.WIDTH - 1;
+                    World.ZoneX -= 1;
+                }
+                if (Zone.Player.Y >= Zone.HEIGHT)
+                {
+                    Zone.Player.Y = 0;
+                    World.ZoneY -= 1;
+                }
+                else if (Zone.Player.Y < 0)
+                {
+                    Zone.Player.Y = Zone.HEIGHT - 1;
+                    World.ZoneY += 1;
+                }
+
                 World.GenerateCurrentZone();
             }
 
