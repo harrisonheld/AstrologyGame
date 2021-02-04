@@ -17,10 +17,7 @@ namespace AstrologyGame.MapData
     public static class Zone
     {
         public const int WIDTH = 16;
-        public const int HEIGHT = 10;
-
-        // go from string to texture2d
-        public static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
+        public const int HEIGHT = 9;
 
         //Declare new layers
         public static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
@@ -35,32 +32,7 @@ namespace AstrologyGame.MapData
         {
             tiles = new Tile[WIDTH, HEIGHT];
             Objects.Clear();
-            textureDict.Clear();
         }
-
-        static Zone()
-        {
-            Objects.CollectionChanged += ObjectsChanged;
-        }
-
-        public static void AddStringToTextureDict(string texName)
-        {
-            // if key not in the dictionary, add it
-            if (!textureDict.ContainsKey(texName))
-            {
-                textureDict.Add(texName, Utility.TryLoadTexture(texName));
-            }
-        }
-        /// <summary>
-        /// Removes a string-Texture2D pair from the texture dictionary ONLY if no tiles or objects use it.
-        /// </summary>
-        /// <param name="texName"></param>
-        public static void RemoveStringFromTextureDict(string texName)
-        {
-            // TODO: IMPLEMENT THIS
-            // if no objects use this texture, remove it
-        }
-
 
         /// <summary>
         ///  Save the Zone state as an XML file.
@@ -218,8 +190,6 @@ namespace AstrologyGame.MapData
                             break;
                         }
                     }
-
-                    AddStringToTextureDict(tiles[x, y].TextureName);
                 }
             }
 
@@ -249,7 +219,7 @@ namespace AstrologyGame.MapData
             Objects.Add(new Pisces() { X = 10, Y = 6 });
             Objects.Add(new ChildOfAbhoth { X = 10, Y = 7 });
 
-            Objects.Add(new MortarStrike(2) { X = 3, Y = 6 });
+            Objects.Add(new MortarStrike(1) { X = 3, Y = 6 });
 
             /*
             Sign sign = new Sign();
@@ -289,19 +259,6 @@ namespace AstrologyGame.MapData
             }
 
             return objectsAtPos;
-        }
-
-        private static void ObjectsChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            // add textures for new objects
-            if (args.NewItems != null)
-                foreach (object o in args.NewItems)
-                    AddStringToTextureDict((o as DynamicObject).TextureName);
-
-            // remove textures for objects removed
-            if (args.OldItems != null)
-                foreach (object o in args.OldItems)
-                    RemoveStringFromTextureDict(o.ToString());
         }
 
         public static void Draw()

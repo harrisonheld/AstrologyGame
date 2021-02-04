@@ -116,7 +116,7 @@ namespace AstrologyGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
-            cursor = Utility.TryLoadTexture("cursor1");
+            cursor = Utility.GetTexture("cursor1");
             font = Content.Load<SpriteFont>("font1");
             Menu.Initalize(font);
         }

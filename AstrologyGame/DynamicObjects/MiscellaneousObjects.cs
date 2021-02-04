@@ -49,12 +49,15 @@ namespace AstrologyGame.DynamicObjects
         }
     }
 
-    public class MortarStrike : DynamicObject
+    public class MortarStrike : Creature
     {
         private readonly int radius;
         public MortarStrike(int _radius)
         {
+            Quickness = 50;
             radius = _radius;
+
+            ShouldRender = false;
 
             // generate indicators
             for(int y = -radius; y <= radius; y++)
@@ -64,8 +67,6 @@ namespace AstrologyGame.DynamicObjects
                     Children.Add(new MortarIndicator(x, y));
                 }
             }
-
-            Zone.AddStringToTextureDict("box");
         }
 
         public override void Draw()
@@ -75,6 +76,13 @@ namespace AstrologyGame.DynamicObjects
             {
                 Utility.DrawDynamicObject(indicator, this.X + indicator.relX, this.Y + indicator.relY);
             }
+        }
+
+        public override void AiTurn()
+        {
+            base.AiTurn();
+
+            Seek(Zone.Player);
         }
     }
     public class MortarIndicator : DynamicObject
@@ -86,7 +94,7 @@ namespace AstrologyGame.DynamicObjects
             relY = _relY;
 
             Color = Color.Red;
-            TextureName = "box";
+            TextureName = "stoop poop";
         }
     }
 }

@@ -19,7 +19,9 @@ namespace AstrologyGame.DynamicObjects
 {
     public abstract class DynamicObject
     {
-        public string TextureName { get; set; } = ""; //file name of the texture it should use
+        public bool ShouldRender { get; set; } = true; // should we try to render this?
+
+        public string TextureName { get; set; } = "";
         public string Name { get; set; } // is the thing named, ie Orion, Harrison, Spider, Demon for creatures or Sand, Stone, for tiles
         public string Lore { get; set; } // the item description, creature description, etc.
         // x and y position of the object

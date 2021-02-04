@@ -17,10 +17,12 @@ namespace AstrologyGame.DynamicObjects
         public const int COST_ATTACK = 100;
         public const int AP_CAP = 200;
 
-        public int Quickness { get; set; } = 100; // how much AP does this creature get per turn
+        public int Quickness { get; set; } = 0; // how much AP does this object get per turn.
         public int ActionPoints { get; set; } = 0; // a.k.a. AP
+
         public Creature()
         {
+            Quickness = 100;
             Solid = true;
             Interactions.Add(Interaction.Attack);
         }
@@ -34,10 +36,10 @@ namespace AstrologyGame.DynamicObjects
         }
         public void RechargeAP()
         {
-            // give the creature its AP for this turn
+            // give the object its AP for this turn
             ActionPoints += Quickness;
 
-            // cap the action points so the creature can't wait around and accumulate a massive amount of AP
+            // cap the action points so the object can't wait around and accumulate a massive amount of AP
             ActionPoints = Math.Clamp(ActionPoints, 0, AP_CAP);
         }
 

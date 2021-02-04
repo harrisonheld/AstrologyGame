@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.IO;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,14 +27,64 @@ namespace AstrologyGame
         public static GraphicsDevice Graphics { get { return graphics; } }
         public static SpriteBatch SpriteBatch { get { return spriteBatch; } }
 
-        const string ERROR_TEXTURE_NAME = "error";
-        static string[] DELIMITERS = { " " };
+        // go from string to texture2d
+        private static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
 
+        const string ERROR_TEXTURE_NAME = "error";
+        static string[] DELIMITERS = { " " }; // for finding spaces in strings
+
+        /// <summary>
+        /// Load an entire folder of content. Got this from
+        /// https://danielsaidi.com/blog/2010/01/26/load-all-assets-in-a-folder-in-xna
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="contentFolder"></param>
+        /// <returns></returns>
+        public static Dictionary<string, T> LoadContent<T>(string contentFolder)
+        {
+            //Load directory info, abort if none
+            DirectoryInfo dir = new DirectoryInfo(Content.RootDirectory + "\\" + contentFolder);
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException();
+            }
+
+            //Init the resulting list
+            Dictionary<string, T> result = new Dictionary<string, T>();
+
+            //Load all files that matches the file filter
+            FileInfo[] files = dir.GetFiles("*.*");
+            foreach (FileInfo file in files)
+            {
+                string key = Path.GetFileNameWithoutExtension(file.Name);
+                result[key] = Content.Load<T>(contentFolder + "/" + key);
+            }
+
+            //Return the result
+            return result;
+        }
         public static void Initialize(ContentManager _content, GraphicsDevice _graphics, SpriteBatch _spriteBatch)
         {
             content = _content;
             graphics = _graphics;
             spriteBatch = _spriteBatch;
+
+            textureDict = LoadContent<Texture2D>("textures");
+        }
+        public static Texture2D GetTexture(string textureName)
+        {
+            Texture2D tex;
+
+            if(textureDict.ContainsKey(textureName))
+            {
+                tex = textureDict[textureName];
+            }
+            else
+            {
+                tex = textureDict[ERROR_TEXTURE_NAME];
+            }
+
+            return tex;
         }
 
         /// <summary>
@@ -70,32 +121,16 @@ namespace AstrologyGame
             return sb.ToString();
         }
 
-        public static Texture2D TryLoadTexture(string textureName)
-        {
-            Texture2D tex;
-
-            try
-            {
-                tex = Content.Load<Texture2D>(textureName);
-            }
-            catch
-            {
-                // if the texture fails to load, load the error texture
-                // if that fails, oh well i guess
-                tex = Content.Load<Texture2D>(ERROR_TEXTURE_NAME);
-                Debug.WriteLine("Failed to load a texture!");
-            }
-
-            return tex;
-        }
-
         public static void DrawDynamicObject(DynamicObject o, int x, int y)
         {
+            if (!o.ShouldRender)
+                return;
+
             int drawX = x * SCALE;
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(Zone.textureDict[o.TextureName], destinationRectangle, o.Color);
+            spriteBatch.Draw(GetTexture(o.TextureName), destinationRectangle, o.Color);
         }
 
         public static int SHA1Hash(string str)

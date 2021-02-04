@@ -76,8 +76,8 @@ namespace AstrologyGame
         {
             Font = _font;
 
-            cursorTexture = Utility.TryLoadTexture(CURSOR_TEXTURE_NAME);
-            backgroundTexture = Utility.TryLoadTexture(BACKGROUND_TEXTURE_NAME);
+            cursorTexture = Utility.GetTexture(CURSOR_TEXTURE_NAME);
+            backgroundTexture = Utility.GetTexture(BACKGROUND_TEXTURE_NAME);
         }
         public Menu()
         {
