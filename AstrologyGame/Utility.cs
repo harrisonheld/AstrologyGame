@@ -13,13 +13,22 @@ namespace AstrologyGame
     // this is a helper class. it contains miscellaneous functions that are helpful everywhere
     public static class Utility
     {
+        private static ContentManager content;
+        private static GraphicsDevice graphics;
+        private static SpriteBatch spriteBatch;
+
+        public static ContentManager Content { get { return content; } }
+        public static GraphicsDevice Graphics { get { return graphics; } }
+        public static SpriteBatch SpriteBatch { get { return spriteBatch; } }
+
         const string ERROR_TEXTURE_NAME = "error";
         static string[] DELIMITERS = { " " };
 
-        private static ContentManager Content;
-        public static void Initialize(ContentManager _Content)
+        public static void Initialize(ContentManager _content, GraphicsDevice _graphics, SpriteBatch _spriteBatch)
         {
-            Content = _Content;
+            content = _content;
+            graphics = _graphics;
+            spriteBatch = _spriteBatch;
         }
 
         /// <summary>

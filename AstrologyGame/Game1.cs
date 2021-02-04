@@ -15,7 +15,7 @@ namespace AstrologyGame
     public class Game1 : Game
     {
         // things for drawing
-        private static GraphicsDeviceManager _graphics;
+        private static GraphicsDeviceManager graphicsDeviceManager;
         private static SpriteBatch _spriteBatch;
         private static SpriteFont font;
 
@@ -32,8 +32,8 @@ namespace AstrologyGame
             {
                 screenSize = value;
 
-                _graphics.PreferredBackBufferWidth = screenSize.X;
-                _graphics.PreferredBackBufferHeight = screenSize.Y;
+                graphicsDeviceManager.PreferredBackBufferWidth = screenSize.X;
+                graphicsDeviceManager.PreferredBackBufferHeight = screenSize.Y;
             }
         }
 
@@ -60,6 +60,7 @@ namespace AstrologyGame
                 return menus.Last();
             }
         }
+        // should we refresh the menus this frame?
         private static bool refreshAllMenusQueued = false;
 
         // the look cursor
@@ -75,23 +76,22 @@ namespace AstrologyGame
         }
 
         private static GameState gameState = GameState.FreeRoam;
-        private bool doTick = false; // should the zone do a tick this frame
+        // should the zone do a tick this frame?
+        private bool doTick = false; 
 
         // dev stuff
         Color DEBUG_COLOR = Color.Red;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
-            Utility.Initialize(Content);
-            Zone.Initialize();
-
+            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             World.GenerateCurrentZone();
 
             DynamicObject knight = new Humanoid();
@@ -106,10 +106,10 @@ namespace AstrologyGame
             Zone.Player = knight;
 
             // is the game fullscreen
-            _graphics.PreferredBackBufferWidth = ScreenSize.X;
-            _graphics.PreferredBackBufferHeight = ScreenSize.Y;
-            _graphics.IsFullScreen = false;
-            _graphics.ApplyChanges();
+            graphicsDeviceManager.PreferredBackBufferWidth = ScreenSize.X;
+            graphicsDeviceManager.PreferredBackBufferHeight = ScreenSize.Y;
+            graphicsDeviceManager.IsFullScreen = false;
+            graphicsDeviceManager.ApplyChanges();
 
             base.Initialize();
         }
@@ -120,6 +120,7 @@ namespace AstrologyGame
             cursor = Utility.TryLoadTexture("cursor1");
             font = Content.Load<SpriteFont>("font1");
 
+            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             Menu.Initalize(GraphicsDevice, _spriteBatch, font);
         }
 
@@ -167,7 +168,7 @@ namespace AstrologyGame
                 // Toggle fullscreen
                 if (controls.Contains(Control.Fullscreen))
                 {
-                    if (_graphics.IsFullScreen)
+                    if (graphicsDeviceManager.IsFullScreen)
                     {
                         ScreenSize = (1024, 576);
                     }
@@ -176,7 +177,7 @@ namespace AstrologyGame
                         ScreenSize = (1920, 1080);
                     }
 
-                    _graphics.ToggleFullScreen();
+                    graphicsDeviceManager.ToggleFullScreen();
                 }
 
                 // tick the level
@@ -278,12 +279,10 @@ namespace AstrologyGame
                 // TODO: pause
                 ;
         }
-
         private void Update_InMenu()
         {
             CurrentMenu.HandleInput(controls);
         }
-
         private void Update_Interacting()
         {
             // the player hit escape, so change player state to free roam and break
@@ -317,7 +316,6 @@ namespace AstrologyGame
                 }
             }
         }
-
         private void Update_Looking()
         {
             if(controls.Contains(Control.Back))
@@ -368,6 +366,7 @@ namespace AstrologyGame
                 Look(objectToLookAt);
             }
         }
+
         /// <summary>
         /// Create and open a LookMenu for the given object.
         /// </summary>
@@ -414,7 +413,7 @@ namespace AstrologyGame
                 m.Draw();
 
             // draw debug info
-            if (controls.Contains(Control.DevFunc1))
+            if (controls.Contains(Control.DevInfo))
             {
                 _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(576 - 16, 0), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(576 - 16, 20), DEBUG_COLOR);

@@ -19,7 +19,8 @@ namespace AstrologyGame.DynamicObjects
             Name = "debug tile";
             Lore = "It's pure black, and very easy to read debug text on.";
             TextureName = "debugTile";
-            Color = new Color(25, 25, 25);
+            int shade = 192;
+            Color = new Color(shade, shade, shade);
         }
     }
 

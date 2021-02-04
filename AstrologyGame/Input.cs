@@ -57,13 +57,13 @@ namespace AstrologyGame
             #endregion
 
             #region Developer Functions
-            // D1 is the number 1 on the row of numbers
+            if (kbState.IsKeyDown(Keys.OemTilde))
+                controls.Add(Control.DevInfo);
+            // D1 is the number 1 on the row of numbers, and so on
             if (kbState.IsKeyDown(Keys.D1))
                 controls.Add(Control.DevFunc1);
-
             if (kbState.IsKeyDown(Keys.D2))
                 controls.Add(Control.DevFunc2);
-
             if (kbState.IsKeyDown(Keys.D3))
                 controls.Add(Control.DevFunc3);
             #endregion

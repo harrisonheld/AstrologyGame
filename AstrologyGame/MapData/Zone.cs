@@ -38,7 +38,7 @@ namespace AstrologyGame.MapData
             textureDict.Clear();
         }
 
-        public static void Initialize()
+        static Zone()
         {
             Objects.CollectionChanged += ObjectsChanged;
         }
