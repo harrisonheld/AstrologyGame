@@ -201,7 +201,6 @@ namespace AstrologyGame.MapData
             }
 
             Pisces p = new Pisces() { X = 5, Y = 5 };
-            p.Children.Add(new Flintlock());
             Objects.Add(p);
         }
 

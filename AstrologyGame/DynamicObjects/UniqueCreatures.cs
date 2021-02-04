@@ -22,8 +22,10 @@ namespace AstrologyGame.DynamicObjects
             Color = Color.LightSkyBlue;
             MaxHealth = 100;
             Health = MaxHealth;
-
             Quickness = 70;
+
+            Children.Add(new PiscesDress());
+            Children.Add(new PiscesBoots());
         }
 
         public override void AiTurn()
@@ -32,14 +34,26 @@ namespace AstrologyGame.DynamicObjects
             base.AiTurn();
         }
     }
-
-    public class Scorpio : Humanoid
-    { 
-        public Scorpio()
+    public class PiscesDress : Item
+    {
+        public PiscesDress()
         {
-            Name = "Scorpio";
-            TextureName = "scorpio";
-            Lore = "Piracy is a very serious crime. Please close the game immediately and report this stolen copy at https://zodiac.com/piracy";
+            TextureName = "dress";
+            Name = "Pisces' dress";
+            Lore = "A sky-blue flare dress lined with white.";
+            Color = Color.LightSkyBlue;
+        }
+    }
+    public class PiscesBoots : Item
+    {
+        public PiscesBoots()
+        {
+            TextureName = "boots";
+            Name = "Pisces' socks";
+            Lore = "White and light blue horizontal stripes cover the socks at equal intervals. " +
+                "Pisces would insist they strengthen his magic. " +
+                "The veracity of this is up for debate, to say the least.";
+            Color = Color.LightSkyBlue;
         }
     }
 }

@@ -22,9 +22,9 @@ namespace AstrologyGame.DynamicObjects
     {
         public Flintlock()
         {
-            Name = "flintlock";
-            Lore = "a gunny";
             TextureName = "flintlock";
+            Name = "flintlock";
+            Lore = "a gunny!!";
         }
     }
 }
