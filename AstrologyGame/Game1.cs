@@ -319,7 +319,7 @@ namespace AstrologyGame
                 {
                     if (o != Zone.Player)
                     {
-                        o.Interact(Interaction.Open, Zone.Player);
+                        o.Interact(Interaction.Attack, Zone.Player);
                         break;
                     }
                     // TODO

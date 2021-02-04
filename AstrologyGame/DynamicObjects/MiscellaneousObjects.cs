@@ -21,7 +21,7 @@ namespace AstrologyGame.DynamicObjects
 
             SignText = "[DEV] This is the default contents of a sign.";
         }
-        protected override void Read(DynamicObject reader)
+        protected override void BeRead(DynamicObject reader)
         {
             if(reader == Zone.Player)
             {
@@ -41,7 +41,7 @@ namespace AstrologyGame.DynamicObjects
             Color = Color.Chocolate;
         }
 
-        protected override void Open(DynamicObject opener)
+        protected override void BeOpened(DynamicObject opener)
         {
             // TODO: make this code open a TradeMenu so you can swap items with it
             InventoryMenu menu = new InventoryMenu(this);

@@ -98,35 +98,35 @@ namespace AstrologyGame.DynamicObjects
             switch (interaction)
             {
                 case Interaction.Read:
-                    Read(interactor);
+                    BeRead(interactor);
                     return;
                 case Interaction.Open:
-                    Open(interactor);
+                    BeOpened(interactor);
                     return;
                 case Interaction.Attack:
-                    Attack(interactor);
+                    BeAttacked(interactor);
                     return;
                 case Interaction.Get:
-                    Get(interactor);
+                    BeGot(interactor);
                     return;
                 case Interaction.Drop:
-                    Drop(interactor);
+                    BeDropped(interactor);
                     return;
             }
         }
 
-        protected virtual void Read(DynamicObject reader) { }
-        protected virtual void Open(DynamicObject opener) { }
-        protected virtual void Attack(DynamicObject attacker)
+        protected virtual void BeRead(DynamicObject reader) { }
+        protected virtual void BeOpened(DynamicObject opener) { }
+        protected virtual void BeAttacked(DynamicObject attacker)
         {
             Debug.WriteLine("Ouch!");
         }
-        protected virtual void Get(DynamicObject pickerUpper)
+        protected virtual void BeGot(DynamicObject pickerUpper)
         {
             Zone.RemoveObject(this);
             pickerUpper.Children.Add(this);
         }
-        protected virtual void Drop(DynamicObject dropper)
+        protected virtual void BeDropped(DynamicObject dropper)
         {
             dropper.Children.Remove(this);
             this.X = dropper.X;

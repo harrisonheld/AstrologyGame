@@ -20,7 +20,7 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "book1";
         }
 
-        protected override void Read(DynamicObject reader)
+        protected override void BeRead(DynamicObject reader)
         {
             if(reader == Zone.Player)
             {

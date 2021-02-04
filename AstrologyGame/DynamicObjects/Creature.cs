@@ -23,14 +23,27 @@ namespace AstrologyGame.DynamicObjects
         public Creature()
         {
             MaxHealth = 10;
-            Health = 10;
+            Health = MaxHealth;
             Quickness = 100;
             Solid = true;
             Interactions.Add(Interaction.Attack);
         }
-        public void GetAttacked(DynamicObject attacker)
+        protected override void BeAttacked(DynamicObject attacker)
         {
+            Health -= attacker.Stats.Prowess;
 
+            if (Health <= 0)
+                Die();
+        }
+        private void Die()
+        {
+            DropAll();
+            Zone.RemoveObject(this);
+        }
+        private void DropAll()
+        {
+            while (Children.Count > 0)
+                Children[0].Interact(Interaction.Drop, this);
         }
 
         public virtual void AiTurn()

@@ -20,6 +20,8 @@ namespace AstrologyGame.DynamicObjects
             Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. " +
                 "Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.";
             Color = Color.LightSkyBlue;
+            MaxHealth = 100;
+            Health = MaxHealth;
 
             Quickness = 70;
         }

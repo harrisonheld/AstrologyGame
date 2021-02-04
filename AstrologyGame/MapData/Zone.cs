@@ -200,7 +200,9 @@ namespace AstrologyGame.MapData
                 Objects.Add(Player);
             }
 
-            Objects.Add(new ChildOfAbhoth());
+            Pisces p = new Pisces() { X = 5, Y = 5 };
+            p.Children.Add(new Flintlock());
+            Objects.Add(p);
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
