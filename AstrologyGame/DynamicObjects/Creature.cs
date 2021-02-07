@@ -10,8 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrologyGame.DynamicObjects
 {
-    public abstract class Creature : DynamicObject
+    public abstract class Creature : DynamicObject, IAttackable
     {
+        List<Interaction> IInteractable.Interactions { get { return new List<Interaction>() { Interaction.Attack }; } }
+
         // the cost for various actions
         public const int COST_MOVE = 100;
         public const int COST_ATTACK = 100;
@@ -26,9 +28,8 @@ namespace AstrologyGame.DynamicObjects
             Health = MaxHealth;
             Quickness = 100;
             Solid = true;
-            Interactions.Add(Interaction.Attack);
         }
-        protected override void BeAttacked(DynamicObject attacker)
+        public void BeAttacked(DynamicObject attacker)
         {
             Health -= attacker.Stats.Prowess;
 
@@ -163,6 +164,11 @@ namespace AstrologyGame.DynamicObjects
     {
         public Humanoid()
         {
+            // add the slots
+            SlotDict.Add(Slot.Head, null);
+            SlotDict.Add(Slot.Body, null);
+            SlotDict.Add(Slot.Legs, null);
+
             TextureName = "human";
         }
     }
@@ -200,15 +206,10 @@ namespace AstrologyGame.DynamicObjects
         }
     }
 
-    public class Catboy : Humanoid
+    public enum Slot
     {
-        public Catboy() 
-        {
-            TextureName = "ears";
-            Name = "catboy";
-            Lore = "Precious black marbles oggle you lovingly. Meow, meow.";
-
-            Color = Color.Pink;
-        }
+        Head,
+        Body,
+        Legs
     }
 }

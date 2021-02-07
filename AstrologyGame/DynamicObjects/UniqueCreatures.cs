@@ -24,7 +24,6 @@ namespace AstrologyGame.DynamicObjects
             Health = MaxHealth;
             Quickness = 70;
 
-            Children.Add(new PiscesDress());
             Children.Add(new PiscesBoots());
         }
 
@@ -34,20 +33,13 @@ namespace AstrologyGame.DynamicObjects
             base.AiTurn();
         }
     }
-    public class PiscesDress : Item
-    {
-        public PiscesDress()
-        {
-            TextureName = "dress";
-            Name = "Pisces' dress";
-            Lore = "A sky-blue flare dress lined with white.";
-            Color = Color.LightSkyBlue;
-        }
-    }
-    public class PiscesBoots : Item
+
+    public class PiscesBoots : EquippableItem
     {
         public PiscesBoots()
         {
+            EquipSlot = Slot.Legs;
+             
             TextureName = "boots";
             Name = "Pisces' socks";
             Lore = "White and light blue horizontal stripes cover the socks at equal intervals. " +

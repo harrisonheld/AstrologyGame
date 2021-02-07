@@ -202,6 +202,11 @@ namespace AstrologyGame.MapData
 
             Pisces p = new Pisces() { X = 5, Y = 5 };
             Objects.Add(p);
+
+            Container container = new Container() { X = 4, Y = 6 };
+            Flintlock gun = new Flintlock();
+            container.Children.Add(gun);
+            Objects.Add(container);
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects

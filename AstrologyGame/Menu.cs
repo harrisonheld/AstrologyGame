@@ -18,7 +18,7 @@ namespace AstrologyGame
     {
         // TODO: make a list of menu elements, mostly text, then when its time to draw, iterate over them and draw them.
 
-        public const string BOOK_PATH = @"./books.xml";
+        public const string BOOK_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\books.xml";
         public const string BACKGROUND_TEXTURE_NAME = "black";
         private const string CURSOR_TEXTURE_NAME = "marble";
 
@@ -187,7 +187,20 @@ namespace AstrologyGame
             sb.Append($"[{container.Name}]\n");
             foreach (Item item in container.Children)
             {
+
                 sb.Append(item.Name);
+
+                // add equip slot if its equipped
+                if (item is IEquippable)
+                {
+                    IEquippable e = item as IEquippable;
+                    if (container.HasEquipped(e))
+                    {
+                        string slot = e.EquipSlot.ToString();
+                        sb.Append($" ({slot})");
+                    }
+                }
+
                 // add item count if its more than 1
                 if (item.Count > 1)
                     sb.Append($" (x{item.Count})");
@@ -202,6 +215,7 @@ namespace AstrologyGame
         public override void SelectionMade()
         {
             List<Interaction> forbiddenInteractions = new List<Interaction>();
+
             // if this is the players inventory...
             if(container == Zone.Player)
             {
@@ -311,19 +325,19 @@ namespace AstrologyGame
         List<Interaction> interactions;
 
         /// <param name="forbiddenInteraction">A list of interactions that will not be included in this menu, even if the object to interact with has them available.</param>
-        public InteractionMenu(DynamicObject _objectToInteractWith, List<Interaction> forbiddenInteraction = null)
+        public InteractionMenu(DynamicObject _objectToInteractWith, List<Interaction> forbiddenInteractions)
         {
             BackgroundColor = Color.Black;
             objectToInteractWith = _objectToInteractWith;
-            /* make a copy of the list so we can mess with it and not worry about messing up 
-             * the interactions inside objectToInteractWith.Interactions */
-            interactions = new List<Interaction>(objectToInteractWith.Interactions);
+
+            // make a copy of the items interactions so we don't have to worry about changing things in the object itself
+            interactions = new List<Interaction>((objectToInteractWith as IInteractable).Interactions);
 
             // if there are any forbidden interactions
-            if(forbiddenInteraction != null)
+            if (forbiddenInteractions != null)
             {
                 // remove them from this menu's interactions
-                foreach (Interaction forbidden in forbiddenInteraction)
+                foreach (Interaction forbidden in forbiddenInteractions)
                     interactions.Remove(forbidden);
             }
 
@@ -345,7 +359,7 @@ namespace AstrologyGame
             Game1.CloseMenu(this);
             // use Zone.Player as interactor because only a Player could have opened an InteractionMenu
             objectToInteractWith.Interact(interactions[selectedIndex], Zone.Player);
-            // regenerate the menus incase this interaction changed them
+            // refresh the menus incase this interaction changed them
             Game1.QueueRefreshAllMenus();
         }
     }

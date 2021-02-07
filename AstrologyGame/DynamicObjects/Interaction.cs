@@ -11,5 +11,6 @@ namespace AstrologyGame.DynamicObjects
         Attack, // attack this object
         Get, // another object picks up this object
         Drop, // drop the object on the ground
+        Equip, // Equip this object
     }
 }

@@ -10,18 +10,27 @@ using AstrologyGame.MapData;
 
 namespace AstrologyGame.DynamicObjects
 {
-    public class Sign : DynamicObject
+    public abstract class Sign : DynamicObject, IReadable
     {
+        List<Interaction> IInteractable.Interactions
+        {
+            get
+            {
+                return new List<Interaction>()
+                {
+                    Interaction.Read
+                };
+            }
+        }
+
+        public string SignText { get; set; }
+
         public Sign()
         {
-            TextureName = "sign";
-            Name = "sign";
-            Lore = "It's a rickety old wooden sign.";
-            Color = Color.Chocolate;
-
-            SignText = "[DEV] This is the default contents of a sign.";
+            
         }
-        protected override void BeRead(DynamicObject reader)
+
+        public void BeRead(DynamicObject reader)
         {
             if(reader == Zone.Player)
             {
@@ -30,18 +39,28 @@ namespace AstrologyGame.DynamicObjects
             }
         }
     }
-    public class Chest : Item
+    public class Container : DynamicObject, IOpenable
     {
-        public Chest()
+        List<Interaction> IInteractable.Interactions
         {
-            interactions.Insert(0, Interaction.Open);
+            get
+            {
+                return new List<Interaction>()
+                {
+                    Interaction.Open
+                };
+            }
+        }
+
+        public Container()
+        {
             TextureName = "chest";
             Name = "chest";
             Lore = "a container";
             Color = Color.Chocolate;
         }
 
-        protected override void BeOpened(DynamicObject opener)
+        public void BeOpened(DynamicObject opener)
         {
             // TODO: make this code open a TradeMenu so you can swap items with it
             InventoryMenu menu = new InventoryMenu(this);
@@ -56,8 +75,6 @@ namespace AstrologyGame.DynamicObjects
             Quickness = 30;
             Solid = false;
             ShouldRender = false;
-            // no interactions.
-            interactions = new List<Interaction>();
 
             // generate indicators
             for (int y = -radius; y <= radius; y++)

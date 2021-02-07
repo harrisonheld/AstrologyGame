@@ -31,7 +31,8 @@ namespace AstrologyGame.DynamicObjects
         public int Health { get; set; }
         public bool Solid { get; set; } // can you walk through the thing
         public Color Color { get; set; } = Color.White;
-        public string SignText { get; set; }
+        // dictionary that maps slots to equipment
+        public Dictionary<Slot, IEquippable> SlotDict { get; set; } = new Dictionary<Slot, IEquippable>();
 
         // the 4 stats
         public DynamicObjectStats Stats { get; set; } = new DynamicObjectStats
@@ -43,19 +44,15 @@ namespace AstrologyGame.DynamicObjects
         };
 
         public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
-        // list of things you can do to the object
-        protected List<Interaction> interactions = new List<Interaction>();
-        public List<Interaction> Interactions
-        {
-            get
-            {
-                return interactions;
-            }
-        }
 
         public DynamicObject()
         {
 
+        }
+
+        public bool HasEquipped(IEquippable equippable)
+        {
+            return SlotDict.ContainsValue(equippable);
         }
 
         /// <summary>
@@ -89,49 +86,59 @@ namespace AstrologyGame.DynamicObjects
 
         public void Interact(Interaction interaction, DynamicObject interactor)
         {
-            if (!interactions.Contains(interaction))
-            {
-                Debug.WriteLine("You can't use Interaction type " + interaction.ToString() + " on this object.");
-                return;
-            }
-
+            // TODO: this is very repetetive, see what else can be done
             switch (interaction)
             {
-                case Interaction.Read:
-                    BeRead(interactor);
-                    return;
-                case Interaction.Open:
-                    BeOpened(interactor);
-                    return;
                 case Interaction.Attack:
-                    BeAttacked(interactor);
-                    return;
-                case Interaction.Get:
-                    BeGot(interactor);
-                    return;
-                case Interaction.Drop:
-                    BeDropped(interactor);
-                    return;
-            }
-        }
+                    if(this is IAttackable)
+                    {
+                        (this as IAttackable).BeAttacked(interactor);
+                        return;
+                    }
+                    break;
 
-        protected virtual void BeRead(DynamicObject reader) { }
-        protected virtual void BeOpened(DynamicObject opener) { }
-        protected virtual void BeAttacked(DynamicObject attacker)
-        {
-            Debug.WriteLine("Ouch!");
-        }
-        protected virtual void BeGot(DynamicObject pickerUpper)
-        {
-            Zone.RemoveObject(this);
-            pickerUpper.Children.Add(this);
-        }
-        protected virtual void BeDropped(DynamicObject dropper)
-        {
-            dropper.Children.Remove(this);
-            this.X = dropper.X;
-            this.Y = dropper.Y;
-            Zone.Objects.Add(this);
+                case Interaction.Get:
+                    if(this is IGettable)
+                    {
+                        (this as IGettable).BeGot(interactor);
+                        return;
+                    }
+                    break;
+
+                case Interaction.Drop:
+                    if(this is IDroppable)
+                    {
+                        (this as IDroppable).BeDropped(interactor);
+                        return;
+                    }
+                    break; 
+
+                case Interaction.Open:
+                    if (this is IOpenable)
+                    {
+                        (this as IOpenable).BeOpened(interactor);
+                        return;
+                    }
+                    break;
+
+                case Interaction.Read:
+                    if (this is IReadable)
+                    {
+                        (this as IReadable).BeRead(interactor);
+                        return;
+                    }
+                    break;
+
+                case Interaction.Equip:
+                    if (this is IEquippable)
+                    {
+                        (this as IEquippable).BeEquipped(interactor);
+                        return;
+                    }
+                    break;
+            }
+
+            Debug.WriteLine("Could not do interaction type {0}.", interaction);
         }
 
         public virtual void AnimationTurn()

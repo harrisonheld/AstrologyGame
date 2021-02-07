@@ -2,19 +2,47 @@
 using System.Collections.Generic;
 using System.Text;
 
+using AstrologyGame.MapData;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrologyGame.DynamicObjects
 {
-    public abstract class Item : DynamicObject
+    public abstract class Item : DynamicObject, IGettable, IDroppable
     {
+        List<Interaction> IInteractable.Interactions {
+            get 
+            { 
+                return new List<Interaction>() 
+                { 
+                    Interaction.Get, 
+                    Interaction.Drop
+                };
+            }
+        }
+
         public int Count { get; set; } = 1;
 
         public Item()
         {
-            interactions.Add(Interaction.Get);
-            interactions.Add(Interaction.Drop);
+
+        }
+
+        public void BeGot(DynamicObject getter)
+        {
+            if(!getter.Children.Contains(this))
+            {
+                Zone.RemoveObject(this);
+                getter.Children.Add(this);
+            }
+        }
+        public void BeDropped(DynamicObject dropper)
+        {
+            dropper.RemoveFromDescendants(this);
+            this.X = dropper.X;
+            this.Y = dropper.Y;
+            Zone.Objects.Add(this);
         }
     }
 

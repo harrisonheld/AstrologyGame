@@ -100,7 +100,7 @@ namespace AstrologyGame
             knight.X = 1;
             knight.Y = 0;
             knight.Children.Add(new Flintlock());
-            knight.Children.Add(new Book("Master of the Moon") { Color = Color.Blue });
+            knight.Children.Add(new Book("MasteroftheMoon") { Color = Color.Blue });
             Zone.Objects.Add(knight);
             Zone.Player = knight;
 
