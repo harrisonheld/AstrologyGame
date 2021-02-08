@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    public struct DynamicObjectStats
+    public struct PrimaryAttributes
     {
         // max HP, ability cool down, speed
         public int Vigor { get; set; }
@@ -15,7 +15,7 @@ namespace AstrologyGame.DynamicObjects
         // makes you have more swag
         public int Some4thThing { get; set; }
 
-        public DynamicObjectStats(int _vigor, int _prowess, int _faith, int _some4thThing)
+        public PrimaryAttributes(int _vigor, int _prowess, int _faith, int _some4thThing)
         {
             Vigor = _vigor;
             Prowess = _prowess;

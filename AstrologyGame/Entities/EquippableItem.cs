@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 using AstrologyGame.MapData;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
     public abstract class EquippableItem : Item, IEquipment
     {
@@ -29,11 +29,11 @@ namespace AstrologyGame.DynamicObjects
 
         }
 
-        public void BeEquipped(DynamicObject equipper)
+        public void BeEquipped(Entity equipper)
         {
             equipper.Equip(this);
         }
-        public void BeDeEquipped(DynamicObject deEquipper)
+        public void BeDeEquipped(Entity deEquipper)
         {
             deEquipper.TryDeEquip(this);
         }

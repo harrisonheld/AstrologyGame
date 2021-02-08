@@ -6,7 +6,7 @@ using System.Xml;
 
 using AstrologyGame.MapData;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
     class Book : Item, IReadable
     {
@@ -20,7 +20,7 @@ namespace AstrologyGame.DynamicObjects
             TextureName = "book1";
         }
 
-        public void BeRead(DynamicObject reader)
+        public void BeRead(Entity reader)
         {
             if(reader == Zone.Player)
             {

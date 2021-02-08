@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.MapData;
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 
 namespace AstrologyGame
 {
@@ -125,16 +125,16 @@ namespace AstrologyGame
             return sb.ToString();
         }
 
-        public static void DrawDynamicObject(DynamicObject o, int x, int y)
+        public static void DrawEntity(Entity e, int x, int y)
         {
-            if (!o.ShouldRender)
+            if (!e.ShouldRender)
                 return;
 
             int drawX = x * SCALE;
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(GetTexture(o.TextureName), destinationRectangle, o.Color);
+            spriteBatch.Draw(GetTexture(e.TextureName), destinationRectangle, e.Color);
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.

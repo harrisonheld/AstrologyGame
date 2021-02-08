@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
     public enum Interaction
     {

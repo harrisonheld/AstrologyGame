@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    class Wall : DynamicObject
+    class Wall : Entity
     {
         public Wall()
         {

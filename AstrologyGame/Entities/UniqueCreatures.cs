@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 using AstrologyGame.MapData;
 
 using Microsoft.Xna.Framework;
 
 
 /* This file contains unique handcrafted NPC's that generally only appear once in the game */
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
     public class Pisces : Humanoid
     {

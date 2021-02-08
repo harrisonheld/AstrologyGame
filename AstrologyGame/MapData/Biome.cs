@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 
 namespace AstrologyGame.MapData
 {

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using AstrologyGame.MapData;
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 using System.Diagnostics;
 using System.Linq;
 
@@ -92,11 +92,11 @@ namespace AstrologyGame
             Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             World.GenerateCurrentZone();
 
-            DynamicObject knight = new Humanoid();
+            Entity knight = new Humanoid();
             knight.Color = Color.Bisque;
             knight.Name = "Knight";
             knight.TextureName = "human2";
-            knight.Stats = new DynamicObjectStats(10, 10, 10, 10);
+            knight.Stats = new PrimaryAttributes(10, 10, 10, 10);
             knight.X = 1;
             knight.Y = 0;
             knight.Equip(new CopperArmor());
@@ -211,7 +211,7 @@ namespace AstrologyGame
             {
                 List<Item> itemsHere = new List<Item>();
 
-                foreach(DynamicObject o in Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y))
+                foreach(Entity o in Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y))
                 {
                     if(o is Item)
                         itemsHere.Add(o as Item);
@@ -254,7 +254,7 @@ namespace AstrologyGame
                 doTick = true;
                 CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
 
-                List<DynamicObject> nearbyObjects = Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y);
+                List<Entity> nearbyObjects = Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y);
                 nearbyObjects.Remove(Zone.Player);
 
                 if(nearbyObjects.Count > 0)
@@ -317,7 +317,7 @@ namespace AstrologyGame
             int interactX = Zone.Player.X + movePair.X;
             int interactY = Zone.Player.Y + movePair.Y;
 
-            foreach (DynamicObject o in Zone.Objects)
+            foreach (Entity o in Zone.Objects)
             {
                 if (o.X == interactX && o.Y == interactY)
                 {
@@ -367,9 +367,9 @@ namespace AstrologyGame
                 CloseMenu(lookMenu); // close the Look Menu because the cursor moved off whatever it was looking at
 
                 // TODO: pick an object to look at
-                DynamicObject objectToLookAt = null;
+                Entity objectToLookAt = null;
 
-                foreach (DynamicObject o in Zone.Objects)
+                foreach (Entity o in Zone.Objects)
                 {
                     if (o.X == cursorX && o.Y == cursorY)
                     {
@@ -392,7 +392,7 @@ namespace AstrologyGame
         /// Create and open a LookMenu for the given object.
         /// </summary>
         /// <param name="o"></param>
-        private void Look(DynamicObject o)
+        private void Look(Entity o)
         {
             lookMenu = new LookMenu(o);
             OpenMenu(lookMenu);

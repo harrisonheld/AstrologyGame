@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 
 namespace AstrologyGame.MapData
 {
@@ -22,8 +22,8 @@ namespace AstrologyGame.MapData
         //Declare new layers
         public static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
         // list of all objects (that aren't tiles) in the zone
-        public static ObservableCollection<DynamicObject> Objects { get; set; } = new ObservableCollection<DynamicObject>() { };
-        public static DynamicObject Player { get; set; }
+        public static ObservableCollection<Entity> Objects { get; set; } = new ObservableCollection<Entity>() { };
+        public static Entity Player { get; set; }
 
         /// <summary>
         /// Clears all tiles and remove all objects
@@ -35,108 +35,11 @@ namespace AstrologyGame.MapData
         }
 
         /// <summary>
-        ///  Save the Zone state as an XML file.
-        /// </summary>
-        /// <param name="path"></param>
-        public static void SaveXml(string path)
-        {
-            XmlWriter xmlWriter = XmlWriter.Create(path);
-
-            xmlWriter.WriteStartDocument();
-            xmlWriter.WriteStartElement("tiles");
-
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                for (int x = 0; x < WIDTH; x++)
-                {
-                    xmlWriter.WriteStartElement("t");
-
-                    // write the Class Type of the tile
-                    string type = (tiles[x, y].GetType().Name);
-                    xmlWriter.WriteAttributeString("Type", type);
-
-                    foreach (DynamicObject o in Objects)
-                    {
-                        if (o.X == x && o.Y == y)
-                        {
-                            // TODO: save all the objects here
-                        }
-                    }
-
-                    xmlWriter.WriteEndElement();
-                }
-            }
-
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Close();
-        }
-
-        /// <summary>
-        /// Load a Zone state from a file.
-        /// </summary>
-        /// <param name="path"></param>
-        public static void LoadXml(string path)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(path);
-
-            Clear();
-
-            // because we know all tiles are in the same assembly as Stone, we use this assembly to get types of other tiles
-            System.Reflection.Assembly assembly = typeof(Stone).Assembly;
-
-            foreach (XmlNode itemNode in xmlDoc.ChildNodes)
-            {
-                if (itemNode.Name == "tiles")
-                {
-                    int x = 0;
-                    int y = 0;
-
-                    foreach (XmlNode tileNode in itemNode.ChildNodes)
-                    {
-                        Tile tile = (Tile)DynamicObjectFromXmlNode(tileNode, assembly);
-                        tiles[x, y] = tile;
-
-                        foreach (XmlNode dynamicObjectNode in tileNode.ChildNodes)
-                        {
-                            DynamicObject o = DynamicObjectFromXmlNode(dynamicObjectNode, assembly);
-                            Objects.Add(o);
-                        }
-
-                        x++;
-                        if (x > WIDTH - 1)
-                        {
-                            y++;
-                            x = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Take an XML node representing an Dynamic Object and make a Dynamic Object of that type.
-        /// Provide the assembly in which that class is found.
-        /// </summary>
-        /// <param name="typeString"></param>
-        /// <param name="assembly"></param>
-        /// <returns></returns>
-        private static DynamicObject DynamicObjectFromXmlNode(XmlNode node, System.Reflection.Assembly assembly)
-        {
-            string typeString = node.Attributes.GetNamedItem("Type").InnerText;
-            typeString = "AstrologyGame.DynamicObjects." + typeString;
-
-            Type type = assembly.GetType(typeString);
-
-            return (DynamicObject)Activator.CreateInstance(type);
-        }
-        /// <summary>
-        /// Have all the DynamicObjects in the Zone do their turns.
+        /// Have all the Entities in the Zone do their turns.
         /// </summary>
         public static void Tick()
         {
-            foreach (DynamicObject o in Objects)
+            foreach (Entity o in Objects)
             {
                 if (o is Creature)
                 {
@@ -213,12 +116,12 @@ namespace AstrologyGame.MapData
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
-        public static bool RemoveObject(DynamicObject toRemove)
+        public static bool RemoveObject(Entity toRemove)
         {
             if (Objects.Remove(toRemove))
                 return true;
 
-            foreach(DynamicObject o in Objects)
+            foreach(Entity o in Objects)
             {
                 if (o.RemoveFromDescendants(toRemove))
                     return true;
@@ -227,11 +130,11 @@ namespace AstrologyGame.MapData
             return false;
         }
 
-        public static List<DynamicObject> ObjectsAtPosition(int x, int y)
+        public static List<Entity> ObjectsAtPosition(int x, int y)
         {
-            List<DynamicObject> objectsAtPos = new List<DynamicObject>();
+            List<Entity> objectsAtPos = new List<Entity>();
 
-            foreach (DynamicObject o in Objects)
+            foreach (Entity o in Objects)
             {
                 if (o.X == x && o.Y == y)
                 {
@@ -254,7 +157,7 @@ namespace AstrologyGame.MapData
             }
 
             // draw the objects
-            foreach (DynamicObject o in Objects)
+            foreach (Entity o in Objects)
             {
                 o.Draw();
             }

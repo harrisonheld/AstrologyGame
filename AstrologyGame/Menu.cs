@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using AstrologyGame.DynamicObjects;
+using AstrologyGame.Entities;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame
@@ -171,9 +171,9 @@ namespace AstrologyGame
 
     class InventoryMenu : SelectMenu
     {
-        private DynamicObject container; // the object whose inventory we are examining
+        private Entity container; // the object whose inventory we are examining
 
-        public InventoryMenu(DynamicObject _container)
+        public InventoryMenu(Entity _container)
         {
             container = _container;
             selectionCount = _container.Children.Count;
@@ -237,7 +237,7 @@ namespace AstrologyGame
 
     class LookMenu : Menu
     {
-        public LookMenu(DynamicObject o)
+        public LookMenu(Entity o)
         {
             PauseWhenOpened = false;
 
@@ -251,13 +251,13 @@ namespace AstrologyGame
     }
     class NearbyObjectsMenu : Menu
     {
-        public NearbyObjectsMenu(List<DynamicObject> nearbyObjects)
+        public NearbyObjectsMenu(List<Entity> nearbyObjects)
         {
             PauseWhenOpened = false;
 
             string t = "[Nearby]\n";
 
-            foreach(DynamicObject o in nearbyObjects)
+            foreach(Entity o in nearbyObjects)
             {
                 t += o.Name + "\n";
             }
@@ -321,11 +321,11 @@ namespace AstrologyGame
     }
     class InteractionMenu : SelectMenu
     {
-        DynamicObject objectToInteractWith;
+        Entity objectToInteractWith;
         List<Interaction> interactions;
 
         /// <param name="forbiddenInteraction">A list of interactions that will not be included in this menu, even if the object to interact with has them available.</param>
-        public InteractionMenu(DynamicObject _objectToInteractWith, List<Interaction> forbiddenInteractions)
+        public InteractionMenu(Entity _objectToInteractWith, List<Interaction> forbiddenInteractions)
         {
             BackgroundColor = Color.Black;
             objectToInteractWith = _objectToInteractWith;

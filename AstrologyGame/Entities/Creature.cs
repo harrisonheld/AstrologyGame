@@ -8,9 +8,9 @@ using AstrologyGame.MapData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    public abstract class Creature : DynamicObject, IAttackable
+    public abstract class Creature : Entity, IAttackable
     {
         List<Interaction> IInteractable.Interactions { get { return new List<Interaction>() { Interaction.Attack }; } }
 
@@ -29,7 +29,7 @@ namespace AstrologyGame.DynamicObjects
             Quickness = 100;
             Solid = true;
         }
-        public void BeAttacked(DynamicObject attacker)
+        public void BeAttacked(Entity attacker)
         {
             Health -= attacker.Stats.Prowess;
 
@@ -78,7 +78,7 @@ namespace AstrologyGame.DynamicObjects
         public bool TryMove(int targetX, int targetY)
         {
             // if there is a solid object in the way, return false
-            foreach (DynamicObject o in Zone.Objects)
+            foreach (Entity o in Zone.Objects)
             {
                 if (o.X == targetX && o.Y == targetY && o.Solid)
                     return false;
@@ -92,7 +92,7 @@ namespace AstrologyGame.DynamicObjects
 
             return true;
         }
-        public bool TryMoveTowards(DynamicObject target)
+        public bool TryMoveTowards(Entity target)
         {
             int targetX = target.X;
             int targetY = target.Y;
@@ -111,7 +111,7 @@ namespace AstrologyGame.DynamicObjects
 
             return TryMove(X + relMoveX, Y + relMoveY);
         }
-        public bool TryMoveAway(DynamicObject target)
+        public bool TryMoveAway(Entity target)
         {
             int targetX = target.X;
             int targetY = target.Y;
@@ -136,7 +136,7 @@ namespace AstrologyGame.DynamicObjects
         /// Spend all this creature's action points seeking a target.
         /// </summary>
         /// <param name="target"></param>
-        public void Seek(DynamicObject target)
+        public void Seek(Entity target)
         {
             while (ActionPoints >= Creature.COST_MOVE)
             {
@@ -147,7 +147,7 @@ namespace AstrologyGame.DynamicObjects
                     break;
             }
         }
-        public void Flee(DynamicObject target)
+        public void Flee(Entity target)
         {
             while (ActionPoints >= Creature.COST_MOVE)
             {

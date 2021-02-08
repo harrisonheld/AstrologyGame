@@ -15,9 +15,9 @@ using Microsoft.Xna.Framework.Content;
 using AstrologyGame.MapData;
 
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    public abstract class DynamicObject
+    public abstract class Entity
     {
         public bool ShouldRender { get; set; } = true; // should we try to render this?
 
@@ -35,7 +35,7 @@ namespace AstrologyGame.DynamicObjects
         protected Dictionary<Slot, IEquipment> slotDict { get; set; } = new Dictionary<Slot, IEquipment>();
 
         // the 4 stats
-        public DynamicObjectStats Stats { get; set; } = new DynamicObjectStats
+        public PrimaryAttributes Stats { get; set; } = new PrimaryAttributes
         {
             Vigor = 10,
             Prowess = 10,
@@ -43,9 +43,9 @@ namespace AstrologyGame.DynamicObjects
             Some4thThing = 10
         };
 
-        public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
+        public List<Entity> Children { get; set; } = new List<Entity>() { };
 
-        public DynamicObject()
+        public Entity()
         {
 
         }
@@ -59,9 +59,9 @@ namespace AstrologyGame.DynamicObjects
                 return;
             }
             // if it's not in our inventory, add it
-            if (!Children.Contains(toEquip as DynamicObject))
+            if (!Children.Contains(toEquip as Entity))
             {
-                Children.Add(toEquip as DynamicObject);
+                Children.Add(toEquip as Entity);
             }
 
             slotDict[toEquip.EquipSlot] = toEquip;
@@ -83,23 +83,23 @@ namespace AstrologyGame.DynamicObjects
         }
 
         /// <summary>
-        /// Using this DynamicObject as a root node, remove the given DynamicObject from any of it's descendants.
+        /// Using this Entity as a root node, remove the given Entity from any of it's descendants.
         /// </summary>
         /// <param name="toRemove">The object to remove from the tree.</param>
         /// <returns>True if the removal was successful, False if the given object wasn't in the tree to begin with.</returns>
-        public bool RemoveFromDescendants(DynamicObject toRemove)
+        public bool RemoveFromDescendants(Entity toRemove)
         {
-            Stack<DynamicObject> stack = new Stack<DynamicObject>();
+            Stack<Entity> stack = new Stack<Entity>();
             stack.Push(this);
 
             while(stack.Count > 0)
             {
-                DynamicObject node = stack.Pop();
+                Entity node = stack.Pop();
 
                 if (node.Children.Remove(toRemove))
                     return true;
 
-                foreach(DynamicObject child in node.Children)
+                foreach(Entity child in node.Children)
                 {
                     if (child.Children.Remove(toRemove))
                         return true;
@@ -111,9 +111,9 @@ namespace AstrologyGame.DynamicObjects
             return false; 
         }
 
-        public void Interact(Interaction interaction, DynamicObject interactor)
+        public void Interact(Interaction interaction, Entity interactor)
         {
-            // TODO: this is very repetetive, see what else can be done
+            // TODO: this code sucks
             switch (interaction)
             {
                 case Interaction.Attack:
@@ -183,7 +183,7 @@ namespace AstrologyGame.DynamicObjects
 
         public virtual void Draw()
         {
-            Utility.DrawDynamicObject(this, this.X, this.Y);
+            Utility.DrawEntity(this, this.X, this.Y);
         }
     }
 }

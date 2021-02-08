@@ -7,9 +7,9 @@ using AstrologyGame.MapData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    public abstract class Item : DynamicObject, IGettable, IDroppable
+    public abstract class Item : Entity, IGettable, IDroppable
     {
         List<Interaction> IInteractable.Interactions {
             get 
@@ -29,7 +29,7 @@ namespace AstrologyGame.DynamicObjects
 
         }
 
-        public void BeGot(DynamicObject getter)
+        public void BeGot(Entity getter)
         {
             if(!getter.Children.Contains(this))
             {
@@ -37,7 +37,7 @@ namespace AstrologyGame.DynamicObjects
                 getter.Children.Add(this);
             }
         }
-        public void BeDropped(DynamicObject dropper)
+        public void BeDropped(Entity dropper)
         {
             if(this is IEquipment)
             {

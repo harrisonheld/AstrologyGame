@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using AstrologyGame.MapData;
 
-namespace AstrologyGame.DynamicObjects
+namespace AstrologyGame.Entities
 {
-    public abstract class Sign : DynamicObject, IReadable
+    public abstract class Sign : Entity, IReadable
     {
         List<Interaction> IInteractable.Interactions
         {
@@ -30,7 +30,7 @@ namespace AstrologyGame.DynamicObjects
             
         }
 
-        public void BeRead(DynamicObject reader)
+        public void BeRead(Entity reader)
         {
             if(reader == Zone.Player)
             {
@@ -39,7 +39,7 @@ namespace AstrologyGame.DynamicObjects
             }
         }
     }
-    public class Container : DynamicObject, IOpenable
+    public class Container : Entity, IOpenable
     {
         List<Interaction> IInteractable.Interactions
         {
@@ -60,7 +60,7 @@ namespace AstrologyGame.DynamicObjects
             Color = Color.Chocolate;
         }
 
-        public void BeOpened(DynamicObject opener)
+        public void BeOpened(Entity opener)
         {
             // TODO: make this code open a TradeMenu so you can swap items with it
             InventoryMenu menu = new InventoryMenu(this);
@@ -91,7 +91,7 @@ namespace AstrologyGame.DynamicObjects
             // draw all indicators
             foreach(MortarIndicator indicator in Children)
             {
-                Utility.DrawDynamicObject(indicator, this.X + indicator.relX, this.Y + indicator.relY);
+                Utility.DrawEntity(indicator, this.X + indicator.relX, this.Y + indicator.relY);
             }
         }
 
@@ -102,7 +102,7 @@ namespace AstrologyGame.DynamicObjects
             Seek(Zone.Player);
         }
     }
-    public class MortarIndicator : DynamicObject
+    public class MortarIndicator : Entity
     {
         public int relX, relY; // position relative to the center of the strike
         public MortarIndicator(int _relX, int _relY)
