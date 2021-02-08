@@ -32,15 +32,15 @@ namespace AstrologyGame.DynamicObjects
         public bool Solid { get; set; } // can you walk through the thing
         public Color Color { get; set; } = Color.White;
         // dictionary that maps slots to equipment
-        public Dictionary<Slot, IEquippable> SlotDict { get; set; } = new Dictionary<Slot, IEquippable>();
+        protected Dictionary<Slot, IEquipment> slotDict { get; set; } = new Dictionary<Slot, IEquipment>();
 
         // the 4 stats
         public DynamicObjectStats Stats { get; set; } = new DynamicObjectStats
         {
-            Vigor = 0,
-            Prowess = 0,
-            Faith = 0,
-            Some4thThing = 0
+            Vigor = 10,
+            Prowess = 10,
+            Faith = 10,
+            Some4thThing = 10
         };
 
         public List<DynamicObject> Children { get; set; } = new List<DynamicObject>() { };
@@ -50,9 +50,36 @@ namespace AstrologyGame.DynamicObjects
 
         }
 
-        public bool HasEquipped(IEquippable equippable)
+        public void Equip(IEquipment toEquip)
         {
-            return SlotDict.ContainsValue(equippable);
+            // if we don't have the appropriate equip slot
+            if (!slotDict.ContainsKey(toEquip.EquipSlot))
+            {
+                Utility.Log("You can't equip this item.");
+                return;
+            }
+            // if it's not in our inventory, add it
+            if (!Children.Contains(toEquip as DynamicObject))
+            {
+                Children.Add(toEquip as DynamicObject);
+            }
+
+            slotDict[toEquip.EquipSlot] = toEquip;
+        }
+        public void TryDeEquip(IEquipment toDeEquip)
+        {
+            Slot slot = toDeEquip.EquipSlot;
+
+            // if we have it equipped
+            if(slotDict[slot] == toDeEquip)
+            {
+                // remove it from the SlotDict
+                slotDict[slot] = null;
+            }
+        }
+        public bool HasEquipped(IEquipment equippable)
+        {
+            return slotDict.ContainsValue(equippable);
         }
 
         /// <summary>
@@ -130,9 +157,17 @@ namespace AstrologyGame.DynamicObjects
                     break;
 
                 case Interaction.Equip:
-                    if (this is IEquippable)
+                    if (this is IEquipment)
                     {
-                        (this as IEquippable).BeEquipped(interactor);
+                        (this as IEquipment).BeEquipped(interactor);
+                        return;
+                    }
+                    break;
+
+                case Interaction.DeEquip:
+                    if( this is IEquipment)
+                    {
+                        (this as IEquipment).BeDeEquipped(interactor);
                         return;
                     }
                     break;

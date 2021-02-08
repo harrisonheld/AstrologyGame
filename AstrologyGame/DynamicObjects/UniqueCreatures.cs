@@ -20,11 +20,10 @@ namespace AstrologyGame.DynamicObjects
             Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. " +
                 "Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.";
             Color = Color.LightSkyBlue;
-            MaxHealth = 100;
-            Health = MaxHealth;
             Quickness = 70;
 
-            Children.Add(new PiscesBoots());
+            Equip(new PiscesDress());
+            Equip(new PiscesSocks());
         }
 
         public override void AiTurn()
@@ -34,17 +33,30 @@ namespace AstrologyGame.DynamicObjects
         }
     }
 
-    public class PiscesBoots : EquippableItem
+    public class PiscesSocks : EquippableItem
     {
-        public PiscesBoots()
+        public PiscesSocks()
         {
             EquipSlot = Slot.Legs;
              
-            TextureName = "boots";
+            TextureName = "socks";
             Name = "Pisces' socks";
             Lore = "White and light blue horizontal stripes cover the socks at equal intervals. " +
                 "Pisces would insist they strengthen his magic. " +
                 "The veracity of this is up for debate, to say the least.";
+            Color = Color.LightSkyBlue;
+        }
+    }
+
+    public class PiscesDress : EquippableItem
+    {
+        public PiscesDress()
+        {
+            EquipSlot = Slot.Body;
+
+            TextureName = "dress";
+            Name = "Pisces' dress";
+            Lore = "It's a sky blue flare dress lined with white.";
             Color = Color.LightSkyBlue;
         }
     }

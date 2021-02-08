@@ -29,9 +29,10 @@ namespace AstrologyGame.DynamicObjects
     {
         void BeOpened(DynamicObject opener);
     }
-    public interface IEquippable : IInteractable
+    public interface IEquipment : IInteractable
     {
         Slot EquipSlot { get; }
         void BeEquipped(DynamicObject equipper);
+        void BeDeEquipped(DynamicObject deequipper);
     }
 }

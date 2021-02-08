@@ -163,7 +163,7 @@ namespace AstrologyGame.MapData
             Clear();
 
             // what biome should this zone generate as
-            Biome biome = BiomeInfo.DebugLand;
+            Biome biome = BiomeInfo.CydonianSands;
             /*double s = rand.NextDouble();
             Biome biome;
             if (s > 0.5)
@@ -207,6 +207,9 @@ namespace AstrologyGame.MapData
             Flintlock gun = new Flintlock();
             container.Children.Add(gun);
             Objects.Add(container);
+
+            ChildOfAbhoth c = new ChildOfAbhoth() { X = 3, Y = 3 };
+            Objects.Add(c);
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects

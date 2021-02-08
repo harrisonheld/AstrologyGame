@@ -194,7 +194,6 @@ namespace AstrologyGame
                 spriteBatch.DrawString(Font, markup, position, defaultColor);
             }
         }
-
         private static Color ColorFromString(string str)
         {
             // if its a hex code
@@ -208,6 +207,17 @@ namespace AstrologyGame
             }
 
             return Color.White;
+        }
+
+        // used to log info for the player to look at
+        public static void Log(string str)
+        {
+            // TODO: make a log menu
+            Debug.WriteLine(str);
+        }
+        public static void Log(object o)
+        {
+            Log(o.ToString());
         }
     }
 }

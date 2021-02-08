@@ -7,7 +7,7 @@ using AstrologyGame.MapData;
 
 namespace AstrologyGame.DynamicObjects
 {
-    public abstract class EquippableItem : Item, IEquippable
+    public abstract class EquippableItem : Item, IEquipment
     {
         public Slot EquipSlot { get; set; }
         List<Interaction> IInteractable.Interactions
@@ -18,7 +18,8 @@ namespace AstrologyGame.DynamicObjects
                 {
                     Interaction.Get,
                     Interaction.Drop,
-                    Interaction.Equip
+                    Interaction.Equip,
+                    Interaction.DeEquip,
                 };
             }
         }
@@ -30,18 +31,29 @@ namespace AstrologyGame.DynamicObjects
 
         public void BeEquipped(DynamicObject equipper)
         {
-            // the equipper picks up the item if it doesnt already have it
-            this.BeGot(equipper);
+            equipper.Equip(this);
+        }
+        public void BeDeEquipped(DynamicObject deEquipper)
+        {
+            deEquipper.TryDeEquip(this);
+        }
+    }
 
-            // if the equipper has the appropriate slot
-            if(equipper.SlotDict.ContainsKey(this.EquipSlot))
-            {
-                equipper.SlotDict[EquipSlot] = this;
-            }
-            else
-            {
-                Debug.WriteLine("You don't have the slot '{0}'.", EquipSlot);
-            }
+    public class CopperArmor : EquippableItem
+    {
+        public CopperArmor()
+        {
+            EquipSlot = Slot.Body;
+            Name = "Copper Armor";
+        }
+    }
+
+    public class CopperLeggings : EquippableItem
+    { 
+        public CopperLeggings()
+        {
+            EquipSlot = Slot.Legs;
+            Name = "Copper Leggings";
         }
     }
 }

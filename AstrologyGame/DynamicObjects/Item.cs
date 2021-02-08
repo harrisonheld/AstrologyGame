@@ -39,6 +39,10 @@ namespace AstrologyGame.DynamicObjects
         }
         public void BeDropped(DynamicObject dropper)
         {
+            if(this is IEquipment)
+            {
+                dropper.TryDeEquip(this as IEquipment);
+            }
             dropper.RemoveFromDescendants(this);
             this.X = dropper.X;
             this.Y = dropper.Y;

@@ -99,8 +99,8 @@ namespace AstrologyGame
             knight.Stats = new DynamicObjectStats(10, 10, 10, 10);
             knight.X = 1;
             knight.Y = 0;
-            knight.Children.Add(new Flintlock());
-            knight.Children.Add(new Book("MasteroftheMoon") { Color = Color.Blue });
+            knight.Equip(new CopperArmor());
+            knight.Equip(new CopperLeggings());
             Zone.Objects.Add(knight);
             Zone.Player = knight;
 
@@ -353,6 +353,11 @@ namespace AstrologyGame
                 cursorY = Zone.HEIGHT - 1;
             else if (cursorY < 0)
                 cursorY = 0;
+
+            if(controls.Contains(Control.DevFunc1))
+            {
+                Zone.Player = Zone.ObjectsAtPosition(cursorX, cursorY)[0];
+            }
 
             // this boolean will be true if the cursor moved this input frame
             bool moved = !(movePair.Equals(OrderedPair.Zero));

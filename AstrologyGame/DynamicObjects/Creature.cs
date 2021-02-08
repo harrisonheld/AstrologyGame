@@ -164,12 +164,14 @@ namespace AstrologyGame.DynamicObjects
     {
         public Humanoid()
         {
-            // add the slots
-            SlotDict.Add(Slot.Head, null);
-            SlotDict.Add(Slot.Body, null);
-            SlotDict.Add(Slot.Legs, null);
-
             TextureName = "human";
+
+            MaxHealth = 100;
+            Health = MaxHealth;
+            // add the slots
+            slotDict.Add(Slot.Head, null);
+            slotDict.Add(Slot.Body, null);
+            slotDict.Add(Slot.Legs, null);
         }
     }
 

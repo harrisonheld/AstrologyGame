@@ -191,9 +191,9 @@ namespace AstrologyGame
                 sb.Append(item.Name);
 
                 // add equip slot if its equipped
-                if (item is IEquippable)
+                if (item is IEquipment)
                 {
-                    IEquippable e = item as IEquippable;
+                    IEquipment e = item as IEquipment;
                     if (container.HasEquipped(e))
                     {
                         string slot = e.EquipSlot.ToString();
