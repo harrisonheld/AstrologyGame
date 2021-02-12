@@ -46,7 +46,7 @@ namespace AstrologyGame.Entities
             dropper.RemoveFromDescendants(this);
             this.X = dropper.X;
             this.Y = dropper.Y;
-            Zone.Objects.Add(this);
+            Zone.AddEntity(this);
         }
     }
 

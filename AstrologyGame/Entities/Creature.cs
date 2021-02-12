@@ -31,7 +31,7 @@ namespace AstrologyGame.Entities
         }
         public void BeAttacked(Entity attacker)
         {
-            Health -= attacker.Stats.Prowess;
+            Health -= attacker.Attributes.Prowess;
 
             if (Health <= 0)
                 Die();
@@ -78,15 +78,15 @@ namespace AstrologyGame.Entities
         public bool TryMove(int targetX, int targetY)
         {
             // if there is a solid object in the way, return false
-            foreach (Entity o in Zone.Objects)
+            foreach (Entity e in Zone.EntitiesAtPosition(new OrderedPair(targetX, targetY)))
             {
-                if (o.X == targetX && o.Y == targetY && o.Solid)
+                if (e.Solid)
                     return false;
             }
 
             // otherwise, do the move and return true
-            X = targetX;
-            Y = targetY;
+            this.X = targetX;
+            this.Y = targetY;
 
             DeductActionPoints(COST_MOVE);
 

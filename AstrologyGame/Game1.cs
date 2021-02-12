@@ -96,12 +96,12 @@ namespace AstrologyGame
             knight.Color = Color.Bisque;
             knight.Name = "Knight";
             knight.TextureName = "human2";
-            knight.Stats = new PrimaryAttributes(10, 10, 10, 10);
+            knight.Attributes = new PrimaryAttributes(10, 10, 10, 10);
             knight.X = 1;
             knight.Y = 0;
             knight.Equip(new CopperArmor());
             knight.Equip(new CopperLeggings());
-            Zone.Objects.Add(knight);
+            Zone.AddEntity(knight);
             Zone.Player = knight;
 
             // is the game fullscreen
@@ -211,7 +211,7 @@ namespace AstrologyGame
             {
                 List<Item> itemsHere = new List<Item>();
 
-                foreach(Entity o in Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y))
+                foreach(Entity o in Zone.EntitiesAtPosition(Zone.Player.Pos))
                 {
                     if(o is Item)
                         itemsHere.Add(o as Item);
@@ -254,7 +254,7 @@ namespace AstrologyGame
                 doTick = true;
                 CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
 
-                List<Entity> nearbyObjects = Zone.ObjectsAtPosition(Zone.Player.X, Zone.Player.Y);
+                List<Entity> nearbyObjects = Zone.EntitiesAtPosition(Zone.Player.Pos);
                 nearbyObjects.Remove(Zone.Player);
 
                 if(nearbyObjects.Count > 0)
@@ -317,19 +317,17 @@ namespace AstrologyGame
             int interactX = Zone.Player.X + movePair.X;
             int interactY = Zone.Player.Y + movePair.Y;
 
-            foreach (Entity o in Zone.Objects)
+            foreach (Entity e in Zone.EntitiesAtPosition(new OrderedPair(interactX, interactY)))
             {
-                if (o.X == interactX && o.Y == interactY)
+                if (e != Zone.Player)
                 {
-                    if (o != Zone.Player)
-                    {
-                        o.Interact(Interaction.Attack, Zone.Player);
-                        break;
-                    }
-                    // TODO
-                    // currently, most objects interact methods will set the gameState to InMenu
-                    // however, if not, you may remain in the state Interacting. So fix this some time
+                    e.Interact(Interaction.Attack, Zone.Player);
+                    return;
                 }
+
+                // TODO
+                // currently, most objects interact methods will set the gameState to InMenu
+                // however, if not, you may remain in the state Interacting. So fix this some time
             }
         }
         private void Update_Looking()
@@ -356,7 +354,7 @@ namespace AstrologyGame
 
             if(controls.Contains(Control.DevFunc1))
             {
-                Zone.Player = Zone.ObjectsAtPosition(cursorX, cursorY)[0];
+                Zone.Player = Zone.EntitiesAtPosition(new OrderedPair(cursorX, cursorY))[0];
             }
 
             // this boolean will be true if the cursor moved this input frame
@@ -366,22 +364,20 @@ namespace AstrologyGame
             {
                 CloseMenu(lookMenu); // close the Look Menu because the cursor moved off whatever it was looking at
 
-                // TODO: pick an object to look at
                 Entity objectToLookAt = null;
 
-                foreach (Entity o in Zone.Objects)
+                foreach (Entity o in Zone.EntitiesAtPosition(new OrderedPair(cursorX, cursorY)))
                 {
-                    if (o.X == cursorX && o.Y == cursorY)
-                    {
-                        objectToLookAt = o;
-                        break;
-                    }
+                    // TODO: pick an object to look at rather than just taking the first one
+
+                    objectToLookAt = o;
+                    break;
                 }
 
                 // look at the tile if there are no objects
                 if(objectToLookAt is null)
                 {
-                    objectToLookAt = Zone.tiles[cursorX, cursorY];
+                    objectToLookAt = Zone.TileAtPosition(new OrderedPair(cursorX, cursorY));
                 }
 
                 Look(objectToLookAt);

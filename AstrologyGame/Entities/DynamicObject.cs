@@ -27,6 +27,8 @@ namespace AstrologyGame.Entities
         // x and y position of the object
         public int X { get; set; }
         public int Y { get; set; }
+        public OrderedPair Pos { get { return new OrderedPair(X, Y); } }
+
         public int MaxHealth { get; set; }
         public int Health { get; set; }
         public bool Solid { get; set; } // can you walk through the thing
@@ -35,7 +37,7 @@ namespace AstrologyGame.Entities
         protected Dictionary<Slot, IEquipment> slotDict { get; set; } = new Dictionary<Slot, IEquipment>();
 
         // the 4 stats
-        public PrimaryAttributes Stats { get; set; } = new PrimaryAttributes
+        public PrimaryAttributes Attributes { get; set; } = new PrimaryAttributes
         {
             Vigor = 10,
             Prowess = 10,

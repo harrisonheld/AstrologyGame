@@ -9,7 +9,7 @@ namespace AstrologyGame
     /// <summary>
     /// An ordered pair of integers.
     /// </summary>
-    public struct OrderedPair : IEquatable<OrderedPair>
+    public class OrderedPair : IEquatable<OrderedPair>
     {
         public int X { get; set; }
         public int Y { get; set; }

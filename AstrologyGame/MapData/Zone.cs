@@ -19,27 +19,25 @@ namespace AstrologyGame.MapData
         public const int WIDTH = 16;
         public const int HEIGHT = 9;
 
-        //Declare new layers
-        public static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
-        // list of all objects (that aren't tiles) in the zone
-        public static ObservableCollection<Entity> Objects { get; set; } = new ObservableCollection<Entity>() { };
+        // array of all the tiles
+        private static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
+        // list of all entities in the zone
+        private static List<Entity> entities { get; set; } = new List<Entity>() { };
         public static Entity Player { get; set; }
 
-        /// <summary>
-        /// Clears all tiles and remove all objects
-        /// </summary>
+        // Clears all tiles and remove all objects
         public static void Clear()
         {
             tiles = new Tile[WIDTH, HEIGHT];
-            Objects.Clear();
+            entities.Clear();
         }
-
+  
         /// <summary>
-        /// Have all the Entities in the Zone do their turns.
+        /// Have all the DynamicObjects in the Zone do their turns.
         /// </summary>
         public static void Tick()
         {
-            foreach (Entity o in Objects)
+            foreach (Entity o in entities)
             {
                 if (o is Creature)
                 {
@@ -100,28 +98,28 @@ namespace AstrologyGame.MapData
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
             {
-                Objects.Add(Player);
+                entities.Add(Player);
             }
 
             Pisces p = new Pisces() { X = 5, Y = 5 };
-            Objects.Add(p);
+            entities.Add(p);
 
             Container container = new Container() { X = 4, Y = 6 };
             Flintlock gun = new Flintlock();
             container.Children.Add(gun);
-            Objects.Add(container);
+            entities.Add(container);
 
             ChildOfAbhoth c = new ChildOfAbhoth() { X = 3, Y = 3 };
-            Objects.Add(c);
+            entities.Add(c);
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
         public static bool RemoveObject(Entity toRemove)
         {
-            if (Objects.Remove(toRemove))
+            if (entities.Remove(toRemove))
                 return true;
 
-            foreach(Entity o in Objects)
+            foreach(Entity o in entities)
             {
                 if (o.RemoveFromDescendants(toRemove))
                     return true;
@@ -130,19 +128,28 @@ namespace AstrologyGame.MapData
             return false;
         }
 
-        public static List<Entity> ObjectsAtPosition(int x, int y)
+        public static void AddEntity(Entity e)
+        {
+            entities.Add(e);
+        }
+
+        public static List<Entity> EntitiesAtPosition(OrderedPair p)
         {
             List<Entity> objectsAtPos = new List<Entity>();
 
-            foreach (Entity o in Objects)
+            foreach (Entity o in entities)
             {
-                if (o.X == x && o.Y == y)
+                if (o.X == p.X && o.Y == p.Y)
                 {
                     objectsAtPos.Add(o);
                 }
             }
 
             return objectsAtPos;
+        }
+        public static Tile TileAtPosition(OrderedPair p)
+        {
+            return tiles[p.X, p.Y];
         }
 
         public static void Draw()
@@ -157,7 +164,7 @@ namespace AstrologyGame.MapData
             }
 
             // draw the objects
-            foreach (Entity o in Objects)
+            foreach (Entity o in entities)
             {
                 o.Draw();
             }
