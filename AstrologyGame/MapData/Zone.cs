@@ -16,8 +16,8 @@ namespace AstrologyGame.MapData
 {
     public static class Zone
     {
-        public const int WIDTH = 16;
-        public const int HEIGHT = 9;
+        public const int WIDTH = 60;
+        public const int HEIGHT = 30;
 
         // array of all the tiles
         private static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
@@ -133,13 +133,13 @@ namespace AstrologyGame.MapData
             entities.Add(e);
         }
 
-        public static List<Entity> EntitiesAtPosition(OrderedPair p)
+        public static List<Entity> GetEntitiesAtPosition(OrderedPair p)
         {
             List<Entity> objectsAtPos = new List<Entity>();
 
             foreach (Entity o in entities)
             {
-                if (o.X == p.X && o.Y == p.Y)
+                if (o.Pos.Equals(p))
                 {
                     objectsAtPos.Add(o);
                 }
@@ -147,7 +147,7 @@ namespace AstrologyGame.MapData
 
             return objectsAtPos;
         }
-        public static Tile TileAtPosition(OrderedPair p)
+        public static Tile GetTileAtPosition(OrderedPair p)
         {
             return tiles[p.X, p.Y];
         }

@@ -78,7 +78,7 @@ namespace AstrologyGame.Entities
         public bool TryMove(int targetX, int targetY)
         {
             // if there is a solid object in the way, return false
-            foreach (Entity e in Zone.EntitiesAtPosition(new OrderedPair(targetX, targetY)))
+            foreach (Entity e in Zone.GetEntitiesAtPosition(new OrderedPair(targetX, targetY)))
             {
                 if (e.Solid)
                     return false;

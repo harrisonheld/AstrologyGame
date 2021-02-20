@@ -19,7 +19,11 @@ namespace AstrologyGame
     // this is a helper class. it contains miscellaneous functions that are helpful everywhere
     public static class Utility
     {
-        public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
+        public const string BOOK_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\books.xml";
+        public const string ABILITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\abilities.xml";
+        const string ERROR_TEXTURE_NAME = "error";
+
+        public const int SCALE = 32 * 1; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
         private static GraphicsDevice graphics;
@@ -34,7 +38,6 @@ namespace AstrologyGame
         // go from string to texture2d
         private static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
 
-        const string ERROR_TEXTURE_NAME = "error";
         static string[] DELIMITERS = { " " }; // for finding spaces in strings
 
         /// <summary>

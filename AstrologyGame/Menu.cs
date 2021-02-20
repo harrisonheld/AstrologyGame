@@ -18,7 +18,6 @@ namespace AstrologyGame
     {
         // TODO: make a list of menu elements, mostly text, then when its time to draw, iterate over them and draw them.
 
-        public const string BOOK_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\books.xml";
         public const string BACKGROUND_TEXTURE_NAME = "black";
         private const string CURSOR_TEXTURE_NAME = "marble";
 
@@ -404,7 +403,7 @@ namespace AstrologyGame
         private int GetPageCount()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(BOOK_PATH);
+            xmlDoc.Load(Utility.BOOK_PATH);
 
             XmlNode bookNode = xmlDoc.GetElementById(bookId);
             int pageCount = bookNode.ChildNodes.Count;
@@ -414,7 +413,7 @@ namespace AstrologyGame
         private string GetPageText(int pageNum)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(BOOK_PATH);
+            xmlDoc.Load(Utility.BOOK_PATH);
 
             XmlNode bookNode = xmlDoc.GetElementById(bookId);
             XmlNode page = bookNode.ChildNodes[pageNum];

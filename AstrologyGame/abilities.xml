@@ -1,0 +1,12 @@
+﻿<!DOCTYPE abilities [
+	<!ELEMENT abilities ANY>
+	<!ELEMENT ability ANY>
+	<!ATTLIST ability id ID #REQUIRED>
+	<!ATTLIST ability name CDATA "Default Ability Name">
+	<!ATTLIST ability lore CDATA "Default Ability Lore">
+	<!ATTLIST ability baseCooldown CDATA "10">
+]>
+
+<abilities>
+	<ability id="teleport" name="Teleport" lore="Wheee!!!" baseCooldown="10" />
+</abilities>

@@ -27,7 +27,18 @@ namespace AstrologyGame.Entities
         // x and y position of the object
         public int X { get; set; }
         public int Y { get; set; }
-        public OrderedPair Pos { get { return new OrderedPair(X, Y); } }
+        public OrderedPair Pos
+        {
+            get 
+            { 
+                return new OrderedPair(X, Y); 
+            }
+            set
+            {
+                this.X = value.X;
+                this.Y = value.Y;
+            }
+        }
 
         public int MaxHealth { get; set; }
         public int Health { get; set; }
@@ -35,6 +46,8 @@ namespace AstrologyGame.Entities
         public Color Color { get; set; } = Color.White;
         // dictionary that maps slots to equipment
         protected Dictionary<Slot, IEquipment> slotDict { get; set; } = new Dictionary<Slot, IEquipment>();
+        // list of abilities
+        protected List<Ability> abilities = new List<Ability>();
 
         // the 4 stats
         public PrimaryAttributes Attributes { get; set; } = new PrimaryAttributes
@@ -82,6 +95,18 @@ namespace AstrologyGame.Entities
         public bool HasEquipped(IEquipment equippable)
         {
             return slotDict.ContainsValue(equippable);
+        }
+
+        public void AddAbility(Ability abilityToAdd)
+        {
+            abilities.Add(abilityToAdd);
+        }
+        /// <summary>
+        /// Try to remove an ability. Returns true if successful, otherwise false.
+        /// </summary>
+        public bool RemoveAbility(Ability abilityToRemove)
+        {
+            return abilities.Remove(abilityToRemove);
         }
 
         /// <summary>

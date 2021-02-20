@@ -101,6 +101,7 @@ namespace AstrologyGame
             knight.Y = 0;
             knight.Equip(new CopperArmor());
             knight.Equip(new CopperLeggings());
+            knight.AddAbility(new Teleport());
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -211,7 +212,7 @@ namespace AstrologyGame
             {
                 List<Item> itemsHere = new List<Item>();
 
-                foreach(Entity o in Zone.EntitiesAtPosition(Zone.Player.Pos))
+                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.Pos))
                 {
                     if(o is Item)
                         itemsHere.Add(o as Item);
@@ -254,7 +255,7 @@ namespace AstrologyGame
                 doTick = true;
                 CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
 
-                List<Entity> nearbyObjects = Zone.EntitiesAtPosition(Zone.Player.Pos);
+                List<Entity> nearbyObjects = Zone.GetEntitiesAtPosition(Zone.Player.Pos);
                 nearbyObjects.Remove(Zone.Player);
 
                 if(nearbyObjects.Count > 0)
@@ -317,7 +318,7 @@ namespace AstrologyGame
             int interactX = Zone.Player.X + movePair.X;
             int interactY = Zone.Player.Y + movePair.Y;
 
-            foreach (Entity e in Zone.EntitiesAtPosition(new OrderedPair(interactX, interactY)))
+            foreach (Entity e in Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY)))
             {
                 if (e != Zone.Player)
                 {
@@ -354,7 +355,7 @@ namespace AstrologyGame
 
             if(controls.Contains(Control.DevFunc1))
             {
-                Zone.Player = Zone.EntitiesAtPosition(new OrderedPair(cursorX, cursorY))[0];
+                Zone.Player = Zone.GetEntitiesAtPosition(new OrderedPair(cursorX, cursorY))[0];
             }
 
             // this boolean will be true if the cursor moved this input frame
@@ -366,7 +367,7 @@ namespace AstrologyGame
 
                 Entity objectToLookAt = null;
 
-                foreach (Entity o in Zone.EntitiesAtPosition(new OrderedPair(cursorX, cursorY)))
+                foreach (Entity o in Zone.GetEntitiesAtPosition(new OrderedPair(cursorX, cursorY)))
                 {
                     // TODO: pick an object to look at rather than just taking the first one
 
@@ -377,7 +378,7 @@ namespace AstrologyGame
                 // look at the tile if there are no objects
                 if(objectToLookAt is null)
                 {
-                    objectToLookAt = Zone.TileAtPosition(new OrderedPair(cursorX, cursorY));
+                    objectToLookAt = Zone.GetTileAtPosition(new OrderedPair(cursorX, cursorY));
                 }
 
                 Look(objectToLookAt);
