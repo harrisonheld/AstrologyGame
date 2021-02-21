@@ -292,6 +292,11 @@ namespace AstrologyGame
                 World.GenerateCurrentZone();
             }
 
+            if(controls.Contains(Control.DevFunc1))
+            {
+                Zone.Player.UseAbility(0);
+            }
+
             if (controls.Contains(Control.Back))
                 // TODO: pause
                 ;
@@ -352,11 +357,6 @@ namespace AstrologyGame
                 cursorY = Zone.HEIGHT - 1;
             else if (cursorY < 0)
                 cursorY = 0;
-
-            if(controls.Contains(Control.DevFunc1))
-            {
-                Zone.Player = Zone.GetEntitiesAtPosition(new OrderedPair(cursorX, cursorY))[0];
-            }
 
             // this boolean will be true if the cursor moved this input frame
             bool moved = !(movePair.Equals(OrderedPair.Zero));

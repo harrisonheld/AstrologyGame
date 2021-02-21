@@ -11,38 +11,60 @@ namespace AstrologyGame
     public abstract class Ability
     {
         private string abilityId;
-        // set the ability id and load its details from the xml
-        protected void SetAbilityId(string id)
-        {
-            abilityId = id;
-            LoadAbility();
-        }
 
         protected string abilityName = "";
         protected string abilityLore = "";
-        public int BaseCooldown { get; set; } // cooldown in turns
+        protected int baseCooldown; // cooldown in turns
+        protected TargetType targetType;
+
+        public int BaseCooldown { get { return baseCooldown;  } }
 
         public virtual void Activate(Entity caster, OrderedPair target) { }
-        public virtual void Activate(Entity caster, Entity target) { }
-
-        private void LoadAbility()
+        public void Activate(Entity caster) // activate with no target
         {
+            Activate(caster, null);
+        }
+
+        protected void LoadFromId(string id)
+        {
+            abilityId = id;
+
             // load ability details from xml
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(Utility.ABILITIES_PATH);
 
-            XmlNode abilityNode = xmlDoc.GetElementById(abilityId);
+            XmlNode abilityNode = xmlDoc.GetElementById(id);
             abilityName = abilityNode.Attributes.GetNamedItem("name").Value;
             abilityLore = abilityNode.Attributes.GetNamedItem("lore").Value;
-            BaseCooldown = int.Parse(abilityNode.Attributes.GetNamedItem("baseCooldown").Value);
+            baseCooldown = int.Parse(abilityNode.Attributes.GetNamedItem("baseCooldown").Value);
+            string target = abilityNode.Attributes.GetNamedItem("target").Value;
+
+            switch(target)
+            {
+                case "self":
+                    targetType = TargetType.Self;
+                    break;
+                case "position":
+                    targetType = TargetType.Position;
+                    break;
+                default:
+                    targetType = TargetType.Position;
+                    break;
+            }
         }
+    }
+
+    public enum TargetType
+    { 
+        Self,
+        Position
     }
 
     public class Teleport : Ability
     {
         public Teleport()
         {
-            SetAbilityId("teleport");
+            LoadFromId("teleport");
         }
 
         public override void Activate(Entity caster, OrderedPair destination)

@@ -108,6 +108,14 @@ namespace AstrologyGame.Entities
         {
             return abilities.Remove(abilityToRemove);
         }
+        public void UseAbility(Ability abilityToUse)
+        {
+            abilityToUse.Activate(this, new OrderedPair(0, 0));
+        }
+        public void UseAbility(int abilityIndex)
+        {
+            UseAbility(abilities[abilityIndex]);
+        }
 
         /// <summary>
         /// Using this Entity as a root node, remove the given Entity from any of it's descendants.
