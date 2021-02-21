@@ -65,11 +65,11 @@ namespace AstrologyGame
         private static Texture2D cursor;
         private static int cursorX = 0;
         private static int cursorY = 0;
-        public static Vector2 CursorPosition
+        public static OrderedPair CursorPosition
         {
             get
             {
-                return new Vector2(cursorX, cursorY);
+                return new OrderedPair(cursorX, cursorY);
             }
         }
 
@@ -102,6 +102,7 @@ namespace AstrologyGame
             knight.Equip(new CopperArmor());
             knight.Equip(new CopperLeggings());
             knight.AddAbility(new Teleport());
+            knight.AddAbility(new Bind());
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -292,11 +293,6 @@ namespace AstrologyGame
                 World.GenerateCurrentZone();
             }
 
-            if(controls.Contains(Control.DevFunc1))
-            {
-                Zone.Player.UseAbility(0);
-            }
-
             if (controls.Contains(Control.Back))
                 // TODO: pause
                 ;
@@ -382,6 +378,19 @@ namespace AstrologyGame
                 }
 
                 Look(objectToLookAt);
+            }
+
+            if (controls.Contains(Control.DevFunc1))
+            {
+                Zone.Player.UseAbility(0, CursorPosition);
+                CloseMenu(lookMenu);
+                gameState = GameState.FreeRoam;
+            }
+            if (controls.Contains(Control.DevFunc2))
+            {
+                Zone.Player.UseAbility(1, CursorPosition);
+                CloseMenu(lookMenu);
+                gameState = GameState.FreeRoam;
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.Entities;
+using AstrologyGame.MapData;
 
 using System.Xml;
 
@@ -70,6 +71,20 @@ namespace AstrologyGame
         public override void Activate(Entity caster, OrderedPair destination)
         {
             caster.Pos = destination;
+        }
+    }
+
+    public class Bind : Ability
+    { 
+        public Bind()
+        {
+            LoadFromId("bind");
+        }
+
+        public override void Activate(Entity caster, OrderedPair target)
+        {
+            Creature targetEntity = Zone.GetEntitiesAtPosition(target)[0] as Creature;
+            targetEntity.Quickness = 0;
         }
     }
 }

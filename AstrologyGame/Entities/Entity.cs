@@ -40,8 +40,36 @@ namespace AstrologyGame.Entities
             }
         }
 
-        public int MaxHealth { get; set; }
-        public int Health { get; set; }
+        private int maxHealth;
+        private int health;
+
+        public int MaxHealth
+        {
+            get
+            {
+                return maxHealth;
+            }
+            set
+            {
+                // if new max health is lower than current hp, lower the current hp
+                if (value < Health)
+                    Health = value;
+
+                maxHealth = value;
+            }
+        }
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health = value;
+            }
+        }
+
         public bool Solid { get; set; } // can you walk through the thing
         public Color Color { get; set; } = Color.White;
         // dictionary that maps slots to equipment
@@ -108,13 +136,13 @@ namespace AstrologyGame.Entities
         {
             return abilities.Remove(abilityToRemove);
         }
-        public void UseAbility(Ability abilityToUse)
+        public void UseAbility(Ability abilityToUse, OrderedPair target)
         {
-            abilityToUse.Activate(this, new OrderedPair(0, 0));
+            abilityToUse.Activate(this, target);
         }
-        public void UseAbility(int abilityIndex)
+        public void UseAbility(int abilityIndex, OrderedPair target)
         {
-            UseAbility(abilities[abilityIndex]);
+            UseAbility(abilities[abilityIndex], target);
         }
 
         /// <summary>

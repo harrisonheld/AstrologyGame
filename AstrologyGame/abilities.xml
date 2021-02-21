@@ -8,6 +8,7 @@
 	<!ATTLIST ability baseCooldown CDATA "10">
 ]>
 
+<!--idea: instead of just lore, have a decription which is short and explains the ability, and a lore which is verbose and tells story-->
 <abilities>
 	<ability id="teleport" name="teleport" lore="teleport somewhere." baseCooldown="100" target="position"/>
 	<ability id="bind" name="bind" lore="bind someone or something in place." baseCooldown="60" target="entity"/>
