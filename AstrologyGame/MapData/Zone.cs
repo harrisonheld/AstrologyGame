@@ -37,20 +37,9 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-            foreach (Entity o in entities)
+            foreach (Entity e in entities)
             {
-                if (o is Creature)
-                {
-                    Creature c = o as Creature;
-                    if (c == Player)
-                    {
-                        c.RechargeAP();
-                    }
-                    else
-                    {
-                        c.AiTurn();
-                    }
-                }
+                e.UpdateAllComponents();
             }
 
             for (int y = 0; y < HEIGHT; y++)
@@ -64,7 +53,7 @@ namespace AstrologyGame.MapData
             Clear();
 
             // what biome should this zone generate as
-            Biome biome = BiomeInfo.CydonianSands;
+            Biome biome = BiomeInfo.DebugLand;
             /*double s = rand.NextDouble();
             Biome biome;
             if (s > 0.5)
@@ -86,8 +75,9 @@ namespace AstrologyGame.MapData
                         if (r < chance)
                         {
                             Tile newTile = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
-                            newTile.X = x;
-                            newTile.Y = y;
+                            OrderedPair pos = newTile.GetComponent<Position>().Pos;
+                            pos.X = x;
+                            pos.Y = y;
                             tiles[x, y] = newTile;
                             break;
                         }
@@ -95,22 +85,21 @@ namespace AstrologyGame.MapData
                 }
             }
 
+            Entity chest = new Entity();
+            chest.AddComponent(new Inventory() { interactable = true });
+            chest.GetComponent<Position>().Pos = new OrderedPair(5, 5);
+            AddEntity(chest);
+
+            Entity book = new Entity();
+            book.AddComponent(new Book() { bookId = "MasterOfTheMoon" });
+            chest.GetComponent<Position>().Pos = new OrderedPair(3, 0);
+            AddEntity(book);
+
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
             {
                 entities.Add(Player);
             }
-
-            Pisces p = new Pisces() { X = 5, Y = 5 };
-            entities.Add(p);
-
-            Container container = new Container() { X = 4, Y = 6 };
-            Flintlock gun = new Flintlock();
-            container.Children.Add(gun);
-            entities.Add(container);
-
-            ChildOfAbhoth c = new ChildOfAbhoth() { X = 3, Y = 3 };
-            entities.Add(c);
         }
 
         // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
@@ -139,7 +128,7 @@ namespace AstrologyGame.MapData
 
             foreach (Entity o in entities)
             {
-                if (o.Position.Equals(p))
+                if (o.GetComponent<Position>().Pos.Equals(p))
                 {
                     objectsAtPos.Add(o);
                 }
@@ -154,19 +143,16 @@ namespace AstrologyGame.MapData
 
         public static void Draw()
         {
-            // draw the tiles
+            // TODO: draw tiles
             for (int y = 0; y < HEIGHT; y++)
-            {
                 for (int x = 0; x < WIDTH; x++)
-                {
-                    tiles[x, y].Draw();
-                }
-            }
+                    Utility.DrawEntity(tiles[x, y], x, y);
 
             // draw the objects
             foreach (Entity o in entities)
             {
-                o.Draw();
+                Position p = o.GetComponent<Position>();
+                Utility.DrawEntity(o, p.x, p.y);
             }
         }
     }

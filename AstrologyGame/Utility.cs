@@ -23,6 +23,11 @@ namespace AstrologyGame
         public const string ABILITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\abilities.xml";
         const string ERROR_TEXTURE_NAME = "error";
 
+        // the cost for various actions
+        public const int COST_MOVE = 100;
+        public const int COST_ATTACK = 100;
+        public const int AP_CAP = 200;
+
         public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
@@ -130,14 +135,16 @@ namespace AstrologyGame
 
         public static void DrawEntity(Entity o, int x, int y)
         {
-            if (!o.ShouldRender)
+            Display d = o.GetComponent<Display>();
+
+            if (!d.shouldRender)
                 return;
 
             int drawX = x * SCALE;
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(GetTexture(o.TextureName), destinationRectangle, o.Color);
+            spriteBatch.Draw(GetTexture(d.textureName), destinationRectangle, d.color);
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.

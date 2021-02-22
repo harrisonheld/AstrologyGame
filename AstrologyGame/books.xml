@@ -6,7 +6,7 @@
 	<!ELEMENT page ANY>]>
 
 <books>
-	<book id="MasteroftheMoon" title="Master of the Moon">
+	<book id="MasterOfTheMoon" title="Master of the Moon">
 		<page>chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text</page>
 		<page>poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text</page>
 	</book>

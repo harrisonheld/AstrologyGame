@@ -44,7 +44,6 @@ namespace AstrologyGame
 
         // menu
         private static List<Menu> menus = new List<Menu>();
-        private static NearbyObjectsMenu nearbyObjectsMenu;
         private static LookMenu lookMenu;
         // an easy way to get the last menu in the list, which is the only one that should accept input
         private static Menu CurrentMenu
@@ -93,17 +92,12 @@ namespace AstrologyGame
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = new Humanoid()
-            {
-                Color = Color.Bisque,
-                Name = "Knight",
-                TextureName = "human2",
-                Position = new OrderedPair(10, 10),
-            };
-            knight.Equip(new CopperArmor());
-            knight.Equip(new CopperLeggings());
-            knight.AddAbility(new Teleport());
-            knight.AddAbility(new Bind());
+            Entity knight = new Humanoid();
+
+            Abilities abilitiesComp = knight.GetComponent<Abilities>();
+            abilitiesComp.AddAbility(new Teleport());
+            abilitiesComp.AddAbility(new Bind());
+
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -212,12 +206,12 @@ namespace AstrologyGame
             }
             else if(controls.Contains(Control.Get))
             {
-                List<Item> itemsHere = new List<Item>();
+                List<Entity> itemsHere = new List<Entity>();
 
-                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.Position))
+                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.GetComponent<Position>().Pos))
                 {
-                    if(o is Item)
-                        itemsHere.Add(o as Item);
+                    if(o.HasComponent<Item>())
+                        itemsHere.Add(o);
                 }
 
                 Menu getMenu = new GetMenu(itemsHere);
@@ -225,8 +219,10 @@ namespace AstrologyGame
             }
             else if (controls.Contains(Control.Look))
             {
-                cursorX = Zone.Player.X;
-                cursorY = Zone.Player.Y;
+                // put the cursor at the player
+                OrderedPair cursorPos = Zone.Player.GetComponent<Position>().Pos;
+                cursorX = cursorPos.X;
+                cursorY = cursorPos.Y;
                 gameState = GameState.LookMode;
                 return;
             }
@@ -244,50 +240,42 @@ namespace AstrologyGame
                 return;
             }
 
-            OrderedPair orderedPair = Input.ControlsToMovePair(controls);
+            OrderedPair movePair = Input.ControlsToMovePair(controls);
+            OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
 
-            int newX = Zone.Player.X + movePair.X;
-            int newY = Zone.Player.Y + movePair.Y;
+            int newX = playerPos.X + movePair.X;
+            int newY = playerPos.Y + movePair.Y;
 
-            bool moveSuccessful = ((Creature)(Zone.Player)).TryMove(newX, newY);
+            bool moveSuccessful = Zone.Player.GetComponent<Creature>().TryMove(newX, newY);
 
             if (moveSuccessful)
             {
                 // THIS CODE IS EXECUTED WHEN THE PLAYER SUCCESSFULLY MOVES TO A NEW TILE
                 doTick = true;
-                CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
-
-                List<Entity> nearbyObjects = Zone.GetEntitiesAtPosition(Zone.Player.Position);
-                nearbyObjects.Remove(Zone.Player);
-
-                if(nearbyObjects.Count > 0)
-                {
-                    nearbyObjectsMenu = new NearbyObjectsMenu(nearbyObjects);
-                    OpenMenu(nearbyObjectsMenu);
-                }
             }
 
             // generate a new zone if the player exits the current one
-            if (Zone.Player.X >= Zone.WIDTH || Zone.Player.X < 0 || Zone.Player.Y >= Zone.HEIGHT || Zone.Player.Y < 0)
+            OrderedPair pos = Zone.Player.GetComponent<Position>().Pos;
+            if (pos.X >= Zone.WIDTH || pos.X < 0 || pos.Y >= Zone.HEIGHT || pos.Y < 0)
             {
-                if (Zone.Player.X >= Zone.WIDTH)
+                if (pos.X >= Zone.WIDTH)
                 {
-                    Zone.Player.X = 0;
+                    pos.X = 0;
                     World.ZoneX += 1;
                 }
-                else if (Zone.Player.X < 0)
+                else if (pos.X < 0)
                 {
-                    Zone.Player.X = Zone.WIDTH - 1;
+                    pos.X = Zone.WIDTH - 1;
                     World.ZoneX -= 1;
                 }
-                if (Zone.Player.Y >= Zone.HEIGHT)
+                if (pos.Y >= Zone.HEIGHT)
                 {
-                    Zone.Player.Y = 0;
+                    pos.Y = 0;
                     World.ZoneY -= 1;
                 }
-                else if (Zone.Player.Y < 0)
+                else if (pos.Y < 0)
                 {
-                    Zone.Player.Y = Zone.HEIGHT - 1;
+                    pos.Y = Zone.HEIGHT - 1;
                     World.ZoneY += 1;
                 }
 
@@ -317,15 +305,23 @@ namespace AstrologyGame
                 return;
             }
 
-            int interactX = Zone.Player.X + movePair.X;
-            int interactY = Zone.Player.Y + movePair.Y;
+            OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
+            int interactX = playerPos.X + movePair.X;
+            int interactY = playerPos.Y + movePair.Y;
 
             foreach (Entity e in Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY)))
             {
                 if (e != Zone.Player)
                 {
-                    e.Interact(Interaction.Attack, Zone.Player);
-                    return;
+                    if (e.HasComponent<Book>())
+                        e.GetComponent<Book>().Interact(Zone.Player);
+
+                    if (e.HasComponent<Inventory>())
+                    {
+                        Inventory inv = e.GetComponent<Inventory>();
+                        if (inv.interactable)
+                            inv.Interact(Zone.Player);
+                    }
                 }
 
                 // TODO
@@ -380,19 +376,6 @@ namespace AstrologyGame
 
                 Look(objectToLookAt);
             }
-
-            if (controls.Contains(Control.DevFunc1))
-            {
-                Zone.Player.UseAbility(0, CursorPosition);
-                CloseMenu(lookMenu);
-                gameState = GameState.FreeRoam;
-            }
-            if (controls.Contains(Control.DevFunc2))
-            {
-                Zone.Player.UseAbility(1, CursorPosition);
-                CloseMenu(lookMenu);
-                gameState = GameState.FreeRoam;
-            }
         }
 
         /// <summary>
@@ -431,8 +414,9 @@ namespace AstrologyGame
             // draw debug info
             if (controls.Contains(Control.DevInfo))
             {
+                OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
                 _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"Player Pos: ({Zone.Player.X}, {Zone.Player.Y})", new Vector2(0, 20), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Player Pos: ({playerPos.X}, {playerPos.Y})", new Vector2(0, 20), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Gamestate: ({gameState})", new Vector2(0, 40), DEBUG_COLOR);
 
                 Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 60));

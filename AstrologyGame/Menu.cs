@@ -171,11 +171,18 @@ namespace AstrologyGame
     class InventoryMenu : SelectMenu
     {
         private Entity container; // the object whose inventory we are examining
+        private List<Entity> contents
+        {
+            get
+            {
+                return container.GetComponent<Inventory>().entites;
+            }
+        }
 
         public InventoryMenu(Entity _container)
         {
             container = _container;
-            selectionCount = _container.Children.Count;
+            selectionCount = contents.Count;
 
             Refresh();
         }
@@ -183,36 +190,37 @@ namespace AstrologyGame
         {
             // add all the item names to the text
             StringBuilder sb = new StringBuilder();
-            sb.Append($"[{container.Name}]\n");
-            foreach (Item item in container.Children)
+            sb.Append($"[{container.GetComponent<Display>().name}]\n");
+            foreach (Entity e in contents)
             {
+                sb.Append(e.GetComponent<Display>().name);
 
-                sb.Append(item.Name);
-
-                // add equip slot if its equipped
-                if (item is IEquipment)
+                Equipment equipment = container.GetComponent<Equipment>();
+                Equippable equippable = e.GetComponent<Equippable>();
+                if (equipment != null && equippable != null)
                 {
-                    IEquipment e = item as IEquipment;
-                    if (container.HasEquipped(e))
+                    if (equipment.HasEquipped(e))
                     {
-                        string slot = e.EquipSlot.ToString();
+                        string slot = equippable.slot.ToString();
                         sb.Append($" ({slot})");
                     }
                 }
 
                 // add item count if its more than 1
-                if (item.Count > 1)
-                    sb.Append($" (x{item.Count})");
+                int count = e.GetComponent<Item>().count;
+                if (count > 1)
+                    sb.Append($" (x{count})");
 
                 sb.Append("\n");
             }
 
-            selectionCount = container.Children.Count;
+            selectionCount = contents.Count;
             Text = sb.ToString();
             base.Refresh();
         }
         public override void SelectionMade()
         {
+            /*
             List<Interaction> forbiddenInteractions = new List<Interaction>();
 
             // if this is the players inventory...
@@ -231,6 +239,7 @@ namespace AstrologyGame
             menu.Position = cursorCoords;
 
             Game1.OpenMenu(menu);
+            */
         }
     }
 
@@ -240,7 +249,9 @@ namespace AstrologyGame
         {
             PauseWhenOpened = false;
 
-            Text = o.Name + " - " + o.Lore + "\n";
+            Display d = o.GetComponent<Display>();
+
+            Text = d.name + " - " + d.lore + "\n";
 
             if (Game1.CursorPosition.X < Zone.WIDTH / 2)
                 Position = new OrderedPair(Game1.ScreenSize.X - Size.X, Position.Y);
@@ -248,32 +259,14 @@ namespace AstrologyGame
                 Position = new OrderedPair(0, Position.Y);
         }
     }
-    class NearbyObjectsMenu : Menu
-    {
-        public NearbyObjectsMenu(List<Entity> nearbyObjects)
-        {
-            PauseWhenOpened = false;
 
-            string t = "[Nearby]\n";
-
-            foreach(Entity o in nearbyObjects)
-            {
-                t += o.Name + "\n";
-            }
-
-            Text = t;
-
-            Size = (OrderedPair)Font.MeasureString(wrappedText);
-            Position = new OrderedPair(Game1.ScreenSize.X - (Size.X + 5), Game1.ScreenSize.Y - (Size.Y + 5) );
-        }
-    }
     class GetMenu : SelectMenu
     {
-        private List<Item> items;
+        private List<Entity> entities;
 
-        public GetMenu(List<Item> _items)
+        public GetMenu(List<Entity> _entities)
         {
-            items = _items;
+            this.entities = _entities;
             Refresh();
         }
         public override void Refresh()
@@ -281,18 +274,21 @@ namespace AstrologyGame
             StringBuilder sb = new StringBuilder();
             sb.Append("[Get]\n");
 
-            foreach (Item i in items)
+            foreach (Entity e in entities)
             {
-                sb.Append($"{i.Name}");
-                if (i.Count > 1)
-                    sb.Append($" x{i.Count}");
+                Display d = e.GetComponent<Display>();
+                Item i = e.GetComponent<Item>();
+
+                sb.Append($"{d.name}");
+                if (i.count > 1)
+                    sb.Append($" x{i.count}");
                 sb.Append("\n");
             }
 
             Text = sb.ToString();
 
             // update maxIndex in case item count changed
-            selectionCount = items.Count;
+            selectionCount = entities.Count;
 
             base.Refresh();
         }
@@ -304,8 +300,8 @@ namespace AstrologyGame
             // if player hits tab, get all items
             if(controls.Contains(Control.Tab))
             {
-                foreach (Item i in items)
-                    i.Interact(Interaction.Get, Zone.Player);
+                foreach (Entity e in entities)
+                    Zone.Player.GetComponent<Inventory>().AddEntity(e);
 
                 Game1.CloseMenu(this);
             }
@@ -313,51 +309,33 @@ namespace AstrologyGame
 
         public override void SelectionMade()
         {
-            items[selectedIndex].Interact(Interaction.Get, Zone.Player);
-            items.RemoveAt(selectedIndex);
+            Zone.Player.GetComponent<Inventory>().AddEntity(entities[selectedIndex]);
             Refresh();
         }
     }
     class InteractionMenu : SelectMenu
     {
         Entity objectToInteractWith;
-        List<Interaction> interactions;
 
         /// <param name="forbiddenInteraction">A list of interactions that will not be included in this menu, even if the object to interact with has them available.</param>
-        public InteractionMenu(Entity _objectToInteractWith, List<Interaction> forbiddenInteractions)
+        public InteractionMenu(Entity _objectToInteractWith)
         {
             BackgroundColor = Color.Black;
             objectToInteractWith = _objectToInteractWith;
 
             // make a copy of the items interactions so we don't have to worry about changing things in the object itself
-            interactions = new List<Interaction>((objectToInteractWith as IInteractable).Interactions);
 
-            // if there are any forbidden interactions
-            if (forbiddenInteractions != null)
-            {
-                // remove them from this menu's interactions
-                foreach (Interaction forbidden in forbiddenInteractions)
-                    interactions.Remove(forbidden);
-            }
-
-            // add interactions to the text
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[Interactions]\n");
-            foreach(Interaction i in interactions)
-            {
-                sb.Append($"{i}\n");
-            }
-            Text = sb.ToString();
-
-            selectionCount = interactions.Count;
         }
 
         public override void SelectionMade()
         {
             // close this menu when a selection is made
             Game1.CloseMenu(this);
-            // use Zone.Player as interactor because only a Player could have opened an InteractionMenu
-            objectToInteractWith.Interact(interactions[selectedIndex], Zone.Player);
+            
+
+            // TODO: DO THE INTERACTION
+
+
             // refresh the menus incase this interaction changed them
             Game1.QueueRefreshAllMenus();
         }

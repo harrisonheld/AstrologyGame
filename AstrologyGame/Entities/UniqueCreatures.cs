@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 /* This file contains unique handcrafted NPC's that generally only appear once in the game */
 namespace AstrologyGame.Entities
 {
+    /*
     public class Pisces : Humanoid
     {
         public Pisces()
@@ -59,5 +60,5 @@ namespace AstrologyGame.Entities
             Lore = "It's a sky blue flare dress lined with white.";
             Color = Color.LightSkyBlue;
         }
-    }
+    } */
 }

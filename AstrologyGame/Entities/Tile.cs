@@ -9,21 +9,24 @@ namespace AstrologyGame.Entities
     {
         public Tile()
         {
-            TextureName = "dots3x3";
+            GetComponent<Display>().textureName = "dots3x3";
         }
     }
+
     class DebugTile : Tile
     { 
         public DebugTile()
         {
-            Name = "debug tile";
-            Lore = "It's pure black, and very easy to read debug text on.";
-            TextureName = "debugTile";
+            Display d = GetComponent<Display>();
+            d.name = "debug tile";
+            d.lore = "It's pure black, and very easy to read debug text on.";
+            d.textureName = "debugTile";
             int shade = 64;
-            Color = new Color(shade, shade, shade);
+            d.color = new Color(shade, shade, shade);
         }
     }
 
+        /*
     class Stone : Tile
     {
         public Stone()
@@ -80,5 +83,5 @@ namespace AstrologyGame.Entities
 
             return new Color(red, green, blue);
         }
-    }
+    }*/
 }

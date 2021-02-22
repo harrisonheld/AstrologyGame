@@ -14,6 +14,7 @@ namespace AstrologyGame.MapData
             TileWeights = new double[] { 1.0 }
         };
 
+        /*
         public readonly static Biome FontOfMiscreation = new Biome()
         {
             TileTypes = new Type[] { typeof(Offal), typeof(Stone) },
@@ -26,16 +27,16 @@ namespace AstrologyGame.MapData
             TileWeights = new double[] {0.8, 0.05, 0.15}
         };
 
-        /*
          * "What's my new biome called?"
          * "The Abyss."
          * "What do you do in The Abyss?"
          * "Get foched."
-         */
+         * 
         public readonly static Biome TheAbyss = new Biome()
         {
 
         };
+        */
     }
 
     public struct Biome

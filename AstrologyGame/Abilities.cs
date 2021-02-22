@@ -70,7 +70,7 @@ namespace AstrologyGame
 
         public override void Activate(Entity caster, OrderedPair destination)
         {
-            caster.Position = destination;
+            caster.GetComponent<Position>().Pos = destination;
         }
     }
 
@@ -83,8 +83,8 @@ namespace AstrologyGame
 
         public override void Activate(Entity caster, OrderedPair target)
         {
-            Creature targetEntity = Zone.GetEntitiesAtPosition(target)[0] as Creature;
-            targetEntity.Quickness = 0;
+            Entity targetEntity = Zone.GetEntitiesAtPosition(target)[0];
+            targetEntity.GetComponent<Creature>().quickness = 0;
         }
     }
 }
