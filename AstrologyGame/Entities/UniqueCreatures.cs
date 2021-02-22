@@ -18,8 +18,7 @@ namespace AstrologyGame.Entities
         {
             Name = "Pisces";
             TextureName = "pisces2";
-            Lore = "He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. " +
-                "Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.";
+            Lore = "";
             Color = Color.LightSkyBlue;
             Quickness = 70;
 
