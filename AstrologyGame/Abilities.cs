@@ -70,7 +70,7 @@ namespace AstrologyGame
 
         public override void Activate(Entity caster, OrderedPair destination)
         {
-            caster.Pos = destination;
+            caster.Position = destination;
         }
     }
 

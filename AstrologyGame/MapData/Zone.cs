@@ -16,8 +16,8 @@ namespace AstrologyGame.MapData
 {
     public static class Zone
     {
-        public const int WIDTH = 60;
-        public const int HEIGHT = 30;
+        public const int WIDTH = 16;
+        public const int HEIGHT = 9;
 
         // array of all the tiles
         private static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
@@ -139,7 +139,7 @@ namespace AstrologyGame.MapData
 
             foreach (Entity o in entities)
             {
-                if (o.Pos.Equals(p))
+                if (o.Position.Equals(p))
                 {
                     objectsAtPos.Add(o);
                 }

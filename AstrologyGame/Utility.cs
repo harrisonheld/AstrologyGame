@@ -23,7 +23,7 @@ namespace AstrologyGame
         public const string ABILITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\abilities.xml";
         const string ERROR_TEXTURE_NAME = "error";
 
-        public const int SCALE = 32 * 1; // how many pixels high and wide sprites should be drawn as
+        public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
         private static GraphicsDevice graphics;

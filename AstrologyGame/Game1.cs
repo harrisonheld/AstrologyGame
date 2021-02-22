@@ -90,15 +90,16 @@ namespace AstrologyGame
         protected override void Initialize()
         {
             Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
+            World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = new Humanoid();
-            knight.Color = Color.Bisque;
-            knight.Name = "Knight";
-            knight.TextureName = "human2";
-            knight.Attributes = new PrimaryAttributes(10, 10, 10, 10);
-            knight.X = 1;
-            knight.Y = 0;
+            Entity knight = new Humanoid()
+            {
+                Color = Color.Bisque,
+                Name = "Knight",
+                TextureName = "human2",
+                Position = new OrderedPair(10, 10),
+            };
             knight.Equip(new CopperArmor());
             knight.Equip(new CopperLeggings());
             knight.AddAbility(new Teleport());
@@ -213,7 +214,7 @@ namespace AstrologyGame
             {
                 List<Item> itemsHere = new List<Item>();
 
-                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.Pos))
+                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.Position))
                 {
                     if(o is Item)
                         itemsHere.Add(o as Item);
@@ -256,7 +257,7 @@ namespace AstrologyGame
                 doTick = true;
                 CloseMenu(nearbyObjectsMenu); // close Nearby Objects Menu because we moved
 
-                List<Entity> nearbyObjects = Zone.GetEntitiesAtPosition(Zone.Player.Pos);
+                List<Entity> nearbyObjects = Zone.GetEntitiesAtPosition(Zone.Player.Position);
                 nearbyObjects.Remove(Zone.Player);
 
                 if(nearbyObjects.Count > 0)

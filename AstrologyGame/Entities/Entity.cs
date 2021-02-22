@@ -27,7 +27,7 @@ namespace AstrologyGame.Entities
         // x and y position of the object
         public int X { get; set; }
         public int Y { get; set; }
-        public OrderedPair Pos
+        public OrderedPair Position
         {
             get 
             { 
