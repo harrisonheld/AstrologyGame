@@ -175,7 +175,7 @@ namespace AstrologyGame
         {
             get
             {
-                return container.GetComponent<Inventory>().entites;
+                return container.GetComponent<Inventory>().contents;
             }
         }
 

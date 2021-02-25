@@ -11,8 +11,6 @@ namespace AstrologyGame.Entities
     public abstract class EntityComponent
     {
         public Entity ParentEntity { get; set; }
-        public bool interactable = false; // can other entities interact with this component?
-        public static string InteractionName { get; set; } // "read" for book, "attack" for creature, etc
 
         public EntityComponent()
         {
@@ -23,22 +21,13 @@ namespace AstrologyGame.Entities
         public virtual void Interact(Entity interactor) { } // this is done when another entity interacts with this component
     }
 
-    public class Display : EntityComponent
-    {
-        public bool shouldRender = true;
-        public string name = "default";
-        public string lore = "default";
-        public string textureName = "default";
-        public Color color = Color.White;
-    }
-
     public class Position : EntityComponent
     {
         public int x = 0;
         public int y = 0;
 
         public OrderedPair Pos
-        { 
+        {
             get
             {
                 return new OrderedPair(x, y);
@@ -51,9 +40,19 @@ namespace AstrologyGame.Entities
         }
     }
 
+    public class Display : EntityComponent
+    {
+        public bool shouldRender = true;
+        public string name = "default";
+        public string lore = "default";
+        public string textureName = "default";
+        public Color color = Color.White;
+    }
+
     public class Inventory : EntityComponent
     {
-        public List<Entity> entites = new List<Entity>();
+        public bool otherEntitiesCanOpen = false; // can other entities open this inventory?
+        public List<Entity> contents = new List<Entity>();
 
         // you must set interactable to true to use this
         public override void Interact(Entity interactor)
@@ -70,7 +69,7 @@ namespace AstrologyGame.Entities
         public void AddEntity(Entity entityToAdd)
         {
             Zone.RemoveObject(entityToAdd); // remove it from the zone
-            entites.Add(entityToAdd); // and put it in this inventory   
+            contents.Add(entityToAdd); // and put it in this inventory   
         }
     }
 
@@ -89,9 +88,9 @@ namespace AstrologyGame.Entities
             }
             // if it's not in our inventory, add it
             Inventory inv = ParentEntity.GetComponent<Inventory>();
-            if (!inv.entites.Contains(toEquip))
+            if (!inv.contents.Contains(toEquip))
             {
-                inv.entites.Add(toEquip);
+                inv.contents.Add(toEquip);
             }
 
             slotDict[slot] = toEquip;
@@ -120,6 +119,11 @@ namespace AstrologyGame.Entities
         }
     }
 
+    public class Item : EntityComponent
+    {
+        public int count;
+    }
+
     public class Equippable : EntityComponent
     {
         public Slot slot;
@@ -141,6 +145,8 @@ namespace AstrologyGame.Entities
 
     public class Creature : EntityComponent
     {
+        // TODO: remove this component
+
         public int health;
         public int maxHealth;
         public int quickness;
@@ -153,6 +159,7 @@ namespace AstrologyGame.Entities
         public void AiTurn()
         {
             RechargeAP();
+            Seek(Zone.Player);
         }
         public void RechargeAP()
         {
@@ -170,7 +177,7 @@ namespace AstrologyGame.Entities
         private void DropAll()
         {
             Inventory inv = ParentEntity.GetComponent<Inventory>();
-            foreach(Entity item in inv.entites)
+            foreach(Entity item in inv.contents)
             {
                 // TODO: drop all items
             }
@@ -237,10 +244,6 @@ namespace AstrologyGame.Entities
         }
     }
 
-    public class Item : EntityComponent
-    {
-        public int count;
-    }
 
     public class Book : EntityComponent
     {
@@ -248,7 +251,7 @@ namespace AstrologyGame.Entities
 
         public Book()
         {
-            interactable = true;
+
         }
 
         public override void Interact(Entity interactor)

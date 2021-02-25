@@ -17,6 +17,12 @@ namespace AstrologyGame.Entities
                 case "Display":
                     component = DisplayFromXmlNode(node);
                     break;
+                case "Inventory":
+                    component = InventoryFromXmlNode(node);
+                    break;
+                case "Item":
+                    component = ItemFromXmlNode(node);
+                    break;
             }
 
             return component;
@@ -50,6 +56,41 @@ namespace AstrologyGame.Entities
             }
 
             return displayComponent;
+        }
+        private static Inventory InventoryFromXmlNode(XmlNode node)
+        {
+            Inventory inventoryComponent = new Inventory();
+
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                string innerText = child.InnerText;
+                switch (child.Name)
+                {
+                    case "otherEntitiesCanOpen":
+                        inventoryComponent.otherEntitiesCanOpen = bool.Parse(innerText);
+                        break;
+                }
+            }
+
+            return inventoryComponent;
+        }
+        private static Item ItemFromXmlNode(XmlNode node)
+        {
+            Item itemComponent = new Item();
+
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                string innerText = child.InnerText;
+
+                switch (child.Name)
+                {
+                    case "count":
+                        itemComponent.count = int.Parse(innerText);
+                        break;
+                }
+            }
+
+            return itemComponent;
         }
     }
 }

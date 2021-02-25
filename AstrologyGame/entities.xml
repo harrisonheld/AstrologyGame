@@ -2,10 +2,8 @@
 	<!ELEMENT entities ANY>
 	<!ELEMENT entity ANY>
 	<!ATTLIST entity id ID #REQUIRED>
-	<!ATTLIST entity name CDATA "Default Ability Name">
-	<!ATTLIST entity lore CDATA "Default Ability Lore">
-	<!ATTLIST entity color CDATA "#FFFFFF">
-	<!ATTLIST entity quickness CDATA "99">
+
+	<!ELEMENT Display ANY>
 ]>
 
 
@@ -14,9 +12,7 @@
 	<entity id="pisces">
 		<Display>
 			<name>Pisces</name>
-			<lore>He wears a sky-blue flare dress lined with white. 
-				Mirrored on both hands, each of five nails is painted a different pastel color.
-				Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.</lore>
+			<lore>He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.</lore>
 			<textureName>pisces2</textureName>
 			<color>#78ceeb</color>
 		</Display>
@@ -25,10 +21,31 @@
 	<entity id="knight">
 		<Display>
 			<name>Knight of Cydonia</name>
-			<lore>He is a Knight. Of Cydonia.</lore>
+			<lore>After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor.</lore>
 			<textureName>human2</textureName>
-			<color>#ffffff</color>
 		</Display>
-	</entity>"
+	</entity>
+	
+	<entity id="chest">
+		<Display>
+			<name>chest</name>
+			<lore>it stores things.</lore>
+			<textureName>chest</textureName>
+		</Display>
+		<Inventory>
+			<otherEntitiesCanOpen>true</otherEntitiesCanOpen>
+		</Inventory>
+	</entity>
+	
+	<entity id="flintlock">
+		<Display>
+			<name>flintlock</name>
+			<lore>a gunny!</lore>
+			<textureName>flintlock</textureName>
+		</Display>
+		<Item>
+			<count>1</count>
+		</Item>
+	</entity>
 			 
 </entities>

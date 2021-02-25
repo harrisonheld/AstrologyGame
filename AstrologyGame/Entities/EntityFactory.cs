@@ -18,6 +18,13 @@ namespace AstrologyGame.Entities
             // create an entity with it
             return EntityFromXmlNode(entityNode);
         }
+        // create a new entity with the specified position
+        public static Entity EntityFromId(string entityId, int xPos, int yPos)
+        {
+            Entity entity = EntityFromId(entityId);
+            entity.AddComponent(new Position { x = xPos, y = yPos });
+            return entity;
+        }
 
         private static Entity EntityFromXmlNode(XmlNode node)
         {

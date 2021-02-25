@@ -93,6 +93,8 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             Entity knight = EntityFactory.EntityFromId("knight");
+            knight.AddComponent(new Position() { x = 0, y = 0 });
+            knight.AddComponent(new Creature());
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -314,7 +316,7 @@ namespace AstrologyGame
                     if (e.HasComponent<Inventory>())
                     {
                         Inventory inv = e.GetComponent<Inventory>();
-                        if (inv.interactable)
+                        if (inv.otherEntitiesCanOpen)
                             inv.Interact(Zone.Player);
                     }
                 }

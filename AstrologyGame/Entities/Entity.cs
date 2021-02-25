@@ -72,13 +72,13 @@ namespace AstrologyGame.Entities
             {
                 Entity node = stack.Pop();
                 Inventory inv = node.GetComponent<Inventory>();
-                if (inv.entites.Remove(toRemove))
+                if (inv.contents.Remove(toRemove))
                     return true;
 
-                foreach(Entity child in inv.entites)
+                foreach(Entity child in inv.contents)
                 {
                     Inventory childInv = child.GetComponent<Inventory>();
-                    if (childInv.entites.Remove(toRemove))
+                    if (childInv.contents.Remove(toRemove))
                         return true;
                     else
                         stack.Push(child);

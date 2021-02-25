@@ -75,9 +75,6 @@ namespace AstrologyGame.MapData
                         if (r < chance)
                         {
                             Tile newTile = (Tile)Activator.CreateInstance(biome.TileTypes[i]);
-                            OrderedPair pos = newTile.GetComponent<Position>().Pos;
-                            pos.X = x;
-                            pos.Y = y;
                             tiles[x, y] = newTile;
                             break;
                         }
@@ -85,14 +82,12 @@ namespace AstrologyGame.MapData
                 }
             }
 
-            Entity chest = new Entity();
-            chest.AddComponent(new Display());
-            chest.AddComponent(new Inventory() { interactable = true });
-            chest.GetComponent<Position>().Pos = new OrderedPair(5, 5);
+            Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
+            Entity flintlock = EntityFactory.EntityFromId("flintlock");
+            chest.GetComponent<Inventory>().AddEntity(flintlock);
             AddEntity(chest);
 
-            Entity pisces = EntityFactory.EntityFromId("pisces");
-            pisces.GetComponent<Position>().Pos = new OrderedPair(3, 3);
+            Entity pisces = EntityFactory.EntityFromId("pisces", 5, 5);
             AddEntity(pisces);
 
             // if there was a player in the zone prior, include him in the new one

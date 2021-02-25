@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Globalization;
@@ -106,6 +107,7 @@ namespace AstrologyGame
         /// </summary>
         public static string WrapText(SpriteFont spriteFont, string text, float maxLineWidth)
         {
+            // split into words
             string[] words = text.Split(DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
             StringBuilder sb = new StringBuilder();
             float lineWidth = 0f;
