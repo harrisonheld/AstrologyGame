@@ -21,6 +21,7 @@ namespace AstrologyGame
     {
         public const string BOOK_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\books.xml";
         public const string ABILITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\abilities.xml";
+        public const string ENTITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\entities.xml";
         const string ERROR_TEXTURE_NAME = "error";
 
         // the cost for various actions
@@ -204,7 +205,7 @@ namespace AstrologyGame
                 spriteBatch.DrawString(Font, markup, position, defaultColor);
             }
         }
-        private static Color ColorFromString(string str)
+        public static Color ColorFromString(string str)
         {
             // if its a hex code
             if(str[0] == '#')

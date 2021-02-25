@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrologyGame.Entities
 {
+    /*
     public class Humanoid : Entity
     {
         public Humanoid()
@@ -31,7 +32,7 @@ namespace AstrologyGame.Entities
         }
     }
 
-    /*public class ZodiacFrog : Creature2
+    public class ZodiacFrog : Creature2
     {
         public ZodiacFrog()
         {

@@ -86,14 +86,14 @@ namespace AstrologyGame.MapData
             }
 
             Entity chest = new Entity();
+            chest.AddComponent(new Display());
             chest.AddComponent(new Inventory() { interactable = true });
             chest.GetComponent<Position>().Pos = new OrderedPair(5, 5);
             AddEntity(chest);
 
-            Entity book = new Entity();
-            book.AddComponent(new Book() { bookId = "MasterOfTheMoon" });
-            chest.GetComponent<Position>().Pos = new OrderedPair(3, 0);
-            AddEntity(book);
+            Entity pisces = EntityFactory.EntityFromId("pisces");
+            pisces.GetComponent<Position>().Pos = new OrderedPair(3, 3);
+            AddEntity(pisces);
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
@@ -144,9 +144,11 @@ namespace AstrologyGame.MapData
         public static void Draw()
         {
             // TODO: draw tiles
+            /*
             for (int y = 0; y < HEIGHT; y++)
                 for (int x = 0; x < WIDTH; x++)
                     Utility.DrawEntity(tiles[x, y], x, y);
+            */
 
             // draw the objects
             foreach (Entity o in entities)

@@ -23,8 +23,7 @@ namespace AstrologyGame.Entities
 
         public Entity()
         {
-            AddComponent(new Position());
-            AddComponent(new Display());
+
         }
 
         public void AddComponent(EntityComponent componentToAdd)
@@ -32,21 +31,25 @@ namespace AstrologyGame.Entities
             componentToAdd.ParentEntity = this;
             components.Add(componentToAdd);
         }
+
         public bool RemoveComponent(EntityComponent componentToRemove)
         {
             return components.Remove(componentToRemove);
         }
+
         public bool HasComponent<T>()
         {
             Type type = typeof(T);
             return (components.Where(x => x.GetType() == type).Count() != 0);
         }
+
         public T GetComponent<T>()
         {
             Type type = typeof(T);
             EntityComponent component = components.Where(x => x.GetType() == type ).FirstOrDefault();
             return (T)(object)component;
         }
+
         public void UpdateAllComponents()
         {
             foreach(EntityComponent comp in components)

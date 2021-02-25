@@ -1,0 +1,34 @@
+﻿<!DOCTYPE entities [
+	<!ELEMENT entities ANY>
+	<!ELEMENT entity ANY>
+	<!ATTLIST entity id ID #REQUIRED>
+	<!ATTLIST entity name CDATA "Default Ability Name">
+	<!ATTLIST entity lore CDATA "Default Ability Lore">
+	<!ATTLIST entity color CDATA "#FFFFFF">
+	<!ATTLIST entity quickness CDATA "99">
+]>
+
+
+<entities>
+	
+	<entity id="pisces">
+		<Display>
+			<name>Pisces</name>
+			<lore>He wears a sky-blue flare dress lined with white. 
+				Mirrored on both hands, each of five nails is painted a different pastel color.
+				Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.</lore>
+			<textureName>pisces2</textureName>
+			<color>#78ceeb</color>
+		</Display>
+	</entity>
+	
+	<entity id="knight">
+		<Display>
+			<name>Knight of Cydonia</name>
+			<lore>He is a Knight. Of Cydonia.</lore>
+			<textureName>human2</textureName>
+			<color>#ffffff</color>
+		</Display>
+	</entity>"
+			 
+</entities>

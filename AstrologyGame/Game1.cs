@@ -92,12 +92,7 @@ namespace AstrologyGame
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = new Humanoid();
-
-            Abilities abilitiesComp = knight.GetComponent<Abilities>();
-            abilitiesComp.AddAbility(new Teleport());
-            abilitiesComp.AddAbility(new Bind());
-
+            Entity knight = EntityFactory.EntityFromId("knight");
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
