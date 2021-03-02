@@ -12,13 +12,6 @@ namespace AstrologyGame.Entities
 
         public override bool FireEvent(ComponentEvent cEvent)
         {
-            // fire the event for all the items in this inventory.
-            // This is recursive... not good...
-            foreach(Entity e in Contents)
-            {
-                e.FireEvent(cEvent);
-            }
-
             switch (cEvent.EventId)
             {
                 case EventId.OpenInventory:

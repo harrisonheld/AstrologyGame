@@ -79,11 +79,11 @@ namespace AstrologyGame.MapData
             Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
             AddEntity(chest);
 
-            Entity babyChest = chest.GetComponent<Inventory>().Contents[1];
-
-            ComponentEvent dropEvent = new ComponentEvent(EventId.DropItem);
-            dropEvent[ParameterId.Target] = babyChest.GetComponent<Inventory>().Contents[0];
-            babyChest.FireEvent(dropEvent);
+            Entity book = new Entity();
+            book.AddComponent(new Display() { textureName = "book1", color = Color.IndianRed });
+            book.AddComponent(new Position() { x = 5, y = 5 });
+            book.AddComponent(new Book() { BookId = "MasterOfTheMoon" });
+            AddEntity(book);
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)

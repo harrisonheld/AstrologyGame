@@ -136,18 +136,18 @@ namespace AstrologyGame
             return sb.ToString();
         }
 
-        public static void DrawEntity(Entity o, int x, int y)
+        public static void DrawEntity(Entity entityToDraw, int x, int y)
         {
-            Display d = o.GetComponent<Display>();
+            Display displayComponent = entityToDraw.GetComponent<Display>();
 
-            if (!d.shouldRender)
+            if (!displayComponent.shouldRender)
                 return;
 
             int drawX = x * SCALE;
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(GetTexture(d.textureName), destinationRectangle, d.color);
+            spriteBatch.Draw(GetTexture(displayComponent.textureName), destinationRectangle, displayComponent.color);
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.

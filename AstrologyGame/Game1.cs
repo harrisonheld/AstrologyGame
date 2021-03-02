@@ -194,11 +194,25 @@ namespace AstrologyGame
 
         private void Update_FreeRoam()
         {
-            if (controls.Contains(Control.Interact))
+            // TODO: we have a lot of if-else statements chained together, and it runs every frame. not good.
+            // a switch statement might be suitable, but we don't have just one control, we have a list of them,
+            // and the user may be pressing multiple at once.
+
+            // open the pause menu
+            if (controls.Contains(Control.Back))
+            {
+                Menu pauseMenu = new Menu();
+                pauseMenu.Text = "[Paused]";
+                OpenMenu(pauseMenu);
+                return;
+            }
+            // start interact mode
+            else if (controls.Contains(Control.Interact))
             {
                 gameState = GameState.InteractMode;
                 return;
             }
+            // open the get menu
             else if(controls.Contains(Control.Get))
             {
                 List<Entity> itemsHere = new List<Entity>();
@@ -279,10 +293,6 @@ namespace AstrologyGame
                     World.GenerateCurrentZone();
                 }
             }
-
-            if (controls.Contains(Control.Back))
-                // TODO: pause
-                ;
         }
         private void Update_InMenu()
         {
