@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE entities [
 	<!ELEMENT entities ANY>
 	<!ELEMENT entity ANY>
-	<!ATTLIST entity id ID #REQUIRED>
+	<!ATTLIST entity id ID #IMPLIED>
+	<!ATTLIST entity ref IDREF #IMPLIED>
 
 	<!ELEMENT Display ANY>
 ]>
@@ -24,6 +25,8 @@
 			<lore>After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor.</lore>
 			<textureName>human2</textureName>
 		</Display>
+	
+		<Creature />
 	</entity>
 	
 	<entity id="chest">
@@ -34,18 +37,26 @@
 		</Display>
 		<Inventory>
 			<otherEntitiesCanOpen>true</otherEntitiesCanOpen>
+			<entity ref="flintlock" />
+			<entity ref="orgoneAccumulator" />
 		</Inventory>
 	</entity>
 	
 	<entity id="flintlock">
 		<Display>
 			<name>flintlock</name>
+		</Display>
+		<Item />
+	</entity>
+	
+	<entity id="orgoneAccumulator">
+		<Display>
+			<name>Orgone Accumulator</name>
 			<lore>a gunny!</lore>
 			<textureName>flintlock</textureName>
 		</Display>
-		<Item>
-			<count>1</count>
-		</Item>
+		<Item />
 	</entity>
-			 
+
 </entities>
+

@@ -23,6 +23,9 @@ namespace AstrologyGame.Entities
                 case "Item":
                     component = ItemFromXmlNode(node);
                     break;
+                case "Creature": // this is temporary
+                    component = new Creature();
+                    break;
             }
 
             return component;
@@ -67,7 +70,11 @@ namespace AstrologyGame.Entities
                 switch (child.Name)
                 {
                     case "otherEntitiesCanOpen":
-                        inventoryComponent.otherEntitiesCanOpen = bool.Parse(innerText);
+                        inventoryComponent.OtherEntitiesCanOpen = bool.Parse(innerText);
+                        break;
+                    case "entity": // this is an entity inside the chest
+                        Entity entity = EntityFactory.EntityFromNode(child);
+                        inventoryComponent.AddEntity(entity);
                         break;
                 }
             }

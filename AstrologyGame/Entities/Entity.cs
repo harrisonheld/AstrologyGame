@@ -21,10 +21,7 @@ namespace AstrologyGame.Entities
     {
         private List<EntityComponent> components = new List<EntityComponent>();
 
-        public Entity()
-        {
 
-        }
 
         public void AddComponent(EntityComponent componentToAdd)
         {
@@ -50,47 +47,29 @@ namespace AstrologyGame.Entities
             return (T)(object)component;
         }
 
-        public void UpdateAllComponents()
+
+        // send the event to all components
+        public void FireEvent(ComponentEvent e)
         {
             foreach(EntityComponent comp in components)
             {
-                comp.Update();
+                comp.FireEvent(e);
             }
         }
 
-        /// <summary>
-        /// Using this Entity as a root node, remove the given Entity from any of it's descendants.
-        /// </summary>
-        /// <param name="toRemove">The object to remove from the tree.</param>
-        /// <returns>True if the removal was successful, False if the given object wasn't in the tree to begin with.</returns>
-        public bool RemoveFromDescendants(Entity toRemove)
+        // overload to fire an event with just an id
+        public void FireEvent(EventId eventId)
         {
-            Stack<Entity> stack = new Stack<Entity>();
-            stack.Push(this);
-
-            while(stack.Count > 0)
-            {
-                Entity node = stack.Pop();
-                Inventory inv = node.GetComponent<Inventory>();
-                if (inv.contents.Remove(toRemove))
-                    return true;
-
-                foreach(Entity child in inv.contents)
-                {
-                    Inventory childInv = child.GetComponent<Inventory>();
-                    if (childInv.contents.Remove(toRemove))
-                        return true;
-                    else
-                        stack.Push(child);
-                }
-            }
-
-            return false; 
+            ComponentEvent e = new ComponentEvent(eventId);
+            FireEvent(e);
         }
 
-        public virtual void AnimationTurn()
+        // overload to fire an event with an id and an interactor
+        public void FireEvent(EventId eventId, Entity interactor)
         {
-            // things like changing the texture, changing color, etc.
+            ComponentEvent e = new ComponentEvent(eventId);
+            e[ParameterId.Interactor] = interactor;
+            FireEvent(e);
         }
     }
 }

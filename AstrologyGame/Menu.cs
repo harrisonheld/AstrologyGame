@@ -171,27 +171,28 @@ namespace AstrologyGame
     class InventoryMenu : SelectMenu
     {
         private Entity container; // the object whose inventory we are examining
-        private List<Entity> contents
+        private List<Entity> inventoryContents
         {
             get
             {
-                return container.GetComponent<Inventory>().contents;
+                return container.GetComponent<Inventory>().Contents;
             }
         }
 
         public InventoryMenu(Entity _container)
         {
             container = _container;
-            selectionCount = contents.Count;
+            selectionCount = inventoryContents.Count;
 
             Refresh();
         }
+
         public override void Refresh()
         {
             // add all the item names to the text
             StringBuilder sb = new StringBuilder();
             sb.Append($"[{container.GetComponent<Display>().name}]\n");
-            foreach (Entity e in contents)
+            foreach (Entity e in inventoryContents)
             {
                 sb.Append(e.GetComponent<Display>().name);
 
@@ -214,32 +215,17 @@ namespace AstrologyGame
                 sb.Append("\n");
             }
 
-            selectionCount = contents.Count;
+            selectionCount = inventoryContents.Count;
             Text = sb.ToString();
             base.Refresh();
         }
+
         public override void SelectionMade()
         {
-            /*
-            List<Interaction> forbiddenInteractions = new List<Interaction>();
-
-            // if this is the players inventory...
-            if(container == Zone.Player)
-            {
-                // ...forbid getting the item. It makes no sense for the player to get an item from their OWN inventory.
-                forbiddenInteractions.Add(Interaction.Get);
-            }
-            else
-            {
-                // otherwise, forbid dropping, as it is someone or something else's inventory
-                forbiddenInteractions.Add(Interaction.Drop);
-            }
-
-            InteractionMenu menu = new InteractionMenu(container.Children[selectedIndex], forbiddenInteractions);
+            InteractionMenu menu = new InteractionMenu(inventoryContents[selectedIndex]);
             menu.Position = cursorCoords;
 
             Game1.OpenMenu(menu);
-            */
         }
     }
 
@@ -329,15 +315,15 @@ namespace AstrologyGame
 
         public override void SelectionMade()
         {
+            /*
             // close this menu when a selection is made
             Game1.CloseMenu(this);
-            
 
             // TODO: DO THE INTERACTION
 
-
             // refresh the menus incase this interaction changed them
             Game1.QueueRefreshAllMenus();
+            */
         }
     }
     class BookMenu : Menu

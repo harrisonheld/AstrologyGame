@@ -92,9 +92,7 @@ namespace AstrologyGame
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = EntityFactory.EntityFromId("knight");
-            knight.AddComponent(new Position() { x = 0, y = 0 });
-            knight.AddComponent(new Creature());
+            Entity knight = EntityFactory.EntityFromId("knight", 0, 0);
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -213,6 +211,7 @@ namespace AstrologyGame
 
                 Menu getMenu = new GetMenu(itemsHere);
                 OpenMenu(getMenu);
+                return;
             }
             else if (controls.Contains(Control.Look))
             {
@@ -240,6 +239,9 @@ namespace AstrologyGame
             OrderedPair movePair = Input.ControlsToMovePair(controls);
             OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
 
+            if (movePair.Equals(OrderedPair.Zero)) // no movent given. stop here
+                return;
+
             int newX = playerPos.X + movePair.X;
             int newY = playerPos.Y + movePair.Y;
 
@@ -249,34 +251,33 @@ namespace AstrologyGame
             {
                 // THIS CODE IS EXECUTED WHEN THE PLAYER SUCCESSFULLY MOVES TO A NEW TILE
                 doTick = true;
-            }
 
-            // generate a new zone if the player exits the current one
-            OrderedPair pos = Zone.Player.GetComponent<Position>().Pos;
-            if (pos.X >= Zone.WIDTH || pos.X < 0 || pos.Y >= Zone.HEIGHT || pos.Y < 0)
-            {
-                if (pos.X >= Zone.WIDTH)
+                // generate a new zone if the player exits the current one
+                if (newX >= Zone.WIDTH || newX < 0 || newY >= Zone.HEIGHT || newY < 0)
                 {
-                    pos.X = 0;
-                    World.ZoneX += 1;
-                }
-                else if (pos.X < 0)
-                {
-                    pos.X = Zone.WIDTH - 1;
-                    World.ZoneX -= 1;
-                }
-                if (pos.Y >= Zone.HEIGHT)
-                {
-                    pos.Y = 0;
-                    World.ZoneY -= 1;
-                }
-                else if (pos.Y < 0)
-                {
-                    pos.Y = Zone.HEIGHT - 1;
-                    World.ZoneY += 1;
-                }
+                    if (newX >= Zone.WIDTH)
+                    {
+                        Zone.Player.GetComponent<Position>().x = 0;
+                        World.ZoneX += 1;
+                    }
+                    else if (newX < 0)
+                    {
+                        Zone.Player.GetComponent<Position>().x = Zone.WIDTH - 1;
+                        World.ZoneX -= 1;
+                    }
+                    if (newY >= Zone.HEIGHT)
+                    {
+                        Zone.Player.GetComponent<Position>().y = 0;
+                        World.ZoneY -= 1;
+                    }
+                    else if (newY < 0)
+                    {
+                        Zone.Player.GetComponent<Position>().y = Zone.HEIGHT - 1;
+                        World.ZoneY += 1;
+                    }
 
-                World.GenerateCurrentZone();
+                    World.GenerateCurrentZone();
+                }
             }
 
             if (controls.Contains(Control.Back))
@@ -306,18 +307,18 @@ namespace AstrologyGame
             int interactX = playerPos.X + movePair.X;
             int interactY = playerPos.Y + movePair.Y;
 
-            foreach (Entity e in Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY)))
+            foreach (Entity entity in Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY)))
             {
-                if (e != Zone.Player)
+                if (entity != Zone.Player)
                 {
-                    if (e.HasComponent<Book>())
-                        e.GetComponent<Book>().Interact(Zone.Player);
-
-                    if (e.HasComponent<Inventory>())
+                    if (entity.HasComponent<Book>())
                     {
-                        Inventory inv = e.GetComponent<Inventory>();
-                        if (inv.otherEntitiesCanOpen)
-                            inv.Interact(Zone.Player);
+                        entity.FireEvent(EventId.Read);
+                    }
+
+                    if (entity.HasComponent<Inventory>())
+                    {
+                        entity.FireEvent(EventId.OpenInventory);
                     }
                 }
 
@@ -394,8 +395,8 @@ namespace AstrologyGame
 
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
 
-            // draw the zone
-            Zone.Draw();
+            // draw the game
+            RenderingSystem.Render();
 
             // draw the look cursor
             if (gameState == GameState.LookMode)

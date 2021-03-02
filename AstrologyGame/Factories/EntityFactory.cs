@@ -16,7 +16,7 @@ namespace AstrologyGame.Entities
             XmlNode entityNode = xmlDoc.GetElementById(entityId);
 
             // create an entity with it
-            return EntityFromXmlNode(entityNode);
+            return EntityFromEntityNode(entityNode);
         }
         // create a new entity with the specified position
         public static Entity EntityFromId(string entityId, int xPos, int yPos)
@@ -26,7 +26,16 @@ namespace AstrologyGame.Entities
             return entity;
         }
 
-        private static Entity EntityFromXmlNode(XmlNode node)
+        public static Entity EntityFromNode(XmlNode node)
+        { 
+            string idRef = node.Attributes.GetNamedItem("ref").Value;
+            if (idRef != null)
+                return (EntityFromId(idRef));
+
+            return EntityFromEntityNode(node);
+        }
+
+        private static Entity EntityFromEntityNode(XmlNode node)
         {
             Entity entity = new Entity();
 

@@ -23,6 +23,7 @@ namespace AstrologyGame.MapData
         private static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
         // list of all entities in the zone
         private static List<Entity> entities { get; set; } = new List<Entity>() { };
+        public static List<Entity> Entities { get { return entities; } }
         public static Entity Player { get; set; }
 
         // Clears all tiles and remove all objects
@@ -37,14 +38,7 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-            foreach (Entity e in entities)
-            {
-                e.UpdateAllComponents();
-            }
 
-            for (int y = 0; y < HEIGHT; y++)
-                for (int x = 0; x < WIDTH; x++)
-                    tiles[x, y].AnimationTurn();
         }
 
         public static void Generate(int seed)
@@ -83,8 +77,6 @@ namespace AstrologyGame.MapData
             }
 
             Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
-            Entity flintlock = EntityFactory.EntityFromId("flintlock");
-            chest.GetComponent<Inventory>().AddEntity(flintlock);
             AddEntity(chest);
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 5, 5);
@@ -105,8 +97,10 @@ namespace AstrologyGame.MapData
 
             foreach(Entity o in entities)
             {
-                if (o.RemoveFromDescendants(toRemove))
-                    return true;
+                ComponentEvent removalEvent = new ComponentEvent(EventId.RemoveItem);
+                removalEvent[ParameterId.Target] = toRemove;
+
+                o.FireEvent(removalEvent);
             }
 
             return false;
@@ -134,23 +128,6 @@ namespace AstrologyGame.MapData
         public static Tile GetTileAtPosition(OrderedPair p)
         {
             return tiles[p.X, p.Y];
-        }
-
-        public static void Draw()
-        {
-            // TODO: draw tiles
-            /*
-            for (int y = 0; y < HEIGHT; y++)
-                for (int x = 0; x < WIDTH; x++)
-                    Utility.DrawEntity(tiles[x, y], x, y);
-            */
-
-            // draw the objects
-            foreach (Entity o in entities)
-            {
-                Position p = o.GetComponent<Position>();
-                Utility.DrawEntity(o, p.x, p.y);
-            }
         }
     }
 }
