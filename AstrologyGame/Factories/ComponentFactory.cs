@@ -74,7 +74,12 @@ namespace AstrologyGame.Entities
                         break;
                     case "entity": // this is an entity inside the chest
                         Entity entity = EntityFactory.EntityFromNode(child);
-                        inventoryComponent.AddEntity(entity);
+
+                        // add the entity to the inventory
+                        ComponentEvent addItemEvent = new ComponentEvent(EventId.AddItem);
+                        addItemEvent[ParameterId.Target] = entity;
+                        inventoryComponent.FireEvent(addItemEvent);
+
                         break;
                 }
             }

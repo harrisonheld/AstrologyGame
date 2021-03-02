@@ -38,7 +38,7 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-
+            TickSystem.Update();
         }
 
         public static void Generate(int seed)
@@ -79,8 +79,11 @@ namespace AstrologyGame.MapData
             Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
             AddEntity(chest);
 
-            Entity pisces = EntityFactory.EntityFromId("pisces", 5, 5);
-            AddEntity(pisces);
+            Entity babyChest = chest.GetComponent<Inventory>().Contents[1];
+
+            ComponentEvent dropEvent = new ComponentEvent(EventId.DropItem);
+            dropEvent[ParameterId.Target] = babyChest.GetComponent<Inventory>().Contents[0];
+            babyChest.FireEvent(dropEvent);
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
@@ -89,26 +92,11 @@ namespace AstrologyGame.MapData
             }
         }
 
-        // remove an object, whether its in the zone's objects or if its a descendant of the zone objects
-        public static bool RemoveObject(Entity toRemove)
-        {
-            if (entities.Remove(toRemove))
-                return true;
-
-            foreach(Entity o in entities)
-            {
-                ComponentEvent removalEvent = new ComponentEvent(EventId.RemoveItem);
-                removalEvent[ParameterId.Target] = toRemove;
-
-                o.FireEvent(removalEvent);
-            }
-
-            return false;
-        }
-
         public static void AddEntity(Entity e)
         {
-            entities.Add(e);
+            // only add the entity if it's not already in the zone
+            if(!entities.Contains(e))
+                entities.Add(e);
         }
 
         public static List<Entity> GetEntitiesAtPosition(OrderedPair p)
@@ -117,6 +105,10 @@ namespace AstrologyGame.MapData
 
             foreach (Entity o in entities)
             {
+                // if the entity doesn't have a position, continue
+                if (!o.HasComponent<Position>())
+                    continue;
+
                 if (o.GetComponent<Position>().Pos.Equals(p))
                 {
                     objectsAtPos.Add(o);

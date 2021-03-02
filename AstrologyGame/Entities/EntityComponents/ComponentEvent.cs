@@ -30,9 +30,8 @@ namespace AstrologyGame.Entities
         Read,
         OpenInventory,
         /// <summary>Remove an item from the Inventory. Generally requires Target parameter, to decide which item will be removed.</summary>
-        RemoveItem,
-        Get,
-        Drop,
+        AddItem,
+        DropItem,
     }
 
     public enum ParameterId

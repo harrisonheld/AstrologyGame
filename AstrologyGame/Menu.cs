@@ -196,14 +196,17 @@ namespace AstrologyGame
             {
                 sb.Append(e.GetComponent<Display>().name);
 
-                Equipment equipment = container.GetComponent<Equipment>();
-                Equippable equippable = e.GetComponent<Equippable>();
-                if (equipment != null && equippable != null)
+                if(container.HasComponent<Equipment>())
                 {
-                    if (equipment.HasEquipped(e))
+                    Equipment equipment = container.GetComponent<Equipment>();
+                    Equippable equippable = e.GetComponent<Equippable>();
+                    if (equipment != null && equippable != null)
                     {
-                        string slot = equippable.slot.ToString();
-                        sb.Append($" ({slot})");
+                        if (equipment.HasEquipped(e))
+                        {
+                            string slot = equippable.slot.ToString();
+                            sb.Append($" ({slot})");
+                        }
                     }
                 }
 
@@ -287,7 +290,11 @@ namespace AstrologyGame
             if(controls.Contains(Control.Tab))
             {
                 foreach (Entity e in entities)
-                    Zone.Player.GetComponent<Inventory>().AddEntity(e);
+                {
+                    ComponentEvent getItemEvent = new ComponentEvent(EventId.AddItem);
+                    getItemEvent[ParameterId.Target] = e;
+                    Zone.Player.FireEvent(getItemEvent);
+                }
 
                 Game1.CloseMenu(this);
             }
@@ -295,7 +302,10 @@ namespace AstrologyGame
 
         public override void SelectionMade()
         {
-            Zone.Player.GetComponent<Inventory>().AddEntity(entities[selectedIndex]);
+            ComponentEvent getItemEvent = new ComponentEvent(EventId.AddItem);
+            getItemEvent[ParameterId.Target] = entities[selectedIndex];
+            Zone.Player.FireEvent(getItemEvent);
+
             Refresh();
         }
     }

@@ -34,17 +34,43 @@ namespace AstrologyGame.Entities
             return components.Remove(componentToRemove);
         }
 
+        public bool RemoveComponentsOfType<T>()
+        {
+            List<T> componentsOfType = GetComponents<T>();
+
+            // if no components of type, return false
+            if (componentsOfType.Count == 0)
+                return false;
+
+            // otherwise, remove them
+            foreach(T component in GetComponents<T>())
+            {
+                RemoveComponent(component as EntityComponent);
+            }
+
+            return true;
+        }
+
         public bool HasComponent<T>()
         {
-            Type type = typeof(T);
-            return (components.Where(x => x.GetType() == type).Count() != 0);
+            return components.OfType<T>().Count() > 0;
         }
 
         public T GetComponent<T>()
         {
-            Type type = typeof(T);
-            EntityComponent component = components.Where(x => x.GetType() == type ).FirstOrDefault();
-            return (T)(object)component;
+            T component = GetComponents<T>().FirstOrDefault();
+
+            if(component == null)
+            {
+                string message = "This entity does not have a component of type " + typeof(T).Name;
+                throw (new Exception(message));
+            }
+            return component;
+        }
+
+        public List<T> GetComponents<T>()
+        {
+            return components.OfType<T>().ToList();
         }
 
 

@@ -4,8 +4,11 @@ using System.Text;
 
 namespace AstrologyGame.Entities
 {
-    public class InInventory : EntityComponent
+    public static class TickSystem
     {
-        public Inventory containingInventory;
+        public static void Update()
+        {
+
+        }
     }
 }

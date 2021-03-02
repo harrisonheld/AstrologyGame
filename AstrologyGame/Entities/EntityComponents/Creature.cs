@@ -29,7 +29,6 @@ namespace AstrologyGame.Entities
         public void Die()
         {
             DropAll();
-            Zone.RemoveObject(ParentEntity);
         }
         private void DropAll()
         {
