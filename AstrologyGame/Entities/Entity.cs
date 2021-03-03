@@ -75,27 +75,32 @@ namespace AstrologyGame.Entities
 
 
         // send the event to all components
-        public void FireEvent(ComponentEvent e)
+        public bool FireEvent(ComponentEvent e)
         {
+            bool success = false;
+
             foreach(EntityComponent comp in components)
             {
-                comp.FireEvent(e);
+                if (comp.FireEvent(e))
+                    success = true;
             }
+
+            return success;
         }
 
         // overload to fire an event with just an id
-        public void FireEvent(EventId eventId)
+        public bool FireEvent(EventId eventId)
         {
             ComponentEvent e = new ComponentEvent(eventId);
-            FireEvent(e);
+            return FireEvent(e);
         }
 
         // overload to fire an event with an id and an interactor
-        public void FireEvent(EventId eventId, Entity interactor)
+        public bool FireEvent(EventId eventId, Entity interactor)
         {
             ComponentEvent e = new ComponentEvent(eventId);
             e[ParameterId.Interactor] = interactor;
-            FireEvent(e);
+            return FireEvent(e);
         }
     }
 }

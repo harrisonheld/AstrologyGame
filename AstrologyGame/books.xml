@@ -6,8 +6,9 @@
 	<!ELEMENT page ANY>]>
 
 <books>
-	<book id="MasterOfTheMoon" title="Master of the Moon">
-		<page>chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text chungus text</page>
-		<page>poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text poop text</page>
+	<book id="MasterOfTheMoon" title="Master of the Moon (Pisces)">
+		<page>To all men who call themselves children of this planet, and grandchildren of the Universe - hark! What is contained in this treatise is of utmost relevance to you and your kin, the great grandchildren of the Universe.</page>
+		<page>Above our own heads, the Master of the Moon looms. He sends forth all manner of strange beasts who would trample and crawl upon the earth, if not for the protection that our firmament provides.</page>
+		<page>Should the strength of our firmament fail - which is not entirely out of the question (see On the Firmament) - </page>
 	</book>
 </books>

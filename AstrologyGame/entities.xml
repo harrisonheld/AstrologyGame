@@ -13,7 +13,8 @@
 	<entity id="pisces">
 		<Display>
 			<name>Pisces</name>
-			<lore>He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.</lore>
+			<lore>He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
+Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that his real name is irrelevant.</lore>
 			<textureName>pisces2</textureName>
 			<color>#78ceeb</color>
 		</Display>
@@ -25,8 +26,18 @@
 			<lore>After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor.</lore>
 			<textureName>human2</textureName>
 		</Display>
-	
+
+		<Inventory />
 		<Creature />
+	</entity>
+
+	<entity id="swordsmanOfJudas">
+		<Display>
+			<name>Swordsman of Judas</name>
+			<lore>One of his faces gives you a condescending sneer. A backstabbing swordsman can never hold his head up high.</lore>
+			<textureName>ouroboros</textureName>
+			<color>#D02020</color>
+		</Display>
 	</entity>
 	
 	<entity id="chest">

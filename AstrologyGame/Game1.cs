@@ -223,7 +223,7 @@ namespace AstrologyGame
                         itemsHere.Add(o);
                 }
 
-                Menu getMenu = new GetMenu(itemsHere);
+                Menu getMenu = new ItemMenu( itemsHere);
                 OpenMenu(getMenu);
                 return;
             }
@@ -239,7 +239,7 @@ namespace AstrologyGame
             else if (controls.Contains(Control.Inventory))
             {
                 // open inventory here
-                Menu menu = new InventoryMenu(Zone.Player);
+                Menu menu = new ItemMenu(Zone.Player.GetComponent<Inventory>().Contents);
                 OpenMenu(menu);
 
                 return;
@@ -308,7 +308,7 @@ namespace AstrologyGame
             }
 
             // if the player didnt use a directional key, or select his current space, do nothing and break
-            if (movePair.X == 0 && movePair.Y == 0 && !(controls.Contains(Control.Here)) )
+            if (movePair.X == 0 && movePair.Y == 0 && !controls.Contains(Control.Here) )
             {
                 return;
             }
@@ -328,7 +328,9 @@ namespace AstrologyGame
 
                     if (entity.HasComponent<Inventory>())
                     {
-                        entity.FireEvent(EventId.OpenInventory);
+                        ComponentEvent getMenuEvent = new ComponentEvent(EventId.OpenItemMenu);
+                        getMenuEvent[ParameterId.Interactor] = Zone.Player;
+                        entity.FireEvent(getMenuEvent);
                     }
                 }
 

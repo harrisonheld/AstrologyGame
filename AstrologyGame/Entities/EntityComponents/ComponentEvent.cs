@@ -4,7 +4,7 @@ namespace AstrologyGame.Entities
 {
     public class ComponentEvent
     {
-        private EventId eventId; // it says what the event wants to do
+        private EventId eventId; // it says what kind of event this is
         private Dictionary<ParameterId, object> parameters = new Dictionary<ParameterId, object>();
 
         public ComponentEvent(EventId _eventId)
@@ -27,10 +27,13 @@ namespace AstrologyGame.Entities
 
     public enum EventId
     {
+        /// <summary>Read something such as a sign or a book. No parameters.</summary>
         Read,
-        OpenInventory,
-        /// <summary>Remove an item from the Inventory. Generally requires Target parameter, to decide which item will be removed.</summary>
+        /// <summary>Opens a GetMenu for this entity's inventory. No paramters, as it is assumed the Player opened the inventory.</summary>
+        OpenItemMenu,
+        /// <summary>Add an item to the Inventory. Generally requires Target parameter, to know which item will be added.</summary>
         AddItem,
+        /// <summary>Drop an item from the Inventory. Generally requires Target parameter, to decide which item will be dropped.</summary>
         DropItem,
     }
 
@@ -40,6 +43,5 @@ namespace AstrologyGame.Entities
         Interactor,
         /// <summary>The entity on which to do this event. Data type should be an Entity. For example, the entity in our inventory we should remove.</summary>
         Target,
-        Name,
     }
 }

@@ -77,7 +77,7 @@ namespace AstrologyGame
         protected void CalculateCursorCoords()
         {
             int x = Position.X + 160;
-            int y = Position.Y + selectedIndex * 22 + 28;
+            int y = Position.Y + selectedIndex * 22 + 1;
             cursorCoords = new OrderedPair(x, y);
         }
     }

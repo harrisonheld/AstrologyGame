@@ -14,9 +14,10 @@ namespace AstrologyGame.Entities
         {
             switch (cEvent.EventId)
             {
-                case EventId.OpenInventory:
-                    InventoryMenu iMenu = new InventoryMenu(ParentEntity);
-                    Game1.OpenMenu(iMenu);
+                // open the item menu for the player
+                case EventId.OpenItemMenu:
+                    ItemMenu itemMenu = new ItemMenu(Contents);
+                    Game1.OpenMenu(itemMenu);
                     return true;
                     
                 case EventId.DropItem:
@@ -31,9 +32,7 @@ namespace AstrologyGame.Entities
                     return false;
             }
         }
-        /// <summary>
-        /// Add an item to this inventory and remove it from where it came from.
-        /// </summary>
+        /// <summary>Add an item to this inventory.</summary>
         private void AddEntity(Entity entityToAdd)
         {
             // remove the position component if it has one, as it's in an inventory now

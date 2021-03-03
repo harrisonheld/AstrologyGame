@@ -6,7 +6,7 @@ namespace AstrologyGame.Entities
     {
         private Dictionary<Slot, Entity> slotDict  = new Dictionary<Slot, Entity>();
 
-        public void Equip(Entity toEquip)
+        private void Equip(Entity toEquip)
         {
             Slot slot = toEquip.GetComponent<Equippable>().slot;
             // if we don't have the appropriate equip slot
@@ -25,16 +25,19 @@ namespace AstrologyGame.Entities
             slotDict[slot] = toEquip;
         }
 
-        public void TryDeEquip(Entity toDeEquip)
+        private bool TryUnequip(Entity toUnequip)
         {
-            Slot slot = toDeEquip.GetComponent<Equippable>().slot;
+            Slot slot = toUnequip.GetComponent<Equippable>().slot;
 
             // if we have it equipped
-            if (slotDict[slot] == toDeEquip)
+            if (slotDict[slot] == toUnequip)
             {
                 // remove it from the SlotDict
                 slotDict[slot] = null;
+                return true;
             }
+
+            return false; // unequip failed
         }
 
         public bool HasEquipped(Entity equippable)

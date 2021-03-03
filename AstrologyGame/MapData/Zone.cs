@@ -83,7 +83,15 @@ namespace AstrologyGame.MapData
             book.AddComponent(new Display() { textureName = "book1", color = Color.IndianRed });
             book.AddComponent(new Position() { x = 5, y = 5 });
             book.AddComponent(new Book() { BookId = "MasterOfTheMoon" });
+            book.AddComponent(new Item());
             AddEntity(book);
+
+            Entity pisces = EntityFactory.EntityFromId("pisces", 2, 2);
+            AddEntity(pisces);
+
+            AddEntity(EntityFactory.EntityFromId("swordsmanOfJudas", 3, 2));
+
+            AddEntity(EntityFactory.EntityFromId("flintlock", 6, 3));
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)

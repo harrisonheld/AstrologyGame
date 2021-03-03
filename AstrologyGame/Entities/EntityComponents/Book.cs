@@ -11,11 +11,12 @@
 
         public override bool FireEvent(ComponentEvent cEvent)
         {
-            if(cEvent.EventId == EventId.Read)
+            switch(cEvent.EventId)
             {
-                BookMenu menu = new BookMenu(BookId);
-                Game1.OpenMenu(menu);
-                return true;
+                case EventId.Read:
+                    BookMenu menu = new BookMenu(BookId);
+                    Game1.OpenMenu(menu);
+                    return true;
             }
 
             return false;

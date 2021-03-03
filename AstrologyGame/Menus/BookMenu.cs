@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using System.Xml;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -21,7 +22,8 @@ namespace AstrologyGame
 
             Size = new OrderedPair(500, 500);
 
-            Text = GetPageText(0);
+            // add two blank lines
+            Text =  GetPageText(0);
         }
 
         public override void Draw()
@@ -62,14 +64,22 @@ namespace AstrologyGame
         }
         private string GetPageText(int pageNum)
         {
+            StringBuilder sb = new StringBuilder(); // for building the page text
+
+            // load the book from xml
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(Utility.BOOK_PATH);
-
             XmlNode bookNode = xmlDoc.GetElementById(bookId);
-            XmlNode page = bookNode.ChildNodes[pageNum];
-            string text = page.InnerText;
 
-            return text;
+            // append the title in brackets and add some whitespace
+            string title = bookNode.Attributes.GetNamedItem("title").Value;
+            sb.Append($"[{title}]\n\n");
+
+            // append the book text
+            string pageText = bookNode.ChildNodes[pageNum].InnerText;
+            sb.Append(pageText);
+
+            return sb.ToString();
         }
     }
 }
