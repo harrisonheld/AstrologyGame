@@ -2,13 +2,13 @@
 {
     public class Equippable : EntityComponent
     {
-        public Slot slot;
-        public Entity wearer;
+        public Slot Slot { get; set; }
+        public Entity Wearer { get; set; }
 
         public bool IsEquipped()
         {
             // if it has a wearer, it is equipped
-            return wearer != null;
+            return Wearer != null;
         }
     }
 }

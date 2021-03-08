@@ -17,7 +17,7 @@ namespace AstrologyGame.Entities
                 if(e.HasComponent<Position>() && e.HasComponent<Display>())
                 {
                     Position p = e.GetComponent<Position>();
-                    Utility.DrawEntity(e, p.x, p.y);
+                    Utility.DrawEntity(e, p.X, p.Y);
                 }
             }
         }

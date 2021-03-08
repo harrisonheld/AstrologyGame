@@ -23,7 +23,7 @@ namespace AstrologyGame
 
             foreach (Entity entity in entities)
             {
-                sb.Append(entity.GetComponent<Display>().name);
+                sb.Append(entity.GetComponent<Display>().Name);
 
                 if (entity.HasComponent<Equippable>())
                 {
@@ -31,13 +31,13 @@ namespace AstrologyGame
 
                     if (equippable.IsEquipped());
                     {
-                        string slot = equippable.slot.ToString();
+                        string slot = equippable.Slot.ToString();
                         sb.Append($" (Worn on {slot})");
                     }
                 }
 
                 // add item count if its more than 1
-                int count = entity.GetComponent<Item>().count;
+                int count = entity.GetComponent<Item>().Count;
                 if (count > 1)
                     sb.Append($" (x{count})");
 

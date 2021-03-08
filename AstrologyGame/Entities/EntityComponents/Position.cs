@@ -2,19 +2,19 @@
 {
     public class Position : EntityComponent
     {
-        public int x = 0;
-        public int y = 0;
+        public int X { get; set; } = 0;
+        public int Y { get; set; } = 0;
 
         public OrderedPair Pos
         {
             get
             {
-                return new OrderedPair(x, y);
+                return new OrderedPair(X, Y);
             }
             set
             {
-                x = value.X;
-                y = value.Y;
+                X = value.X;
+                Y = value.Y;
             }
         }
     }

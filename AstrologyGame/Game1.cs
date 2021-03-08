@@ -271,22 +271,22 @@ namespace AstrologyGame
                 {
                     if (newX >= Zone.WIDTH)
                     {
-                        Zone.Player.GetComponent<Position>().x = 0;
+                        Zone.Player.GetComponent<Position>().X = 0;
                         World.ZoneX += 1;
                     }
                     else if (newX < 0)
                     {
-                        Zone.Player.GetComponent<Position>().x = Zone.WIDTH - 1;
+                        Zone.Player.GetComponent<Position>().X = Zone.WIDTH - 1;
                         World.ZoneX -= 1;
                     }
                     if (newY >= Zone.HEIGHT)
                     {
-                        Zone.Player.GetComponent<Position>().y = 0;
+                        Zone.Player.GetComponent<Position>().Y = 0;
                         World.ZoneY -= 1;
                     }
                     else if (newY < 0)
                     {
-                        Zone.Player.GetComponent<Position>().y = Zone.HEIGHT - 1;
+                        Zone.Player.GetComponent<Position>().Y = Zone.HEIGHT - 1;
                         World.ZoneY += 1;
                     }
 

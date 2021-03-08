@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
+using System.Reflection;
 using System.Xml;
 
 namespace AstrologyGame.Entities
@@ -10,68 +13,51 @@ namespace AstrologyGame.Entities
     {
         public static EntityComponent ComponentFromXmlNode(XmlNode node)
         {
-            EntityComponent component = null;
+            // make a component of the right type, and throw an error if no class of that name exists
+            Type componentType = Type.GetType("AstrologyGame.Entities." + node.Name, true);
+            EntityComponent component = Activator.CreateInstance(componentType) as EntityComponent;
 
-            switch(node.Name)
+            // set the properties of the component
+            foreach(XmlAttribute attribute in node.Attributes)
             {
-                case "Display":
-                    component = DisplayFromXmlNode(node);
-                    break;
-                case "Inventory":
-                    component = InventoryFromXmlNode(node);
-                    break;
-                case "Item":
-                    component = ItemFromXmlNode(node);
-                    break;
-                case "Creature": // this is temporary
-                    component = new Creature();
-                    break;
+                string propertyName = attribute.Name;
+                string propertyValueAsString = attribute.Value;
+
+                PropertyInfo propertyInfo = componentType.GetProperty(propertyName);
+                Type propertyType = propertyInfo.PropertyType;
+
+                object propertyValue = null;
+
+                if(propertyType != typeof(string)) // if it shouldn't be a string
+                {
+                    try // first, try converting the string to a base data type if possible
+                    {
+                        propertyValue = Convert.ChangeType(propertyValueAsString, propertyType);
+                    }
+                    catch // and if that doesn't work
+                    {
+                        // try converting to a color
+                        if (propertyType == typeof(Color))
+                        {
+                            propertyValue = Utility.ColorFromString(propertyValueAsString);
+                        }
+                    }
+                }
+
+                propertyInfo.SetValue(component, propertyValue ?? propertyValueAsString);
             }
 
             return component;
         }
 
-        private static Display DisplayFromXmlNode(XmlNode node)
-        {
-            Display displayComponent = new Display();
-
-            foreach (XmlNode child in node.ChildNodes)
-            {
-                string innerText = child.InnerText;
-                switch (child.Name)
-                {
-                    case "shouldRender":
-                        displayComponent.shouldRender = bool.Parse(innerText);
-                        break;
-                    case "name":
-                        displayComponent.name = innerText;
-                        break;
-                    case "lore":
-                        displayComponent.lore = innerText;
-                        break;
-                    case "textureName":
-                        displayComponent.textureName = innerText;
-                        break;
-                    case "color":
-                        displayComponent.color = Utility.ColorFromString(innerText);
-                        break;
-                }
-            }
-
-            return displayComponent;
-        }
         private static Inventory InventoryFromXmlNode(XmlNode node)
         {
             Inventory inventoryComponent = new Inventory();
 
             foreach (XmlNode child in node.ChildNodes)
             {
-                string innerText = child.InnerText;
                 switch (child.Name)
                 {
-                    case "otherEntitiesCanOpen":
-                        inventoryComponent.OtherEntitiesCanOpen = bool.Parse(innerText);
-                        break;
                     case "entity": // this is an entity inside the chest
                         Entity entity = EntityFactory.EntityFromNode(child);
 
@@ -85,24 +71,6 @@ namespace AstrologyGame.Entities
             }
 
             return inventoryComponent;
-        }
-        private static Item ItemFromXmlNode(XmlNode node)
-        {
-            Item itemComponent = new Item();
-
-            foreach (XmlNode child in node.ChildNodes)
-            {
-                string innerText = child.InnerText;
-
-                switch (child.Name)
-                {
-                    case "count":
-                        itemComponent.count = int.Parse(innerText);
-                        break;
-                }
-            }
-
-            return itemComponent;
         }
     }
 }

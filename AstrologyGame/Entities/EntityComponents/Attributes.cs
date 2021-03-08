@@ -6,11 +6,11 @@ namespace AstrologyGame.Entities
 {
     public class Attributes : EntityComponent
     {
-        public int prowess = 10;
-        public int vigor = 10;
-        public int faith = 10;
-        public int theFourthStat = 10;
+        public int Prowess { get; set; } = 10;
+        public int Vigor { get; set; } = 10;
+        public int Faith { get; set; } = 10;
+        public int TheFourthStat { get; set; } = 10;
 
-        public int quickness = 100;
+        public int Quickness { get; set; } = 100;
     }
 }

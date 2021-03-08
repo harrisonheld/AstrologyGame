@@ -140,14 +140,14 @@ namespace AstrologyGame
         {
             Display displayComponent = entityToDraw.GetComponent<Display>();
 
-            if (!displayComponent.shouldRender)
+            if (!displayComponent.ShouldRender)
                 return;
 
             int drawX = x * SCALE;
             int drawY = y * SCALE;
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(GetTexture(displayComponent.textureName), destinationRectangle, displayComponent.color);
+            spriteBatch.Draw(GetTexture(displayComponent.TextureName), destinationRectangle, displayComponent.Color);
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.

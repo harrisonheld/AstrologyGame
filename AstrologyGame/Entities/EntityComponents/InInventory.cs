@@ -6,6 +6,6 @@ namespace AstrologyGame.Entities
 {
     public class InInventory : EntityComponent
     {
-        public Inventory containingInventory;
+        public Inventory ContainingInventory { get; set; }
     }
 }

@@ -21,8 +21,6 @@ namespace AstrologyGame.Entities
     {
         private List<EntityComponent> components = new List<EntityComponent>();
 
-
-
         public void AddComponent(EntityComponent componentToAdd)
         {
             componentToAdd.ParentEntity = this;

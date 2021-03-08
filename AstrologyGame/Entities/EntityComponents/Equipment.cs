@@ -8,7 +8,7 @@ namespace AstrologyGame.Entities
 
         private void Equip(Entity toEquip)
         {
-            Slot slot = toEquip.GetComponent<Equippable>().slot;
+            Slot slot = toEquip.GetComponent<Equippable>().Slot;
             // if we don't have the appropriate equip slot
             if (!slotDict.ContainsKey(slot))
             {
@@ -27,7 +27,7 @@ namespace AstrologyGame.Entities
 
         private bool TryUnequip(Entity toUnequip)
         {
-            Slot slot = toUnequip.GetComponent<Equippable>().slot;
+            Slot slot = toUnequip.GetComponent<Equippable>().Slot;
 
             // if we have it equipped
             if (slotDict[slot] == toUnequip)

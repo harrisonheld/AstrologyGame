@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE entities [
 	<!ELEMENT entities ANY>
 	<!ELEMENT entity ANY>
-	<!ATTLIST entity id ID #IMPLIED>
+	<!ATTLIST entity id ID #REQUIRED>
 	<!ATTLIST entity ref IDREF #IMPLIED>
 
 	<!ELEMENT Display ANY>
@@ -11,74 +11,29 @@
 <entities>
 	
 	<entity id="pisces">
-		<Display>
-			<name>Pisces</name>
-			<lore>He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
-Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that his real name is irrelevant.</lore>
-			<textureName>pisces2</textureName>
-			<color>#78ceeb</color>
-		</Display>
+		<Display Name="Pisces" TextureName="pisces2" Color="#78ceeb" Lore="He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
+Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that his real name is irrelevant."/>
 	</entity>
 	
 	<entity id="knight">
-		<Display>
-			<name>Knight of Cydonia</name>
-			<lore>After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor.</lore>
-			<textureName>human2</textureName>
-		</Display>
-
+		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
 		<Creature />
 	</entity>
 
 	<entity id="swordsmanOfJudas">
-		<Display>
-			<name>Swordsman of Judas</name>
-			<lore>One of his faces gives you a condescending sneer. A backstabbing swordsman can never hold his head up high.</lore>
-			<textureName>ouroboros</textureName>
-			<color>#D02020</color>
-		</Display>
-	</entity>
-	
-	<entity id="chest">
-		<Display>
-			<name>chest</name>
-			<lore>it stores things.</lore>
-			<textureName>chest</textureName>
-		</Display>
-		<Inventory>
-			<otherEntitiesCanOpen>true</otherEntitiesCanOpen>
-			<entity ref="flintlock" />
-			<entity ref="babyChest" />
-		</Inventory>
+		<Display Name="Swordsman of Judas" TextureName="ouroborous" Color="#D02020" Lore="One of his faces gives you a condescending sneer." />
 	</entity>
 
-	<entity id="babyChest">
-		<Display>
-			<name>Baby chest!!!</name>
-		</Display>
-		<Item />
-		<Inventory>
-			<entity ref="orgoneAccumulator" />
-		</Inventory>
+	<entity id="chest">
+		<Display Name="chest" TextureName="chest" Lore="It stores things." />
+		<Inventory />
 	</entity>
 	
 	<entity id="flintlock">
-		<Display>
-			<name>flintlock</name>
-			<textureName>flintlock</textureName>
-		</Display>
+		<Display Name="flintlock" TextureName="flintlock"/>
 		<Item />
 	</entity>
 	
-	<entity id="orgoneAccumulator">
-		<Display>
-			<name>Orgone Accumulator</name>
-			<lore>It makes you feel greater.</lore>
-			<textureName>orgoneAccumulator</textureName>
-		</Display>
-		<Item />
-	</entity>
-
 </entities>
 

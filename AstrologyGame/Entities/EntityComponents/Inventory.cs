@@ -37,7 +37,7 @@ namespace AstrologyGame.Entities
         {
             // remove the position component if it has one, as it's in an inventory now
             entityToAdd.RemoveComponentsOfType<Position>();
-            entityToAdd.AddComponent(new InInventory() { containingInventory = this });
+            entityToAdd.AddComponent(new InInventory() { ContainingInventory = this });
 
             // put a reference to the entity in our list of items
             Contents.Add(entityToAdd);
@@ -60,7 +60,7 @@ namespace AstrologyGame.Entities
 
                 // make a shallow copy of the parent's position
                 Position parentPositionComp = ParentEntity.GetComponent<Position>();
-                Position itemPositionComp = new Position() { x = parentPositionComp.x, y = parentPositionComp.y };
+                Position itemPositionComp = new Position() { X = parentPositionComp.X, Y = parentPositionComp.Y };
                 // add it to the item
                 entityToDrop.AddComponent(itemPositionComp);
             }
@@ -68,7 +68,7 @@ namespace AstrologyGame.Entities
             {
                 // get the grandparent inventory and add this as a child
                 InInventory parentInInventory = ParentEntity.GetComponent<InInventory>();
-                Inventory grandparentInventory = parentInInventory.containingInventory;
+                Inventory grandparentInventory = parentInInventory.ContainingInventory;
                 grandparentInventory.AddEntity(entityToDrop);
             }
 

@@ -80,8 +80,8 @@ namespace AstrologyGame.MapData
             AddEntity(chest);
 
             Entity book = new Entity();
-            book.AddComponent(new Display() { textureName = "book1", color = Color.IndianRed });
-            book.AddComponent(new Position() { x = 5, y = 5 });
+            book.AddComponent(new Display() { TextureName = "book1", Color = Color.IndianRed });
+            book.AddComponent(new Position() { X = 5, Y = 5 });
             book.AddComponent(new Book() { BookId = "MasterOfTheMoon" });
             book.AddComponent(new Item());
             AddEntity(book);

@@ -2,7 +2,7 @@
 {
     public class Item : EntityComponent
     {
-        public int count;
+        public int Count { get; set; } = 1;
 
         public Item() { }
     }

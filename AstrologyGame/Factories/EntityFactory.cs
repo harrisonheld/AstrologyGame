@@ -22,7 +22,7 @@ namespace AstrologyGame.Entities
         public static Entity EntityFromId(string entityId, int xPos, int yPos)
         {
             Entity entity = EntityFromId(entityId);
-            entity.AddComponent(new Position { x = xPos, y = yPos });
+            entity.AddComponent(new Position { X = xPos, Y = yPos });
             return entity;
         }
 
