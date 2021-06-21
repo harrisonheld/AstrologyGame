@@ -10,8 +10,14 @@ namespace AstrologyGame.Entities
     {
         public static void Render()
         {
-            // TODO: draw tiles
+            // draw tiles
+            /*
+            for (int y = 0; y < Zone.HEIGHT; y++)
+                for (int x = 0; x < Zone.WIDTH; x++)
+                    Utility.DrawEntity(Zone.GetTileAtPosition((x, y)), x, y);
+            */
 
+            // draw other entities
             foreach (Entity e in Zone.Entities)
             {
                 if(e.HasComponent<Position>() && e.HasComponent<Display>())

@@ -14,12 +14,14 @@ using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.MapData;
 
-
+    
 namespace AstrologyGame.Entities
 {
     public class Entity
     {
         private List<EntityComponent> components = new List<EntityComponent>();
+
+
 
         public void AddComponent(EntityComponent componentToAdd)
         {
@@ -60,8 +62,8 @@ namespace AstrologyGame.Entities
 
             if(component == null)
             {
-                string message = "This entity does not have a component of type " + typeof(T).Name;
-                throw (new Exception(message));
+                string exceptionMessage = $"This entity does not have a component of type {typeof(T).Name}.";
+                throw (new Exception(exceptionMessage));
             }
             return component;
         }
@@ -70,6 +72,7 @@ namespace AstrologyGame.Entities
         {
             return components.OfType<T>().ToList();
         }
+
 
 
         // send the event to all components
@@ -84,21 +87,6 @@ namespace AstrologyGame.Entities
             }
 
             return success;
-        }
-
-        // overload to fire an event with just an id
-        public bool FireEvent(EventId eventId)
-        {
-            ComponentEvent e = new ComponentEvent(eventId);
-            return FireEvent(e);
-        }
-
-        // overload to fire an event with an id and an interactor
-        public bool FireEvent(EventId eventId, Entity interactor)
-        {
-            ComponentEvent e = new ComponentEvent(eventId);
-            e[ParameterId.Interactor] = interactor;
-            return FireEvent(e);
         }
     }
 }

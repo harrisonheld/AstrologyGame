@@ -62,8 +62,7 @@ namespace AstrologyGame.Entities
                         Entity entity = EntityFactory.EntityFromNode(child);
 
                         // add the entity to the inventory
-                        ComponentEvent addItemEvent = new ComponentEvent(EventId.AddItem);
-                        addItemEvent[ParameterId.Target] = entity;
+                        CEPickupItem addItemEvent = new CEPickupItem() { EntityToPickup = entity };
                         inventoryComponent.FireEvent(addItemEvent);
 
                         break;

@@ -323,14 +323,12 @@ namespace AstrologyGame
                 {
                     if (entity.HasComponent<Book>())
                     {
-                        entity.FireEvent(EventId.Read);
+                        entity.FireEvent(new CERead());
                     }
 
                     if (entity.HasComponent<Inventory>())
                     {
-                        ComponentEvent getMenuEvent = new ComponentEvent(EventId.OpenItemMenu);
-                        getMenuEvent[ParameterId.Interactor] = Zone.Player;
-                        entity.FireEvent(getMenuEvent);
+                        entity.FireEvent(new CEOpenItemMenu());
                     }
                 }
 

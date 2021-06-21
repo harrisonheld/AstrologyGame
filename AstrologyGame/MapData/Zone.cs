@@ -38,7 +38,7 @@ namespace AstrologyGame.MapData
         /// </summary>
         public static void Tick()
         {
-            TickSystem.Update();
+
         }
 
         public static void Generate(int seed)
@@ -78,12 +78,11 @@ namespace AstrologyGame.MapData
 
             Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
             AddEntity(chest);
+            CEPickupItem addItemEvent = new CEPickupItem();
+            addItemEvent.EntityToPickup = EntityFactory.EntityFromId("flintlock");
+            chest.FireEvent(addItemEvent);
 
-            Entity book = new Entity();
-            book.AddComponent(new Display() { TextureName = "book1", Color = Color.IndianRed });
-            book.AddComponent(new Position() { X = 5, Y = 5 });
-            book.AddComponent(new Book() { BookId = "MasterOfTheMoon" });
-            book.AddComponent(new Item());
+            Entity book = EntityFactory.EntityFromId("booktest", 3, 4);
             AddEntity(book);
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 2, 2);

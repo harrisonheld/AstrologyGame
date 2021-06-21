@@ -9,17 +9,18 @@
 
         }
 
-        public override bool FireEvent(ComponentEvent cEvent)
+        public override bool FireEvent(ComponentEvent componentEvent)
         {
-            switch(cEvent.EventId)
+            switch(componentEvent)
             {
-                case EventId.Read:
+                case CERead readEvent:
                     BookMenu menu = new BookMenu(BookId);
                     Game1.OpenMenu(menu);
                     return true;
-            }
 
-            return false;
+                default:
+                    return false;
+            }
         }
     }
 }

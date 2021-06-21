@@ -12,13 +12,17 @@
 	
 	<entity id="pisces">
 		<Display Name="Pisces" TextureName="pisces2" Color="#78ceeb" Lore="He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
-Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that his real name is irrelevant."/>
+Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that this confusion is unintentional."/>
 	</entity>
 	
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
 		<Creature />
+	</entity>
+
+	<entity id="">
+		<Display Name="Intangible" Lore="It oozes greasily though three-dimensional space." />
 	</entity>
 
 	<entity id="swordsmanOfJudas">
@@ -32,6 +36,12 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	
 	<entity id="flintlock">
 		<Display Name="flintlock" TextureName="flintlock"/>
+		<Item />
+	</entity>
+
+	<entity id="booktest" >
+		<Display Name="Master of the Moon" TextureName="book1" Lore="A boog..."/>
+		<Book BookId="MasterOfTheMoon" />
 		<Item />
 	</entity>
 	

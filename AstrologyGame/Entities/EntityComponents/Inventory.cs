@@ -10,22 +10,22 @@ namespace AstrologyGame.Entities
         public bool OtherEntitiesCanOpen { get; set; } = false; // can other entities open this inventory?
         public List<Entity> Contents { get; set; } = new List<Entity>();
 
-        public override bool FireEvent(ComponentEvent cEvent)
+        public override bool FireEvent(ComponentEvent componentEvent)
         {
-            switch (cEvent.EventId)
+            switch (componentEvent)
             {
                 // open the item menu for the player
-                case EventId.OpenItemMenu:
+                case CEOpenItemMenu openItemMenuEvent:
                     ItemMenu itemMenu = new ItemMenu(Contents);
                     Game1.OpenMenu(itemMenu);
                     return true;
-                    
-                case EventId.DropItem:
-                    bool success = DropEntity(cEvent[ParameterId.Target] as Entity);
+
+                case CEDropItem dropItemEvent:
+                    bool success = DropEntity(dropItemEvent.EntityToDrop);
                     return success;
 
-                case EventId.AddItem:
-                    AddEntity(cEvent[ParameterId.Target] as Entity);
+                case CEPickupItem addItemEvent:
+                    AddEntity(addItemEvent.EntityToPickup);
                     return true;
 
                 default:
