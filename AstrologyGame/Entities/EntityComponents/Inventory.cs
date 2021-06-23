@@ -10,6 +10,7 @@ namespace AstrologyGame.Entities
         public bool OtherEntitiesCanOpen { get; set; } = false; // can other entities open this inventory?
         public List<Entity> Contents { get; set; } = new List<Entity>();
 
+        /*
         public override bool FireEvent(ComponentEvent componentEvent)
         {
             switch (componentEvent)
@@ -32,6 +33,8 @@ namespace AstrologyGame.Entities
                     return false;
             }
         }
+        */
+
         /// <summary>Add an item to this inventory.</summary>
         private void AddEntity(Entity entityToAdd)
         {

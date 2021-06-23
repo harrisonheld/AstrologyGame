@@ -76,21 +76,11 @@ namespace AstrologyGame.MapData
                 }
             }
 
-            Entity chest = EntityFactory.EntityFromId("chest", 3, 3);
-            AddEntity(chest);
-            CEPickupItem addItemEvent = new CEPickupItem();
-            addItemEvent.EntityToPickup = EntityFactory.EntityFromId("flintlock");
-            chest.FireEvent(addItemEvent);
-
-            Entity book = EntityFactory.EntityFromId("booktest", 3, 4);
+            Entity book = EntityFactory.EntityFromId("booktest", 10, 4);
             AddEntity(book);
 
-            Entity pisces = EntityFactory.EntityFromId("pisces", 2, 2);
+            Entity pisces = EntityFactory.EntityFromId("pisces", 12, 5);
             AddEntity(pisces);
-
-            AddEntity(EntityFactory.EntityFromId("swordsmanOfJudas", 3, 2));
-
-            AddEntity(EntityFactory.EntityFromId("flintlock", 6, 3));
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)

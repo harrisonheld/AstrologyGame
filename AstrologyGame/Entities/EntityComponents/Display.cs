@@ -1,5 +1,7 @@
-﻿
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+
+using AstrologyGame.Entities.ComponentInteractions;
 
 namespace AstrologyGame.Entities
 {
@@ -10,5 +12,20 @@ namespace AstrologyGame.Entities
         public string Lore { get; set; } = "default";
         public string TextureName { get; set; } = "default";
         public Color Color { get; set; } = Color.White;
+
+        public Display()
+        {
+            Interaction infoInteraction = new Interaction();
+            infoInteraction.Perform = () => Info();
+            infoInteraction.Name = "Info";
+            interactions.Add(infoInteraction);
+        }
+
+        private void Info()
+        {
+            Menu infoMenu = new Menu();
+            infoMenu.Text = Lore;
+            Game1.OpenMenu(infoMenu);
+        }
     }
 }

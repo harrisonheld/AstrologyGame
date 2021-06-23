@@ -321,15 +321,8 @@ namespace AstrologyGame
             {
                 if (entity != Zone.Player)
                 {
-                    if (entity.HasComponent<Book>())
-                    {
-                        entity.FireEvent(new CERead());
-                    }
-
-                    if (entity.HasComponent<Inventory>())
-                    {
-                        entity.FireEvent(new CEOpenItemMenu());
-                    }
+                    InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, entity);
+                    OpenMenu(interactionMenu);
                 }
 
                 // TODO

@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.MapData;
+using AstrologyGame.Entities.ComponentInteractions;
 
     
 namespace AstrologyGame.Entities
@@ -76,18 +77,16 @@ namespace AstrologyGame.Entities
 
 
 
-        // send the event to all components
-        public bool FireEvent(ComponentEvent e)
+        public List<Interaction> GetInteractions()
         {
-            bool success = false;
+            List<Interaction> interactions = new List<Interaction>();
 
-            foreach(EntityComponent comp in components)
+            foreach(EntityComponent component in components)
             {
-                if (comp.FireEvent(e))
-                    success = true;
+                interactions.AddRange(component.GetInteractions());
             }
 
-            return success;
+            return interactions;
         }
     }
 }

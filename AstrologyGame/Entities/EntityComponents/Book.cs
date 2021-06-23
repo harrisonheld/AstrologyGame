@@ -1,4 +1,6 @@
-﻿namespace AstrologyGame.Entities
+﻿using AstrologyGame.Entities.ComponentInteractions;
+
+namespace AstrologyGame.Entities
 {
     public class Book : EntityComponent
     {
@@ -6,21 +8,39 @@
 
         public Book()
         {
+            Interaction readInteraction = new Interaction();
+            readInteraction.Perform = () => Read();
+            readInteraction.Name = "Read";
+            interactions.Add(readInteraction);
 
+            Interaction fuckYouInteraction = new Interaction();
+            fuckYouInteraction.Perform = () => FuckYou();
+            fuckYouInteraction.Name = "Cool Easter Egg!";
+            interactions.Add(fuckYouInteraction);
+
+            Interaction kickInteraction = new Interaction();
+            kickInteraction.Perform = () => Kick();
+            kickInteraction.Name = "Kick";
+            interactions.Add(kickInteraction);
         }
 
-        public override bool FireEvent(ComponentEvent componentEvent)
+        private void Read()
         {
-            switch(componentEvent)
-            {
-                case CERead readEvent:
-                    BookMenu menu = new BookMenu(BookId);
-                    Game1.OpenMenu(menu);
-                    return true;
+            BookMenu menu = new BookMenu(BookId);
+            Game1.OpenMenu(menu);
+        }
 
-                default:
-                    return false;
-            }
+        private void FuckYou()
+        {
+            Menu fuckYouMenu = new Menu();
+            fuckYouMenu.Text = "you found the easter egg! FUCK YOU";
+            fuckYouMenu.BackgroundColor = Microsoft.Xna.Framework.Color.DeepPink;
+            Game1.OpenMenu(fuckYouMenu);
+        }
+
+        private void Kick()
+        {
+            ParentEntity.GetComponent<Position>().X += 1;
         }
     }
 }

@@ -58,8 +58,7 @@ namespace AstrologyGame
             {
                 foreach (Entity e in entities)
                 {
-                    CEPickupItem pickupItemEvent = new CEPickupItem() { EntityToPickup = e };
-                    Zone.Player.FireEvent(pickupItemEvent);
+                    // TODO: PICKUP ALL THE ITEMS
                 }
 
                 Game1.CloseMenu(this);
@@ -74,10 +73,8 @@ namespace AstrologyGame
             if (Zone.Player.GetComponent<Inventory>().Contents.Contains(entityToGet))
                 return;
 
-            // make an event to get the item
-            CEPickupItem pickupItemEvent = new CEPickupItem { EntityToPickup = entityToGet };
-            
-            bool success = Zone.Player.FireEvent(pickupItemEvent);
+            // TODO: PICKIP THE ITEM
+            bool success = false;
 
             // if the players gets the item, remove it from the list and refresh the text. This will also fix the cursor if it needs to move.
             if(success)
