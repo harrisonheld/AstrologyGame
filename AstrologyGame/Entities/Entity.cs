@@ -42,7 +42,7 @@ namespace AstrologyGame.Entities
             if (componentsOfType.Count == 0)
                 return false;
 
-            // otherwise, remove them
+            // otherwise, remove them and return true
             foreach(T component in GetComponents<T>())
             {
                 RemoveComponent(component as EntityComponent);
@@ -65,6 +65,7 @@ namespace AstrologyGame.Entities
                 string exceptionMessage = $"This entity does not have a component of type {typeof(T).Name}.";
                 throw (new Exception(exceptionMessage));
             }
+
             return component;
         }
 

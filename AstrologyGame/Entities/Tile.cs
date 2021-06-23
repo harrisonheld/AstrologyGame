@@ -9,7 +9,7 @@ namespace AstrologyGame.Entities
     {
         public Tile()
         {
-
+            AddComponent(new Display());
         }
     }
 
@@ -17,14 +17,12 @@ namespace AstrologyGame.Entities
     { 
         public DebugTile()
         {
-            /*
             Display d = GetComponent<Display>();
-            d.name = "debug tile";
-            d.lore = "It's pure black, and very easy to read debug text on.";
-            d.textureName = "debugTile";
-            int shade = 64;
-            d.color = new Color(shade, shade, shade);
-            */
+            d.Name = "debug tile";
+            d.Lore = "It's pure black, and very easy to read debug text on.";
+            d.TextureName = "debugTile";
+            int shade = 128;
+            d.Color = new Color(shade, shade, shade);
         }
     }
 

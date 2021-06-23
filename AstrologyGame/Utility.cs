@@ -151,7 +151,7 @@ namespace AstrologyGame
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.
-        // The following will yield the same number for the same string every time.
+        // The following will yield the same hash for the same string every time.
         public static int SHA1Hash(string str)
         {
             using var algo = System.Security.Cryptography.SHA1.Create();
@@ -167,17 +167,14 @@ namespace AstrologyGame
             {
                 // how far in x to offset from position
                 int currentOffset = 0;
-
-                // example:
-                // string.Format("You attempt to hit the [color:#FFFF0000]{0}[/color] but [color:{1}]MISS[/color]!",
-                // currentMonster.Name, Color.Red.ToHex(true));
+                
                 string[] splits = markup.Split(new string[] { "<c:" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var str in splits)
                 {
                     // if this section starts with a color
                     if (str.StartsWith("#"))
                     {
-                        // #123456789
+                        // extract the hex code, e.g. #123456
                         string hexString = str.Substring(0, 7);
 
                         // any subsequent msgs after the [/color] tag are defaultColor
@@ -203,7 +200,7 @@ namespace AstrologyGame
             }
             else
             {
-                // just draw the string as ordered
+                // just draw the string literally
                 spriteBatch.DrawString(Font, markup, position, defaultColor);
             }
         }
