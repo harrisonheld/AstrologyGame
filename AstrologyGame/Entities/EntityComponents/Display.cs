@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 
 using AstrologyGame.Entities.ComponentInteractions;
@@ -15,13 +17,17 @@ namespace AstrologyGame.Entities
 
         public Display()
         {
-            Interaction infoInteraction = new Interaction();
-            infoInteraction.Perform = (Entity e) => Info();
-            infoInteraction.Name = "Info";
-            interactions.Add(infoInteraction);
+            interactions = new List<Interaction>()
+            {
+                new Interaction()
+                {
+                    Name = "Info",
+                    Perform = (Entity e) => ShowInfo(),
+                }
+            };
         }
 
-        private void Info()
+        private void ShowInfo()
         {
             Menu infoMenu = new Menu();
             infoMenu.Text = Lore;

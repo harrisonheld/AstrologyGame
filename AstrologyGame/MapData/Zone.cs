@@ -32,14 +32,6 @@ namespace AstrologyGame.MapData
             tiles = new Tile[WIDTH, HEIGHT];
             entities.Clear();
         }
-  
-        /// <summary>
-        /// Have all the DynamicObjects in the Zone do their turns.
-        /// </summary>
-        public static void Tick()
-        {
-
-        }
 
         public static void Generate(int seed)
         {

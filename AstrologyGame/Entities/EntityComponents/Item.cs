@@ -1,4 +1,7 @@
-﻿using AstrologyGame.Entities.ComponentInteractions;
+﻿using System.Collections.Generic;
+
+using AstrologyGame.Entities.ComponentInteractions;
+using AstrologyGame.MapData;
 
 namespace AstrologyGame.Entities
 {
@@ -8,19 +11,23 @@ namespace AstrologyGame.Entities
         public bool OnGround { get; set; } = true;
         public Inventory ContainingInventory { get; set; }
 
-        public Item() 
+        public Item()
         {
-            Interaction pickupInteraction = new Interaction();
-            pickupInteraction.Perform = (Entity e) => BePickedUp(e);
-            pickupInteraction.Condition = (Entity e) => BePickedUpPredicate(e);
-            pickupInteraction.Name = "Pick Up";
-            interactions.Add(pickupInteraction);
-
-            Interaction dropInteraction = new Interaction();
-            dropInteraction.Perform = (Entity e) => BeDropped(e);
-            dropInteraction.Condition = (Entity e) => BeDroppedPredicate(e);
-            dropInteraction.Name = "Drop";
-            interactions.Add(dropInteraction);
+            interactions = new List<Interaction>()
+            {
+                new Interaction()
+                {
+                    Name = "Pick Up",
+                    Perform = (Entity e) => BePickedUp(e),
+                    Condition = (Entity e) => BePickedUpPredicate(e)
+                },
+                new Interaction()
+                {
+                    Name = "Drop",
+                    Perform = (Entity e) => BeDropped(e),
+                    Condition = (Entity e) => BeDroppedPredicate(e)
+                }
+            };
         }
 
         private void BePickedUp(Entity pickerUpper)
@@ -45,9 +52,14 @@ namespace AstrologyGame.Entities
             Position dropperPos = dropper.GetComponent<Position>();
             Position thisPos = new Position();
             thisPos.Pos = dropperPos.Pos;
+            ParentEntity.AddComponent(thisPos);
 
             // remove the entity from the inventory that contains it
             ContainingInventory.RemoveEntity(ParentEntity);
+
+            // add it to the zone if the zone does not already contain it
+            if (!Zone.Entities.Contains(ParentEntity))
+                Zone.AddEntity(ParentEntity);
 
             ContainingInventory = null;
             OnGround = true;

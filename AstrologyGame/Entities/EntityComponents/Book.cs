@@ -1,4 +1,6 @@
-﻿using AstrologyGame.Entities.ComponentInteractions;
+﻿using System.Collections.Generic;
+
+using AstrologyGame.Entities.ComponentInteractions;
 
 namespace AstrologyGame.Entities
 {
@@ -8,10 +10,14 @@ namespace AstrologyGame.Entities
 
         public Book()
         {
-            Interaction readInteraction = new Interaction();
-            readInteraction.Perform = (Entity e) => Read();
-            readInteraction.Name = "Read";
-            interactions.Add(readInteraction);
+            interactions = new List<Interaction>()
+            {
+                new Interaction()
+                {
+                    Name = "Read",
+                    Perform = (Entity e) => Read()
+                }
+            };
         }
 
         private void Read()

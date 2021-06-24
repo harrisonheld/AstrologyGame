@@ -7,10 +7,11 @@ namespace AstrologyGame.Entities
     public class Attributes : EntityComponent
     {
         // base stats
-        public int Prowess { get; set; } = 10;
-        public int Vigor { get; set; } = 10;
-        public int Faith { get; set; } = 10;
-        public int TheFourthStat { get; set; } = 10;
+        // comments are just hypothetical ideas of what they do
+        public int Prowess { get; set; } = 10; // damage
+        public int Vigor { get; set; } = 10; // max HP, recovery rate, dodging, 
+        public int Faith { get; set; } = 10; // mana / mana regen rate, magic damage
+        public int Concentration { get; set; } = 10; // ability cooldown, crit chance
 
         // health
         public int MaxHealth { get; set; } = 10;

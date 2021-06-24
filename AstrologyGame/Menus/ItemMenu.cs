@@ -29,7 +29,7 @@ namespace AstrologyGame
                 {
                     Equippable equippable = entity.GetComponent<Equippable>();
 
-                    if (equippable.IsEquipped());
+                    if (equippable.IsEquipped())
                     {
                         string slot = equippable.Slot.ToString();
                         sb.Append($" (Worn on {slot})");

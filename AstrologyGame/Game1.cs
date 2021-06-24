@@ -177,7 +177,7 @@ namespace AstrologyGame
                 // tick the level
                 if (doTick)
                 {
-                    Zone.Tick();
+                    // TODO: TICK THE LEVEL
                     doTick = false;
                 }
 

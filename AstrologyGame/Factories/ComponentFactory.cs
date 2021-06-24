@@ -62,7 +62,7 @@ namespace AstrologyGame.Entities
                         Entity entity = EntityFactory.EntityFromNode(child);
 
                         // add the entity to the inventory
-                        inventoryComponent.Contents.Add(entity);
+                        inventoryComponent.AddEntity(entity);
 
                         break;
                 }
