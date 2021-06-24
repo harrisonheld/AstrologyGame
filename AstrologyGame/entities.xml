@@ -40,7 +40,7 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	</entity>
 
 	<entity id="booktest" >
-		<Display Name="Master of the Moon" TextureName="book1" Lore="A boog..."/>
+		<Display Color="#8080B0" Name="Master of the Moon" TextureName="book1" Lore="A boog..."/>
 		<Book BookId="MasterOfTheMoon" />
 		<Item />
 	</entity>

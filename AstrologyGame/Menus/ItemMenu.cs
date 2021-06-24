@@ -67,21 +67,11 @@ namespace AstrologyGame
 
         public override void SelectionMade()
         {
-            Entity entityToGet = entities[selectedIndex];
-
-            // if the player already has this item, do nothing and return
-            if (Zone.Player.GetComponent<Inventory>().Contents.Contains(entityToGet))
-                return;
-
-            // TODO: PICKIP THE ITEM
-            bool success = false;
-
-            // if the players gets the item, remove it from the list and refresh the text. This will also fix the cursor if it needs to move.
-            if(success)
-            {
-                entities.Remove(entityToGet);
-                Refresh();
-            }
+            Entity selected = entities[selectedIndex];
+            InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, selected);
+            // put the menu at the place of the cursor
+            interactionMenu.Position = cursorCoords;
+            Game1.OpenMenu(interactionMenu);
         }
     }
 }

@@ -21,9 +21,22 @@ namespace AstrologyGame
             interactions = objectToInteractWith.GetInteractions();
             selectionCount = interactions.Count;
 
-            foreach(Interaction interaction in interactions)
+            int idx = 0;
+            while(idx < interactions.Count)
             {
+                Interaction interaction = interactions[idx];
+
+                // if the interactor does not meet the condition to perform this interaction
+                if (!interaction.Condition(interactor))
+                {
+                    // remove it from the list and continue
+                    interactions.RemoveAt(idx);
+                    continue;
+                }
+
                 Text += interaction.Name + "\n";
+
+                idx++;
             }
         }
 
