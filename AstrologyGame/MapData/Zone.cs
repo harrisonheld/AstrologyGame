@@ -68,14 +68,9 @@ namespace AstrologyGame.MapData
                 }
             }
 
-            Entity book = EntityFactory.EntityFromId("booktest", 10, 4);
-            AddEntity(book);
-
-            Entity pisces = EntityFactory.EntityFromId("pisces", 12, 5);
-            AddEntity(pisces);
-
-            Entity gun = EntityFactory.EntityFromId("flintlock", 9, 6);
-            AddEntity(gun);
+            Entity armor = EntityFactory.EntityFromId("armor", 9, 6);
+            armor.GetComponent<Equippable>().Slot = Slot.Body;
+            AddEntity(armor);
 
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)

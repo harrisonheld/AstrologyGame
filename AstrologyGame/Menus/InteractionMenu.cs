@@ -29,10 +29,13 @@ namespace AstrologyGame
                 // if the interactor does not meet the condition to perform this interaction
                 if (!interaction.Condition(interactor))
                 {
-                    // remove it from the list and continue
+                    // remove it from the list
                     interactions.RemoveAt(idx);
+                    // reduce the amount of selections in the menu
+                    selectionCount--;
                     continue;
                 }
+
 
                 Text += interaction.Name + "\n";
 

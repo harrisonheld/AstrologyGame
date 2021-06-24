@@ -93,6 +93,7 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             Entity knight = EntityFactory.EntityFromId("knight", 0, 0);
+            knight.GetComponent<BodyPlan>().AddSlot(Slot.Body);
             Zone.AddEntity(knight);
             Zone.Player = knight;
 

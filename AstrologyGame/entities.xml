@@ -18,15 +18,18 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
+		<BodyPlan />
 		<Creature />
 	</entity>
 
-	<entity id="">
-		<Display Name="Intangible" Lore="It oozes greasily though three-dimensional space." />
+	<entity id="armor">
+		<Display Name="Chest Plate" TextureName="marble" Lore="Chungus plate." />
+		<Equippable />
+		<Item />
 	</entity>
 
 	<entity id="swordsmanOfJudas">
-		<Display Name="Swordsman of Judas" TextureName="ouroborous" Color="#D02020" Lore="One of his faces gives you a condescending sneer." />
+		<Display Name="Swordsman of Judas" TextureName="voidBird" Color="#D02020" Lore="One of his faces gives you a condescending sneer." />
 	</entity>
 
 	<entity id="chest">
@@ -40,7 +43,7 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	</entity>
 
 	<entity id="booktest" >
-		<Display Color="#8080B0" Name="Master of the Moon" TextureName="book1" Lore="A boog..."/>
+		<Display Color="#8080D0" Name="Master of the Moon" TextureName="book1" Lore="A boog..."/>
 		<Book BookId="MasterOfTheMoon" />
 		<Item />
 	</entity>
