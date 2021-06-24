@@ -35,7 +35,7 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	</entity>
 	
 	<entity id="flintlock">
-		<Display Name="flintlock" TextureName="flintlock"/>
+		<Display Name="flintlock" TextureName="flintlock" Lore="a gunny!"/>
 		<Item />
 	</entity>
 

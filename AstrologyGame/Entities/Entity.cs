@@ -26,7 +26,7 @@ namespace AstrologyGame.Entities
 
         public void AddComponent(EntityComponent componentToAdd)
         {
-            componentToAdd.ParentEntity = this;
+            componentToAdd.SetParentEntity(this);
             components.Add(componentToAdd);
         }
 

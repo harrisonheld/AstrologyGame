@@ -82,6 +82,9 @@ namespace AstrologyGame.MapData
             Entity pisces = EntityFactory.EntityFromId("pisces", 12, 5);
             AddEntity(pisces);
 
+            Entity gun = EntityFactory.EntityFromId("flintlock", 9, 6);
+            AddEntity(gun);
+
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
             {

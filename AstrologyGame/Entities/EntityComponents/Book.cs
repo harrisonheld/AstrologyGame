@@ -9,17 +9,17 @@ namespace AstrologyGame.Entities
         public Book()
         {
             Interaction readInteraction = new Interaction();
-            readInteraction.Perform = () => Read();
+            readInteraction.Perform = (Entity e) => Read();
             readInteraction.Name = "Read";
             interactions.Add(readInteraction);
 
             Interaction fuckYouInteraction = new Interaction();
-            fuckYouInteraction.Perform = () => FuckYou();
+            fuckYouInteraction.Perform = (Entity e) => FuckYou();
             fuckYouInteraction.Name = "Cool Easter Egg!";
             interactions.Add(fuckYouInteraction);
 
             Interaction kickInteraction = new Interaction();
-            kickInteraction.Perform = () => Kick();
+            kickInteraction.Perform = (Entity e) => Kick();
             kickInteraction.Name = "Kick";
             interactions.Add(kickInteraction);
         }

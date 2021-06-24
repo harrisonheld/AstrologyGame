@@ -16,7 +16,7 @@ namespace AstrologyGame.Entities
         public Display()
         {
             Interaction infoInteraction = new Interaction();
-            infoInteraction.Perform = () => Info();
+            infoInteraction.Perform = (Entity e) => Info();
             infoInteraction.Name = "Info";
             interactions.Add(infoInteraction);
         }

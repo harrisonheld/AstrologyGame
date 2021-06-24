@@ -8,8 +8,15 @@ namespace AstrologyGame.Entities
 {
     public abstract class EntityComponent
     {
-        public Entity ParentEntity { get; set; }
+        private Entity parentEntity;
+        public Entity ParentEntity { get { return parentEntity; } }
+
         protected List<Interaction> interactions { get; set; } = new List<Interaction>();
+
+        public void SetParentEntity(Entity parent)
+        {
+            parentEntity = parent;
+        }
 
         public List<Interaction> GetInteractions()
         {

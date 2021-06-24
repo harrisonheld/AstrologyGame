@@ -10,9 +10,12 @@ namespace AstrologyGame
     class InteractionMenu : SelectMenu
     {
         List<Interaction> interactions;
+        Entity interactor;
 
         public InteractionMenu(Entity interactor, Entity objectToInteractWith)
         {
+            this.interactor = interactor;
+
             BackgroundColor = Color.Black;
 
             interactions = objectToInteractWith.GetInteractions();
@@ -30,7 +33,7 @@ namespace AstrologyGame
             Game1.CloseMenu(this);
 
             // do the interaction
-            interactions[selectedIndex].Perform();
+            interactions[selectedIndex].Perform(interactor);
 
             // refresh the menus incase this interaction changed them
             Game1.QueueRefreshAllMenus();

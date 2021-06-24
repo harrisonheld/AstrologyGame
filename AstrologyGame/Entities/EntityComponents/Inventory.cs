@@ -36,7 +36,7 @@ namespace AstrologyGame.Entities
         */
 
         /// <summary>Add an item to this inventory.</summary>
-        private void AddEntity(Entity entityToAdd)
+        public void AddEntity(Entity entityToAdd)
         {
             // remove the position component if it has one, as it's in an inventory now
             entityToAdd.RemoveComponentsOfType<Position>();
