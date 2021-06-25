@@ -4,7 +4,9 @@ using System.Text;
 
 using System.Xml;
 
-namespace AstrologyGame.Entities
+using AstrologyGame.Entities.Components;
+
+namespace AstrologyGame.Entities.Factories
 {
     public static class EntityFactory
     {

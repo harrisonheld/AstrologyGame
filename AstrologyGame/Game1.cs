@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using AstrologyGame.MapData;
 using AstrologyGame.Entities;
-using System.Diagnostics;
-using System.Linq;
+using AstrologyGame.Entities.Components;
+using AstrologyGame.Entities.Factories;
 
 namespace AstrologyGame
 {

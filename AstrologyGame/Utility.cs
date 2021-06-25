@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.MapData;
 using AstrologyGame.Entities;
+using AstrologyGame.Entities.Components;
 
 namespace AstrologyGame
 {

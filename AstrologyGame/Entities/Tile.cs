@@ -3,29 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using AstrologyGame.Entities.Components;
+
 namespace AstrologyGame.Entities
 {
-    public abstract class Tile : Entity
+    public class Tile : Entity
     {
         public Tile()
         {
-            AddComponent(new Display());
-        }
-    }
-
-    class DebugTile : Tile
-    { 
-        public DebugTile()
-        {
-            Display d = GetComponent<Display>();
+            Display d = new Display();
             d.Name = "debug tile";
             d.Lore = "It's pure black, and very easy to read debug text on.";
             d.TextureName = "debugTile";
             int shade = 128;
             d.Color = new Color(shade, shade, shade);
+
+            AddComponent(d);
         }
     }
-
         /*
     class Stone : Tile
     {

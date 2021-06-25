@@ -3,7 +3,7 @@
 using AstrologyGame.MapData;
 using AstrologyGame.Entities;
 
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Entities.Components
 {
     public class Inventory : EntityComponent
     {

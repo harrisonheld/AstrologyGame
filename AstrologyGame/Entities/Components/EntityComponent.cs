@@ -2,9 +2,9 @@
 using System.Text;
 using System.Collections.Generic;
 
-using AstrologyGame.Entities.ComponentInteractions;
+using AstrologyGame.Entities.Components;
 
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Entities.Components
 {
     public abstract class EntityComponent
     {

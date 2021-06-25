@@ -12,6 +12,7 @@
 <abilities>
 	<ability id="teleport" name="teleport" lore="teleport somewhere." baseCooldown="100" target="position"/>
 	<ability id="bind" name="bind" lore="bind someone or something in place." baseCooldown="60" target="entity"/>
+	<!--vault over an enemy like in checkers-->
 	<ability id="vault" name="vault" lore="vault over a creature." baseCooldown="20" target="entity"/>
 	
 	<ability id="heal" name="heal" lore="heal 10 points." baseCooldown="0" target="self"/>

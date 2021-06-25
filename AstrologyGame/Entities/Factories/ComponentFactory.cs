@@ -7,14 +7,16 @@ using Microsoft.Xna.Framework;
 using System.Reflection;
 using System.Xml;
 
-namespace AstrologyGame.Entities
+using AstrologyGame.Entities.Components;
+
+namespace AstrologyGame.Entities.Factories
 {
     public static class ComponentFactory
     {
         public static EntityComponent ComponentFromXmlNode(XmlNode node)
         {
             // make a component of the right type, and throw an error if no class of that name exists
-            Type componentType = Type.GetType("AstrologyGame.Entities." + node.Name, true);
+            Type componentType = Type.GetType("AstrologyGame.Entities.Components." + node.Name, true);
             EntityComponent component = Activator.CreateInstance(componentType) as EntityComponent;
 
             // set the properties of the component
@@ -28,9 +30,9 @@ namespace AstrologyGame.Entities
 
                 object propertyValue = null;
 
-                if(propertyType != typeof(string)) // if it shouldn't be a string
+                if (propertyType != typeof(string)) // if it shouldn't be a string
                 {
-                    try // first, try converting the string to a base data type if possible
+                    try // first, try converting the string to the right datatype using Convert
                     {
                         propertyValue = Convert.ChangeType(propertyValueAsString, propertyType);
                     }
@@ -43,8 +45,10 @@ namespace AstrologyGame.Entities
                         }
                     }
                 }
+                else
+                    propertyValue = propertyValueAsString;
 
-                propertyInfo.SetValue(component, propertyValue ?? propertyValueAsString);
+                propertyInfo.SetValue(component, propertyValue);
             }
 
             return component;

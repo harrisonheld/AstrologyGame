@@ -15,8 +15,8 @@ namespace AstrologyGame.MapData
         public static int ZoneX { get; set; }
         public static int ZoneY { get; set; }
 
-        private static int worldSeedInt = Environment.TickCount;
-        private static string worldSeedString = worldSeedInt.ToString();
+        private static int worldSeedInt = Environment.TickCount; // the true integer seed of the World
+        private static string worldSeedString = worldSeedInt.ToString(); // a string who's hash will be used to generate the World
         public static string Seed
         {
             get
@@ -41,7 +41,7 @@ namespace AstrologyGame.MapData
 
                 ALSO: Increasing the seed by only one cases strange behavior when moving between zones. With two possible 
                 biome options, is extremely noticible that the biome just alternates back and forth as 
-                you move across zones. I suppose this is just a consequence of incrementing seeds by 1?
+                you move across zones. I guess this is just a consequence of incrementing seeds by 1?
             */
 
             // temporary solution is to just take the hash

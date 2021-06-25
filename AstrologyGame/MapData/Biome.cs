@@ -10,7 +10,7 @@ namespace AstrologyGame.MapData
     {
         public readonly static Biome DebugLand = new Biome()
         {
-            TileTypes = new Type[] { typeof(DebugTile) },
+            TileTypes = new Type[] { typeof(Tile) },
             TileWeights = new double[] { 1.0 }
         };
 

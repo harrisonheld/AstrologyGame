@@ -6,7 +6,8 @@
 	<!ELEMENT page ANY>]>
 
 <books>
-	<book id="MasterOfTheMoon" title="Master of the Moon (Pisces)">
+	<book id="MasterOfTheMoon" title="Master of the Moon">
+		<page>PREFACE: What follows is a list of all songs on the album Master of the Moon by Ronnie James Dio. Please do not sue me.</page>
 		<page>1. ONE MORE FOR THE ROAD</page>
 		<page>2. MASTER OF THE MOON</page>
 		<page>3. THE END OF THE WORLD</page>

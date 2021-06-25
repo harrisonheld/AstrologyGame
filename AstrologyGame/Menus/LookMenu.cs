@@ -1,5 +1,6 @@
 ﻿
 using AstrologyGame.Entities;
+using AstrologyGame.Entities.Components;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame

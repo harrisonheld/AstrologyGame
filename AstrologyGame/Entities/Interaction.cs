@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AstrologyGame.Entities.ComponentInteractions
+namespace AstrologyGame.Entities
 {
     public class Interaction
     {

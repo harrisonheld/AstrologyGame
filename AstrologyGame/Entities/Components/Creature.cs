@@ -2,7 +2,7 @@
 
 using AstrologyGame.MapData;
 
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Entities.Components
 {
     public class Creature : EntityComponent
     {

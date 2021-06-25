@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
-using System.Xml;
+using AstrologyGame.Entities.Components;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
-
-using AstrologyGame.MapData;
-using AstrologyGame.Entities.ComponentInteractions;
-
-    
 namespace AstrologyGame.Entities
 {
     public class Entity
     {
         private List<EntityComponent> components = new List<EntityComponent>();
-
 
 
         public void AddComponent(EntityComponent componentToAdd)
@@ -74,7 +61,6 @@ namespace AstrologyGame.Entities
         {
             return components.OfType<T>().ToList();
         }
-
 
 
         public List<Interaction> GetInteractions()

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Entities.Components
 {
     public class BodyPlan : EntityComponent
     {

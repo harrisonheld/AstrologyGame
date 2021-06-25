@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.Entities;
+using AstrologyGame.Entities.Components;
+using AstrologyGame.Entities.Factories;
 
 namespace AstrologyGame.MapData
 {
@@ -40,12 +42,6 @@ namespace AstrologyGame.MapData
 
             // what biome should this zone generate as
             Biome biome = BiomeInfo.DebugLand;
-            /*double s = rand.NextDouble();
-            Biome biome;
-            if (s > 0.5)
-                biome = BiomeInfo.CydonianSands;
-            else
-                biome = BiomeInfo.FontOfMiscreation;*/
 
             for (int y = 0; y < HEIGHT; y++)
             {
@@ -72,6 +68,9 @@ namespace AstrologyGame.MapData
             armor.GetComponent<Equippable>().Slot = Slot.Body;
             AddEntity(armor);
 
+            Entity testEntity = EntityFactory.EntityFromId("test", 3, 3);
+            AddEntity(testEntity);
+
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
             {
@@ -84,6 +83,10 @@ namespace AstrologyGame.MapData
             // only add the entity if it's not already in the zone
             if(!entities.Contains(e))
                 entities.Add(e);
+        }
+        public static void RemoveEntity(Entity e)
+        {
+            Entities.Remove(e);
         }
 
         public static List<Entity> GetEntitiesAtPosition(OrderedPair p)

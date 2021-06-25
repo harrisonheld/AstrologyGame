@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using AstrologyGame.Entities.ComponentInteractions;
-
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Entities.Components
 {
     public class Display : EntityComponent
     {
