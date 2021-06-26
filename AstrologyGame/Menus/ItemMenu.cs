@@ -6,9 +6,9 @@ using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 using AstrologyGame.MapData;
 
-namespace AstrologyGame
+namespace AstrologyGame.Menus
 {
-    class ItemMenu : SelectMenu
+    public class ItemMenu : SelectMenu
     {
         private List<Entity> entities;
 

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using AstrologyGame.MapData;
+using AstrologyGame.Menus;
 using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 using AstrologyGame.Entities.Factories;
@@ -207,6 +208,13 @@ namespace AstrologyGame
                 Menu pauseMenu = new Menu();
                 pauseMenu.Text = "[Paused]";
                 OpenMenu(pauseMenu);
+                return;
+            }
+            // open the dev menu
+            if (controls.Contains(Control.DevFunc1))
+            {
+                DevSpawnMenu devMenu = new DevSpawnMenu();
+                OpenMenu(devMenu);
                 return;
             }
             // start interact mode

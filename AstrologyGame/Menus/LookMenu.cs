@@ -3,9 +3,9 @@ using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 using AstrologyGame.MapData;
 
-namespace AstrologyGame
+namespace AstrologyGame.Menus
 {
-    class LookMenu : Menu
+    public class LookMenu : Menu
     {
         public LookMenu(Entity o)
         {

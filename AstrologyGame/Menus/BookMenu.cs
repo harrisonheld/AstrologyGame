@@ -5,9 +5,9 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace AstrologyGame
+namespace AstrologyGame.Menus
 {
-    class BookMenu : SelectMenu
+    public class BookMenu : SelectMenu
     {
         private readonly string bookId;
 

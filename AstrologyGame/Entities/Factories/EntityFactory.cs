@@ -20,7 +20,7 @@ namespace AstrologyGame.Entities.Factories
             // create an entity with it
             return EntityFromEntityNode(entityNode);
         }
-        // create a new entity with the specified position
+        // create a new entity, and add a Position component with the specified coords
         public static Entity EntityFromId(string entityId, int xPos, int yPos)
         {
             Entity entity = EntityFromId(entityId);
@@ -49,6 +49,27 @@ namespace AstrologyGame.Entities.Factories
             }
 
             return entity;
+        }
+
+
+        /// <summary>
+        /// Returns a list of all the ids in entities.xml
+        /// </summary>
+        /// <returns>A list of ids</returns>
+        public static List<string> GetIdsInXML()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(Utility.ENTITIES_PATH);
+
+            List<string> ids = new List<string>();
+
+            foreach(XmlNode node in xmlDoc.ChildNodes[1])
+            {
+                string id = node.Attributes.GetNamedItem("id").Value;
+                ids.Add(id);
+            }
+
+            return ids;
         }
     }
 }

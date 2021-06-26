@@ -2,6 +2,8 @@
 
 using Microsoft.Xna.Framework;
 
+using AstrologyGame.Menus;
+
 namespace AstrologyGame.Entities.Components
 {
     public class Display : EntityComponent

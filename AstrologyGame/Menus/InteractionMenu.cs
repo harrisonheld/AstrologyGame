@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 
-namespace AstrologyGame
+namespace AstrologyGame.Menus
 {
-    class InteractionMenu : SelectMenu
+    public class InteractionMenu : SelectMenu
     {
         List<Interaction> interactions;
         Entity interactor;

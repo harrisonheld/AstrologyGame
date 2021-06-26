@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-namespace AstrologyGame
+namespace AstrologyGame.Menus
 {
     // a menu where you can select one thing in a list
-    abstract class SelectMenu : Menu
+    public abstract class SelectMenu : Menu
     {
         public bool DrawCursor = true; // should the menu draw a cursor next to the selected item?
 
