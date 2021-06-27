@@ -18,18 +18,24 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
-		<BodyPlan />
+		<Equipment />
 		<Creature />
 	</entity>
 
-	<entity id="armor">
-		<Display Name="Chest Plate" TextureName="marble" Lore="Chungus plate." />
-		<Equippable />
+	<entity id="chestplatesteel">
+		<Display Name="Steel Chest Plate" TextureName="chestplate" Lore="Chungus plate."/>
 		<Item />
+		<Equippable Slot="Body" />
+	</entity>
+	
+	<entity id="chestplatemythril">
+		<Display Name="Mythril Chest Plate" TextureName="chestplate" Lore="WOW RUNESCAPE ARMOR SO COOL." Color="#2020B0" />
+		<Item />
+		<Equippable Slot="Body" />
 	</entity>
 
 	<entity id="swordsmanOfJudas">
-		<Display Name="Swordsman of Judas" TextureName="voidBird" Color="#D02020" Lore="One of his faces gives you a condescending sneer." />
+		<Display Name="Swordsman of Judas" TextureName="human1" Color="#D02020" Lore="One of his faces gives you a condescending sneer." />
 	</entity>
 
 	<entity id="chest">
@@ -42,8 +48,8 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Item />
 	</entity>
 
-	<entity id="test" >
-		<Display Color="#8080D0" Name="Dev Testing Item" TextureName="watch" Lore="cool item for testing stuff"/>
+	<entity id="devsuperitem" >
+		<Display Color="#FFD700" Name="Dev Super Item" TextureName="watch" Lore="cool item for testing stuff"/>
 		<Book BookId="MasterOfTheMoon" />
 		<DevComponent />
 		<Item />

@@ -8,21 +8,22 @@ namespace AstrologyGame.Entities
 {
     public class Entity
     {
-        private List<EntityComponent> components = new List<EntityComponent>();
+        private List<Component> components = new List<Component>();
 
 
-        public void AddComponent(EntityComponent componentToAdd)
+        public void AddComponent(Component componentToAdd)
         {
-            componentToAdd.SetParentEntity(this);
+            componentToAdd.Owner = this;
             components.Add(componentToAdd);
         }
 
-        public bool RemoveComponent(EntityComponent componentToRemove)
+        public bool RemoveComponent(Component componentToRemove)
         {
             return components.Remove(componentToRemove);
         }
 
         public bool RemoveComponentsOfType<T>()
+            where T : Component
         {
             List<T> componentsOfType = GetComponents<T>();
 
@@ -33,18 +34,20 @@ namespace AstrologyGame.Entities
             // otherwise, remove them and return true
             foreach(T component in GetComponents<T>())
             {
-                RemoveComponent(component as EntityComponent);
+                RemoveComponent(component as Component);
             }
 
             return true;
         }
 
         public bool HasComponent<T>()
+            where T : Component
         {
             return components.OfType<T>().Count() > 0;
         }
 
         public T GetComponent<T>()
+            where T : Component
         {
             T component = GetComponents<T>().FirstOrDefault();
 
@@ -58,6 +61,7 @@ namespace AstrologyGame.Entities
         }
 
         public List<T> GetComponents<T>()
+            where T : Component
         {
             return components.OfType<T>().ToList();
         }
@@ -67,7 +71,7 @@ namespace AstrologyGame.Entities
         {
             List<Interaction> interactions = new List<Interaction>();
 
-            foreach(EntityComponent component in components)
+            foreach(Component component in components)
             {
                 interactions.AddRange(component.GetInteractions());
             }

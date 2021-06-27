@@ -4,7 +4,7 @@ using AstrologyGame.MapData;
 
 namespace AstrologyGame.Entities.Components
 {
-    public class Creature : EntityComponent
+    public class Creature : Component
     {
         // TODO: remove this component
 
@@ -32,7 +32,7 @@ namespace AstrologyGame.Entities.Components
         }
         private void DropAll()
         {
-            Inventory inv = ParentEntity.GetComponent<Inventory>();
+            Inventory inv = Owner.GetComponent<Inventory>();
             foreach(Entity item in inv.Contents)
             {
                 // TODO: drop all items
@@ -56,13 +56,13 @@ namespace AstrologyGame.Entities.Components
             // TODO: check if solid object is in the way
 
             // otherwise, do the move and return true
-            ParentEntity.GetComponent<Position>().Pos = new OrderedPair(targetX, targetY);
+            Owner.GetComponent<Position>().Pos = new OrderedPair(targetX, targetY);
 
             return true;
         }
         public bool TryMoveTowards(Entity target)
         {
-            OrderedPair myPos = ParentEntity.GetComponent<Position>().Pos;
+            OrderedPair myPos = Owner.GetComponent<Position>().Pos;
             OrderedPair targetPos = target.GetComponent<Position>().Pos;
 
             int targetX = targetPos.X;

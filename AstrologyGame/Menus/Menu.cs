@@ -9,7 +9,7 @@ namespace AstrologyGame.Menus
 {
     public class Menu
     {
-        public const string BACKGROUND_TEXTURE_NAME = "black";
+        public const string BACKGROUND_TEXTURE_NAME = "blank";
         private const string CURSOR_TEXTURE_NAME = "marble";
 
         public static SpriteFont Font { get; set; }

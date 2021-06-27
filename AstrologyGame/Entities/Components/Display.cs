@@ -6,7 +6,7 @@ using AstrologyGame.Menus;
 
 namespace AstrologyGame.Entities.Components
 {
-    public class Display : EntityComponent
+    public class Display : Component
     {
         public bool ShouldRender { get; set; } = true;
         public string Name { get; set; } = "default";

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.MapData;
+using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 
-namespace AstrologyGame.Entities
+namespace AstrologyGame.Systems
 {
     public static class RenderingSystem
     {
-        public static void Render()
+        // render the Zone
+        public static void RenderZone()
         {
             // draw tiles
             for (int y = 0; y < Zone.HEIGHT; y++)

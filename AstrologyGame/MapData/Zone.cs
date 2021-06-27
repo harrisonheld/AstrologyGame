@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Content;
 using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 using AstrologyGame.Entities.Factories;
+using AstrologyGame.Systems;
 
 namespace AstrologyGame.MapData
 {
@@ -64,18 +65,16 @@ namespace AstrologyGame.MapData
                 }
             }
 
-            Entity armor = EntityFactory.EntityFromId("armor", 9, 6);
-            armor.GetComponent<Equippable>().Slot = Slot.Body;
-            AddEntity(armor);
-
-            Entity testEntity = EntityFactory.EntityFromId("test", 3, 3);
-            AddEntity(testEntity);
-
             // if there was a player in the zone prior, include him in the new one
             if (Player != null)
             {
                 entities.Add(Player);
             }
+        }
+
+        public static void Tick()
+        {
+            // RUN SYSTEMS
         }
 
         public static void AddEntity(Entity e)

@@ -4,7 +4,7 @@ using AstrologyGame.Menus;
 
 namespace AstrologyGame.Entities.Components
 {
-    public class Book : EntityComponent
+    public class Book : Component
     {
         public string BookId { get; set; }
 

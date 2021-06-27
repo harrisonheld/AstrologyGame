@@ -29,6 +29,10 @@ namespace AstrologyGame.Menus
         {
             base.HandleInput(controls);
 
+            // if no options, theres nothing to do
+            if (selectionCount == 0)
+                return;
+
             // increment or decrement index
             if (controls.Contains(IncrementControl))
             {
@@ -38,29 +42,20 @@ namespace AstrologyGame.Menus
             {
                 selectedIndex--;
             }
-            // clamp index in case it went negative or went too high
-            ClampSelection();
+
+            // use modulo to wrap around if the index is too high
+            selectedIndex %= selectionCount;
+            // if the index is negative, add the selectionCount to wrap it
+            if (selectedIndex < 0)
+                selectedIndex += selectionCount;
 
             // make a selection if user hits select, and there is something to select
-            if (controls.Contains(SelectControl) && selectionCount != 0)
+            if (controls.Contains(SelectControl))
                 SelectionMade();
         }
-        private void ClampSelection()
-        {
-            int before = selectedIndex; // we will check if the selected index changed
 
-            if (selectionCount != 0)
-                selectedIndex = Math.Clamp(selectedIndex, 0, selectionCount - 1);
-
-            // the selectedIndex changed
-            if (before != selectedIndex)
-            {
-                SelectionChanged();
-            }
-        }
         public override void Refresh()
         {
-            ClampSelection();
             base.Refresh();
         }
         public override void Draw()

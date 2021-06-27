@@ -6,17 +6,11 @@ using AstrologyGame.Entities.Components;
 
 namespace AstrologyGame.Entities.Components
 {
-    public abstract class EntityComponent
+    public abstract class Component
     {
-        private Entity parentEntity;
-        public Entity ParentEntity { get { return parentEntity; } }
+        public Entity Owner { get; set; }
 
-        protected List<Interaction> interactions { get; set; } = new List<Interaction>();
-
-        public void SetParentEntity(Entity parent)
-        {
-            parentEntity = parent;
-        }
+        protected List<Interaction> interactions = new List<Interaction>();
 
         public List<Interaction> GetInteractions()
         {

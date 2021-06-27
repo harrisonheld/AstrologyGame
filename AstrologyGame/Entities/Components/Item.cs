@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
 using AstrologyGame.Entities.Components;
-using AstrologyGame.Entities.Systems;
+using AstrologyGame.Systems;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame.Entities.Components
 {
-    public class Item : EntityComponent
+    public class Item : Component
     {
         public int Count { get; set; } = 1;
         public bool OnGround { get; set; } = true;
@@ -19,13 +19,13 @@ namespace AstrologyGame.Entities.Components
                 new Interaction()
                 {
                     Name = "Pick Up",
-                    Perform = (Entity e) => InventorySystem.PutEntityInInventory(ParentEntity, e.GetComponent<Inventory>()),
+                    Perform = (Entity e) => InventorySystem.PutInInventory(this, e.GetComponent<Inventory>()),
                     Condition = (Entity e) => BePickedUpPredicate(e)
                 },
                 new Interaction()
                 {
                     Name = "Drop",
-                    Perform = (Entity e) => InventorySystem.DropEntityFromInventory(ParentEntity),
+                    Perform = (Entity e) => InventorySystem.DropFromInventory(this),
                     Condition = (Entity e) => BeDroppedPredicate(e)
                 },
             };

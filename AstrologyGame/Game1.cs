@@ -12,6 +12,7 @@ using AstrologyGame.Menus;
 using AstrologyGame.Entities;
 using AstrologyGame.Entities.Components;
 using AstrologyGame.Entities.Factories;
+using AstrologyGame.Systems;
 
 namespace AstrologyGame
 {
@@ -96,7 +97,7 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             Entity knight = EntityFactory.EntityFromId("knight", 0, 0);
-            knight.GetComponent<BodyPlan>().AddSlot(Slot.Body);
+            knight.GetComponent<Equipment>().SlotDict.Add(Slot.Body, null);
             Zone.AddEntity(knight);
             Zone.Player = knight;
 
@@ -181,7 +182,7 @@ namespace AstrologyGame
                 // tick the level
                 if (doTick)
                 {
-                    // TODO: TICK THE LEVEL
+                    Zone.Tick();
                     doTick = false;
                 }
 
@@ -410,7 +411,7 @@ namespace AstrologyGame
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
 
             // draw the game
-            RenderingSystem.Render();
+            RenderingSystem.RenderZone();
 
             // draw the look cursor
             if (gameState == GameState.LookMode)

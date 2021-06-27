@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AstrologyGame.Entities.Components
 {
-    public class Attributes : EntityComponent
+    public class Attributes : Component
     {
         // base stats
         // comments are just hypothetical ideas of what they do

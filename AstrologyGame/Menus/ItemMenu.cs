@@ -26,17 +26,6 @@ namespace AstrologyGame.Menus
             {
                 sb.Append(entity.GetComponent<Display>().Name);
 
-                if (entity.HasComponent<Equippable>())
-                {
-                    Equippable equippable = entity.GetComponent<Equippable>();
-
-                    if (equippable.IsEquipped())
-                    {
-                        string slot = equippable.Slot.ToString();
-                        sb.Append($" (Worn on {slot})");
-                    }
-                }
-
                 // add item count if its more than 1
                 int count = entity.GetComponent<Item>().Count;
                 if (count > 1)

@@ -13,11 +13,11 @@ namespace AstrologyGame.Entities.Factories
 {
     public static class ComponentFactory
     {
-        public static EntityComponent ComponentFromXmlNode(XmlNode node)
+        public static Component ComponentFromXmlNode(XmlNode node)
         {
             // make a component of the right type, and throw an error if no class of that name exists
             Type componentType = Type.GetType("AstrologyGame.Entities.Components." + node.Name, true);
-            EntityComponent component = Activator.CreateInstance(componentType) as EntityComponent;
+            Component component = Activator.CreateInstance(componentType) as Component;
 
             // set the properties of the component
             foreach(XmlAttribute attribute in node.Attributes)
@@ -28,25 +28,18 @@ namespace AstrologyGame.Entities.Factories
                 PropertyInfo propertyInfo = componentType.GetProperty(propertyName);
                 Type propertyType = propertyInfo.PropertyType;
 
-                object propertyValue = null;
+                object propertyValue;
 
-                if (propertyType != typeof(string)) // if it shouldn't be a string
+                if (propertyType == typeof(Color))
                 {
-                    try // first, try converting the string to the right datatype using Convert
-                    {
-                        propertyValue = Convert.ChangeType(propertyValueAsString, propertyType);
-                    }
-                    catch // and if that doesn't work
-                    {
-                        // try converting to a color
-                        if (propertyType == typeof(Color))
-                        {
-                            propertyValue = Utility.ColorFromString(propertyValueAsString);
-                        }
-                    }
+                    propertyValue = Utility.ColorFromString(propertyValueAsString);
                 }
                 else
-                    propertyValue = propertyValueAsString;
+                {
+                    System.ComponentModel.TypeConverter typeConverter = System.ComponentModel.TypeDescriptor.GetConverter(propertyType);
+                    propertyValue = typeConverter.ConvertFromString(propertyValueAsString);
+                }
+
 
                 propertyInfo.SetValue(component, propertyValue);
             }
@@ -66,7 +59,7 @@ namespace AstrologyGame.Entities.Factories
                         Entity entity = EntityFactory.EntityFromNode(child);
 
                         // add the entity to the inventory
-                        inventoryComponent.AddEntity(entity);
+                        inventoryComponent.Contents.Add(entity);
 
                         break;
                 }

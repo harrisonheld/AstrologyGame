@@ -44,7 +44,7 @@ namespace AstrologyGame.Entities.Factories
             // each child node should be a component
             foreach(XmlNode child in node.ChildNodes)
             {
-                EntityComponent newComponent = ComponentFactory.ComponentFromXmlNode(child);
+                Component newComponent = ComponentFactory.ComponentFromXmlNode(child);
                 entity.AddComponent(newComponent);
             }
 
