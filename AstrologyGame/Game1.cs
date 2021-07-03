@@ -411,7 +411,7 @@ namespace AstrologyGame
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
 
             // draw the game
-            RenderingSystem.RenderZone();
+            RenderingFunctions.RenderZone();
 
             // draw the look cursor
             if (gameState == GameState.LookMode)

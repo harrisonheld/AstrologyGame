@@ -26,7 +26,7 @@ namespace AstrologyGame.Menus
         public override void SelectionMade()
         {
             string id = ids[selectedIndex];
-            Entity e = EntityFactory.EntityFromId(id, 2, 2);
+            Entity e = EntityFactory.EntityFromId(id, 0, 0);
             Zone.AddEntity(e);
         }
     }

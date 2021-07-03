@@ -8,7 +8,7 @@ using AstrologyGame.Entities.Components;
 
 namespace AstrologyGame.Systems
 {
-    public static class RenderingSystem
+    public static class RenderingFunctions
     {
         // render the Zone
         public static void RenderZone()

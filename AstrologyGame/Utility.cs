@@ -31,7 +31,7 @@ namespace AstrologyGame
         public const int COST_ATTACK = 100;
         public const int AP_CAP = 200;
 
-        public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
+        public const int SCALE = 32 * 8; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
         private static GraphicsDevice graphics;

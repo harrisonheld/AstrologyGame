@@ -9,7 +9,7 @@ using AstrologyGame.MapData;
 
 namespace AstrologyGame.Systems
 {
-    public static class InventorySystem
+    public static class InventoryFunctions
     {
         public static void PutInInventory(Item item, Inventory inventory)
         {

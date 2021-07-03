@@ -19,13 +19,13 @@ namespace AstrologyGame.Entities.Components
                 new Interaction()
                 {
                     Name = "Pick Up",
-                    Perform = (Entity e) => InventorySystem.PutInInventory(this, e.GetComponent<Inventory>()),
+                    Perform = (Entity e) => InventoryFunctions.PutInInventory(this, e.GetComponent<Inventory>()),
                     Condition = (Entity e) => BePickedUpPredicate(e)
                 },
                 new Interaction()
                 {
                     Name = "Drop",
-                    Perform = (Entity e) => InventorySystem.DropFromInventory(this),
+                    Perform = (Entity e) => InventoryFunctions.DropFromInventory(this),
                     Condition = (Entity e) => BeDroppedPredicate(e)
                 },
             };

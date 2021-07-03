@@ -18,8 +18,8 @@ namespace AstrologyGame.Entities.Components
                 new Interaction()
                 {
                     Name = "Equip",
-                    Perform = (Entity equipper) => InventorySystem.Equip(this, equipper),
-                    Condition = (Entity equipper) => InventorySystem.CanEquip(this, equipper)
+                    Perform = (Entity equipper) => InventoryFunctions.Equip(this, equipper),
+                    Condition = (Entity equipper) => InventoryFunctions.CanEquip(this, equipper)
                 }
             };
         }

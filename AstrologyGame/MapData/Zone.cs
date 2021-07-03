@@ -75,6 +75,7 @@ namespace AstrologyGame.MapData
         public static void Tick()
         {
             // RUN SYSTEMS
+            HealthSystem.Run();
         }
 
         public static void AddEntity(Entity e)
@@ -86,6 +87,10 @@ namespace AstrologyGame.MapData
         public static void RemoveEntity(Entity e)
         {
             Entities.Remove(e);
+        }
+        public static void RemoveEntityAt(int index)
+        {
+            RemoveEntity(entities[index]);
         }
 
         public static List<Entity> GetEntitiesAtPosition(OrderedPair p)

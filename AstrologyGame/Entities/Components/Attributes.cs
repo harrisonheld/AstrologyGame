@@ -13,10 +13,6 @@ namespace AstrologyGame.Entities.Components
         public int Faith { get; set; } = 10; // mana / mana regen rate, magic damage
         public int Concentration { get; set; } = 10; // ability cooldown, crit chance
 
-        // health
-        public int MaxHealth { get; set; } = 10;
-        public int Health { get; set; } = 10;
-
         public int Quickness { get; set; } = 100;
     }
 }
