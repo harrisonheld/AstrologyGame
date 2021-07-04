@@ -1,6 +1,6 @@
 ﻿
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame.Menus

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 
 using AstrologyGame.Menus;
+using AstrologyGame.Entities;
 
-namespace AstrologyGame.Entities.Components
+namespace AstrologyGame.Components
 {
     public class Book : Component
     {

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Entities;
 using AstrologyGame.Systems;
-using AstrologyGame.MapData;
 
-namespace AstrologyGame.Entities.Components
+namespace AstrologyGame.Components
 {
     public class Item : Component
     {

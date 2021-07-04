@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AstrologyGame.Entities.Components
+namespace AstrologyGame.Components
 {
     public class ActionTaker : Component
     {

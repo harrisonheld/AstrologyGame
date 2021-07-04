@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using AstrologyGame.MapData;
 using AstrologyGame.Menus;
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 using AstrologyGame.Entities.Factories;
 using AstrologyGame.Systems;
 

@@ -11,8 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
-using AstrologyGame.Entities.Factories;
+using AstrologyGame.Components;
 using AstrologyGame.Systems;
 
 namespace AstrologyGame.MapData
@@ -28,6 +27,14 @@ namespace AstrologyGame.MapData
         private static List<Entity> entities { get; set; } = new List<Entity>() { };
         public static List<Entity> Entities { get { return entities; } }
         public static Entity Player { get; set; }
+
+        // all the systems. they are in the order they will be run
+        private static ISystem[] systems { get; set; } = new ISystem[3]
+        {
+            new EnergyRechargingSystem(),
+            new HealthSystem(),
+            new AISystem()
+        };
 
         // Clears all tiles and remove all objects
         public static void Clear()
@@ -74,10 +81,11 @@ namespace AstrologyGame.MapData
 
         public static void Tick()
         {
-            // RUN SYSTEMS
-            EnergyRechargingSystem.Run();
-            AISystem.Run();
-            HealthSystem.Run();
+            // RUN ALL SYSTEMS
+            foreach(ISystem system in systems)
+            {
+                system.Run();
+            }
         }
 
         public static void AddEntity(Entity e)

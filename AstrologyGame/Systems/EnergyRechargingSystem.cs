@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame.Systems
 {
-    public static class EnergyRechargingSystem
+    public sealed class EnergyRechargingSystem : ISystem
     {
-        private static readonly ComponentFilter filter = new ComponentFilter()
+        ComponentFilter ISystem.Filter => new ComponentFilter()
              .AddNecessary(typeof(ActionTaker));
 
-        public static void Run()
+        void ISystem.OperateOnEntity(Entity entity)
         {
-            foreach(Entity e in Zone.Entities.FindAll(filter.Match))
-            {
-                ActionTaker comp = e.GetComponent<ActionTaker>();
-                comp.Energy += comp.Speed;
+            ActionTaker comp = entity.GetComponent<ActionTaker>();
+            comp.Energy += comp.Speed;
 
-                if (comp.Energy >= Utility.ENERGY_CAP)
-                    comp.Energy = Utility.ENERGY_CAP;
-            }
+            if (comp.Energy >= Utility.ENERGY_CAP)
+                comp.Energy = Utility.ENERGY_CAP;
         }
     }
 }

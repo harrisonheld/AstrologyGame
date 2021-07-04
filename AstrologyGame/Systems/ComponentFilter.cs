@@ -6,21 +6,21 @@ using AstrologyGame.Entities;
 namespace AstrologyGame.Systems
 {
     // Inspiration from: https://github.com/adizhavo/ECS/blob/master/ECS/Filter.cs
-    class ComponentFilter
+    public class ComponentFilter
     {
-        public readonly HashSet<Type> Necessary = new HashSet<Type>(); // filters for entities with ALL of these component types
-        public readonly HashSet<Type> Forbidden = new HashSet<Type>(); // excludes entities containing ANY of these component types
+        private readonly HashSet<Type> Necessary = new HashSet<Type>(); // filters for entities with ALL of these component types
+        private readonly HashSet<Type> Forbidden = new HashSet<Type>(); // excludes entities containing ANY of these component types
 
-        public ComponentFilter AddNecessary(params Type[] toInclude)
+        public ComponentFilter AddNecessary(params Type[] toAdd)
         {
-            foreach (Type t in toInclude)
+            foreach (Type t in toAdd)
                 Necessary.Add(t);
 
             return this;
         }
-        public ComponentFilter AddForbidden(params Type[] toExclude)
+        public ComponentFilter AddForbidden(params Type[] toAdd)
         {
-            foreach (Type t in toExclude)
+            foreach (Type t in toAdd)
                 Forbidden.Add(t);
 
             return this;

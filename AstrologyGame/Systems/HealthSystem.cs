@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 using AstrologyGame.MapData;
 
 namespace AstrologyGame.Systems
 {
-    public static class HealthSystem
+    public sealed class HealthSystem : ISystem
     {
-        public static void Run()
+        ComponentFilter ISystem.Filter => new ComponentFilter()
+            .AddNecessary(typeof(Health));
+
+        void ISystem.OperateOnEntity(Entity entity)
         {
-            // use a while loop because removing entities involved in a foreach() loop will cause an exception
-            int e = 0;
-            while (e < Zone.Entities.Count)
-            {
-                if (Zone.Entities[e].HasComponent<Health>())
-                {
-                    Health health = Zone.Entities[e].GetComponent<Health>();
+            Health comp = entity.GetComponent<Health>();
 
-                    if (health.HitPoints <= 0)
-                    {
-                        Zone.RemoveEntityAt(e);
-                    }
-                }
-
-                e++;
-            }
+            // remove the enemy if its HP has run out
+            if (comp.HitPoints <= 0)
+                Zone.RemoveEntity(entity);
         }
     }
 }

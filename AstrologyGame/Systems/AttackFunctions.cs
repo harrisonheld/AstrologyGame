@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 
 namespace AstrologyGame.Systems
 {

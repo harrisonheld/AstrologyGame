@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using AstrologyGame.Systems;
+using AstrologyGame.Entities;
 
-namespace AstrologyGame.Entities.Components
+namespace AstrologyGame.Components
 {
     public class Health : Component
     {

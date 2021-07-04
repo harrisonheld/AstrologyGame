@@ -1,4 +1,4 @@
-﻿namespace AstrologyGame.Entities.Components
+﻿namespace AstrologyGame.Components
 {
     public class Position : Component
     {

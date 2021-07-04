@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 
 using AstrologyGame.Entities;
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 
 namespace AstrologyGame.Menus
 {

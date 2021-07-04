@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Reflection;
 using System.Xml;
 
-using AstrologyGame.Entities.Components;
+using AstrologyGame.Components;
 
 namespace AstrologyGame.Entities.Factories
 {
@@ -16,7 +16,7 @@ namespace AstrologyGame.Entities.Factories
         public static Component ComponentFromXmlNode(XmlNode node)
         {
             // make a component of the right type, and throw an error if no class of that name exists
-            Type componentType = Type.GetType("AstrologyGame.Entities.Components." + node.Name, true);
+            Type componentType = Type.GetType("AstrologyGame.Components." + node.Name, true);
             Component component = Activator.CreateInstance(componentType) as Component;
 
             // set the properties of the component

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using AstrologyGame.Entities;
 
-namespace AstrologyGame.Entities.Components
+namespace AstrologyGame.Components
 {
     public class Equipment : Component
     {
