@@ -8,12 +8,14 @@ namespace AstrologyGame
 {
     static class Input
     {
-        public static List<Control> GetInput()
+        private static List<Control> controls = new List<Control>() { };
+        public static List<Control> Controls { get { return controls; } }
+
+        public static void Update()
         {
             KeyboardState kbState = Keyboard.GetState();
-            Keys[] keys = kbState.GetPressedKeys();
 
-            List<Control> controls = new List<Control>() { };
+            controls.Clear();
 
             #region Directional Keys
             if (kbState.IsKeyDown(Keys.Up))
@@ -76,8 +78,6 @@ namespace AstrologyGame
             if (kbState.IsKeyDown(Keys.Tab))
                 controls.Add(Control.Tab);
             #endregion
-
-            return controls;
         }
 
         public static OrderedPair ControlsToMovePair(List<Control> controls)

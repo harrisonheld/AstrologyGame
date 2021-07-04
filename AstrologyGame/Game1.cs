@@ -42,7 +42,6 @@ namespace AstrologyGame
         // for input
         private const int INPUT_STAGGER = 1000 / 8; // the input stagger in milliseconds
         private int timeSinceLastInput = 0; // in milliseconds
-        private List<Control> controls; // list of all controls pressed this frame
         private bool inputLastFrame = false; // did the player do any input the frame prior?
         private OrderedPair movePair;
 
@@ -81,7 +80,7 @@ namespace AstrologyGame
         private bool doTick = false; 
 
         // dev stuff
-        Color DEBUG_COLOR = Color.Red;
+        Color DEBUG_COLOR = Color.White;
 
         public Game1()
         {
@@ -97,6 +96,7 @@ namespace AstrologyGame
             World.GenerateCurrentZone();
 
             Entity knight = EntityFactory.EntityFromId("knight", 0, 0);
+            knight.AddComponent(new PlayerControlled());
             knight.GetComponent<Equipment>().SlotDict.Add(Slot.Body, null);
             Zone.AddEntity(knight);
             Zone.Player = knight;
@@ -133,17 +133,15 @@ namespace AstrologyGame
 
         protected override void Update(GameTime gameTime)
         {
-            controls = Input.GetInput();
-
+            Input.Update();
             timeSinceLastInput += gameTime.ElapsedGameTime.Milliseconds;
             
-
             // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
             // and if the user pressed a control
-            if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && controls.Count != 0)
+            if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && Input.Controls.Count != 0)
             {
                 // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING!
-                movePair = Input.ControlsToMovePair(controls);
+                movePair = Input.ControlsToMovePair(Input.Controls);
 
                 switch (gameState)
                 {
@@ -165,7 +163,7 @@ namespace AstrologyGame
                 }
 
                 // Toggle fullscreen
-                if (controls.Contains(Control.Fullscreen))
+                if (Input.Controls.Contains(Control.Fullscreen))
                 {
                     if (graphicsDeviceManager.IsFullScreen)
                     {
@@ -189,7 +187,7 @@ namespace AstrologyGame
                 timeSinceLastInput = 0;
             }
 
-            if (controls.Count == 0)
+            if (Input.Controls.Count == 0)
                 inputLastFrame = false;
             else
                 inputLastFrame = true;
@@ -204,7 +202,7 @@ namespace AstrologyGame
             // and the user may be pressing multiple at once.
 
             // open the pause menu
-            if (controls.Contains(Control.Back))
+            if (Input.Controls.Contains(Control.Back))
             {
                 Menu pauseMenu = new Menu();
                 pauseMenu.Text = "[Paused]";
@@ -212,20 +210,20 @@ namespace AstrologyGame
                 return;
             }
             // open the dev menu
-            if (controls.Contains(Control.DevFunc1))
+            if (Input.Controls.Contains(Control.DevFunc1))
             {
                 DevSpawnMenu devMenu = new DevSpawnMenu();
                 OpenMenu(devMenu);
                 return;
             }
             // start interact mode
-            else if (controls.Contains(Control.Interact))
+            else if (Input.Controls.Contains(Control.Interact))
             {
                 gameState = GameState.InteractMode;
                 return;
             }
             // open the get menu
-            else if(controls.Contains(Control.Get))
+            else if(Input.Controls.Contains(Control.Get))
             {
                 List<Entity> itemsHere = new List<Entity>();
 
@@ -239,7 +237,7 @@ namespace AstrologyGame
                 OpenMenu(getMenu);
                 return;
             }
-            else if (controls.Contains(Control.Look))
+            else if (Input.Controls.Contains(Control.Look))
             {
                 // put the cursor at the player
                 OrderedPair cursorPos = Zone.Player.GetComponent<Position>().Pos;
@@ -248,7 +246,7 @@ namespace AstrologyGame
                 gameState = GameState.LookMode;
                 return;
             }
-            else if (controls.Contains(Control.Inventory))
+            else if (Input.Controls.Contains(Control.Inventory))
             {
                 // open inventory here
                 Menu menu = new ItemMenu(Zone.Player.GetComponent<Inventory>().Contents);
@@ -256,13 +254,13 @@ namespace AstrologyGame
 
                 return;
             }
-            else if (controls.Contains(Control.Here))
+            else if (Input.Controls.Contains(Control.Here))
             {
                 doTick = true;
                 return;
             }
 
-            OrderedPair movePair = Input.ControlsToMovePair(controls);
+            OrderedPair movePair = Input.ControlsToMovePair(Input.Controls);
             OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
 
             if (movePair.Equals(OrderedPair.Zero)) // no movent given. stop here
@@ -271,7 +269,8 @@ namespace AstrologyGame
             int newX = playerPos.X + movePair.X;
             int newY = playerPos.Y + movePair.Y;
 
-            bool moveSuccessful = Zone.Player.GetComponent<Creature>().TryMove(newX, newY);
+            Zone.Player.GetComponent<Position>().Pos = (newX, newY);
+            bool moveSuccessful = true; // TODO: check if there was a rock in the way or some shit
 
             if (moveSuccessful)
             {
@@ -308,19 +307,19 @@ namespace AstrologyGame
         }
         private void Update_InMenu()
         {
-            CurrentMenu.HandleInput(controls);
+            CurrentMenu.HandleInput(Input.Controls);
         }
         private void Update_Interacting()
         {
             // the player hit escape, so change player state to free roam and break
-            if (controls.Contains(Control.Back))
+            if (Input.Controls.Contains(Control.Back))
             {
                 gameState = GameState.FreeRoam;
                 return;
             }
 
             // if the player didnt use a directional key, or select his current space, do nothing and break
-            if (movePair.X == 0 && movePair.Y == 0 && !controls.Contains(Control.Here) )
+            if (movePair.X == 0 && movePair.Y == 0 && !Input.Controls.Contains(Control.Here) )
             {
                 return;
             }
@@ -344,7 +343,7 @@ namespace AstrologyGame
         }
         private void Update_Looking()
         {
-            if(controls.Contains(Control.Back))
+            if(Input.Controls.Contains(Control.Back))
             {
                 CloseMenu(lookMenu); // close the menu in case there is a LookMenu open
                 gameState = GameState.FreeRoam;
@@ -425,14 +424,15 @@ namespace AstrologyGame
                 m.Draw();
 
             // draw debug info
-            if (controls.Contains(Control.DevInfo))
+            if (Input.Controls.Contains(Control.DevInfo))
             {
                 OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
                 _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Player Pos: ({playerPos.X}, {playerPos.Y})", new Vector2(0, 20), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Gamestate: ({gameState})", new Vector2(0, 40), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"FPS: ({1000 / gameTime.ElapsedGameTime.Milliseconds})", new Vector2(0, 60), DEBUG_COLOR);
 
-                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 60));
+                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 80));
             }
 
             _spriteBatch.End();

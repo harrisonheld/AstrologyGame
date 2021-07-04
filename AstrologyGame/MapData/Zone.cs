@@ -75,6 +75,8 @@ namespace AstrologyGame.MapData
         public static void Tick()
         {
             // RUN SYSTEMS
+            EnergyRechargingSystem.Run();
+            AISystem.Run();
             HealthSystem.Run();
         }
 

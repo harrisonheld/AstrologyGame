@@ -53,7 +53,7 @@ namespace AstrologyGame.Entities
             Lore = "This wretched thing is \"alive\" only in the most abstract meaning of the word. " +
                 "Extremeties jut out from the central mass in no particular order. " +
                 "A limb here, or a lobe there - it makes no difference. Lacking a face " +
-                "with which to divulge the true magnitude of its suffering, it locomotes silently. ";
+                "with which to divulge its screaming malice, it locomotes silently. ";
             Color = Color.IndianRed;
             Quickness = 20;
         }

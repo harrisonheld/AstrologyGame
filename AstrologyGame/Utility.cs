@@ -26,12 +26,15 @@ namespace AstrologyGame
         public const string ENTITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\entities.xml";
         const string ERROR_TEXTURE_NAME = "error";
 
-        // the cost for various actions
-        public const int COST_MOVE = 100;
-        public const int COST_ATTACK = 100;
-        public const int AP_CAP = 200;
+        // control options
+        public const int INPUT_STAGGER = 1000 / 8; // when a key is held down, how many milliseconds must pass to repeat it 
 
-        public const int SCALE = 32 * 8; // how many pixels high and wide sprites should be drawn as
+        // the cost for various actions
+        public const int COST_MOVE = 1000;
+        public const int COST_ATTACK = 1000;
+        public const int ENERGY_CAP = 2000;
+
+        public const int SCALE = 32 * 2; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
         private static GraphicsDevice graphics;
@@ -226,9 +229,7 @@ namespace AstrologyGame
             // TODO: make a log menu
             Debug.WriteLine(str);
         }
-        public static void Log(object o)
-        {
-            Log(o.ToString());
-        }
+        public static void Log(object o) => Log(o.ToString());
+        public static void Log() => Log("");
     }
 }

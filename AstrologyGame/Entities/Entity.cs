@@ -10,6 +10,10 @@ namespace AstrologyGame.Entities
     {
         private List<Component> components = new List<Component>();
 
+        ~Entity()
+        {
+            components.Clear();
+        }
 
         public void AddComponent(Component componentToAdd)
         {
@@ -44,6 +48,10 @@ namespace AstrologyGame.Entities
             where T : Component
         {
             return components.OfType<T>().Count() > 0;
+        }
+        public bool HasComponent(Type type)
+        {
+            return components.Exists((Component comp) => (comp.GetType() == type));
         }
 
         public T GetComponent<T>()
