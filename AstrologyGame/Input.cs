@@ -36,12 +36,7 @@ namespace AstrologyGame
 
             #region Actions
             if (kbState.IsKeyDown(Keys.Space))
-            {
-                if (kbState.IsKeyDown(Keys.LeftControl))
-                    controls.Add(Control.InteractSpecific);
-                else
-                    controls.Add(Control.Interact);
-            }
+                controls.Add(Control.Interact);
             if (kbState.IsKeyDown(Keys.G))
                 controls.Add(Control.Get);
 
@@ -58,6 +53,20 @@ namespace AstrologyGame
                 controls.Add(Control.Back);
             #endregion
 
+            #region Misc.
+            if (kbState.IsKeyDown(Keys.F))
+                controls.Add(Control.Fullscreen);
+            if (kbState.IsKeyDown(Keys.Enter))
+                controls.Add(Control.Enter);
+            if (kbState.IsKeyDown(Keys.Tab))
+                controls.Add(Control.Tab);
+            #endregion
+
+            #region Modifier Keys
+            if (kbState.IsKeyDown(Keys.LeftControl))
+                controls.Add(Control.Alternate);
+            #endregion
+
             #region Developer Functions
             if (kbState.IsKeyDown(Keys.OemTilde))
                 controls.Add(Control.DevInfo);
@@ -68,15 +77,6 @@ namespace AstrologyGame
                 controls.Add(Control.DevFunc2);
             if (kbState.IsKeyDown(Keys.D3))
                 controls.Add(Control.DevFunc3);
-            #endregion
-
-            #region Misc.
-            if (kbState.IsKeyDown(Keys.F))
-                controls.Add(Control.Fullscreen);
-            if (kbState.IsKeyDown(Keys.Enter))
-                controls.Add(Control.Enter);
-            if (kbState.IsKeyDown(Keys.Tab))
-                controls.Add(Control.Tab);
             #endregion
         }
 
@@ -146,22 +146,24 @@ namespace AstrologyGame
 
         // actions
         Interact,
-        InteractSpecific, // the user chooses which interaction type they want to do
         Get,
         Look,
         Inventory,
         Favorites, // the weapon wheel
         Back, // leave a menu
 
-        // dev functions
-        DevInfo, // kinda like the F3 key in Minecraft
-        DevFunc1,
-        DevFunc2,
-        DevFunc3,
-
         // misc
         Fullscreen,
         Enter,
         Tab,
+
+        // modifier keys
+        Alternate,
+
+        // dev functions
+        DevInfo, // shows debug info, kinda like the F3 key in Minecraft
+        DevFunc1,
+        DevFunc2,
+        DevFunc3,
     }
 }

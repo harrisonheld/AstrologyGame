@@ -76,11 +76,13 @@ namespace AstrologyGame
         }
 
         private static GameState gameState = GameState.FreeRoam;
+        private static InteractType interactType = InteractType.General;
         // should the zone do a tick this frame?
         private bool doTick = false; 
 
         // dev stuff
         Color DEBUG_COLOR = Color.White;
+        Color DEBUG_COLOR_BAD = Color.Red;
 
         public Game1()
         {
@@ -220,6 +222,12 @@ namespace AstrologyGame
             else if (Input.Controls.Contains(Control.Interact))
             {
                 gameState = GameState.InteractMode;
+
+                if (Input.Controls.Contains(Control.Alternate))
+                    interactType = InteractType.Specific;
+                else
+                    interactType = InteractType.General;
+
                 return;
             }
             // open the get menu
@@ -311,36 +319,46 @@ namespace AstrologyGame
         }
         private void Update_Interacting()
         {
-            // the player hit escape, so change player state to free roam and break
+            // player wants to leave Interact mode, change to free roam and return
             if (Input.Controls.Contains(Control.Back))
             {
                 gameState = GameState.FreeRoam;
                 return;
             }
 
-            // if the player didnt use a directional key, or select his current space, do nothing and break
+            // if the player didnt use a directional key, or select his current space, do nothing and return
             if (movePair.X == 0 && movePair.Y == 0 && !Input.Controls.Contains(Control.Here) )
-            {
                 return;
-            }
 
             OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
             int interactX = playerPos.X + movePair.X;
             int interactY = playerPos.Y + movePair.Y;
 
-            foreach (Entity entity in Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY)))
-            {
-                if (entity != Zone.Player)
-                {
-                    InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, entity);
-                    OpenMenu(interactionMenu);
-                }
+            List<Entity> entitiesHere = Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY));
+            // there are no entities here, return
+            if (entitiesHere.Count == 0)
+                return;
 
-                // TODO
-                // currently, most objects interact methods will set the gameState to InMenu
-                // however, if not, you may remain in the state Interacting. So fix this some time
+            Entity toInteractWith = entitiesHere.Last();
+
+            if(interactType == InteractType.Specific)
+            {
+                InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, toInteractWith);
+                OpenMenu(interactionMenu);
+            }
+            else // interactType == InteractType.General
+            {
+                List<Interaction> interactions = toInteractWith.GetInteractions();
+                // if entity has no interactions, return
+                if (interactions.Count == 0)
+                    return;
+
+                // do the first interaction in the list
+                interactions[0].Perform(Zone.Player);
+                doTick = true;
             }
         }
+
         private void Update_Looking()
         {
             if(Input.Controls.Contains(Control.Back))
@@ -429,8 +447,9 @@ namespace AstrologyGame
                 OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
                 _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Player Pos: ({playerPos.X}, {playerPos.Y})", new Vector2(0, 20), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"Gamestate: ({gameState})", new Vector2(0, 40), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"FPS: ({1000 / gameTime.ElapsedGameTime.Milliseconds})", new Vector2(0, 60), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"Gamestate: {gameState}", new Vector2(0, 40), DEBUG_COLOR);
+                Color fpsColor = gameTime.IsRunningSlowly ? DEBUG_COLOR_BAD : DEBUG_COLOR; // change color depending on if game is running slow
+                _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 60), fpsColor);
 
                 Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 80));
             }
@@ -480,6 +499,12 @@ namespace AstrologyGame
             InMenu, // the player is in a menu and must exit it before doing anything else
             InteractMode, // the player wants to interact with an adjacent tile
             LookMode // the player is looking at things
+        }
+
+        public enum InteractType
+        {
+            General, // the chosen object will have its first interaction chosen automatically
+            Specific // the chosen object will bring up a list of possible interactions
         }
     }
 }

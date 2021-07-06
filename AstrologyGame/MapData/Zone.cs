@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
 using AstrologyGame.Entities;
+using AstrologyGame.Entities.Factories;
 using AstrologyGame.Components;
 using AstrologyGame.Systems;
 

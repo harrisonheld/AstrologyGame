@@ -14,24 +14,5 @@ namespace AstrologyGame.Components
         public string Lore { get; set; } = "default";
         public string TextureName { get; set; } = "default";
         public Color Color { get; set; } = Color.White;
-
-        public Display()
-        {
-            interactions = new List<Interaction>()
-            {
-                new Interaction()
-                {
-                    Name = "Info",
-                    Perform = (Entity e) => ShowInfo(),
-                }
-            };
-        }
-
-        private void ShowInfo()
-        {
-            Menu infoMenu = new Menu();
-            infoMenu.Text = Lore;
-            Game1.OpenMenu(infoMenu);
-        }
     }
 }
