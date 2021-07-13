@@ -15,8 +15,8 @@ namespace AstrologyGame.MapData
         public static int ZoneX { get; set; }
         public static int ZoneY { get; set; }
 
-        private static int worldSeedInt = Environment.TickCount; // the true integer seed of the World
-        private static string worldSeedString = worldSeedInt.ToString(); // a string who's hash will be used to generate the World
+        private static string worldSeedString = Environment.TickCount.ToString(); // a string who's hash will be used to generate the World
+        private static int worldSeedInt = Utility.SHA1Hash(worldSeedString); // the true integer seed of the World
         public static string Seed
         {
             get
@@ -29,6 +29,7 @@ namespace AstrologyGame.MapData
                 worldSeedInt = Utility.SHA1Hash(worldSeedString);
             }
         }
+
         public static int GetZoneSeed()
         {
             /* TODO: REPLACE THIS MATH LATER
@@ -55,13 +56,12 @@ namespace AstrologyGame.MapData
         }
         public static void Save(string path)
         {
-            XmlWriter xmlWriter = XmlWriter.Create(path);
-
+            using XmlWriter xmlWriter = XmlWriter.Create(path);
             xmlWriter.WriteStartDocument();
 
-                xmlWriter.WriteStartElement("world");
-                xmlWriter.WriteAttributeString("seed", worldSeedString);
-                xmlWriter.WriteEndElement();
+            xmlWriter.WriteStartElement("world");
+            xmlWriter.WriteAttributeString("seed", worldSeedString);
+            xmlWriter.WriteEndElement();
 
             xmlWriter.WriteEndDocument();
             xmlWriter.Close();

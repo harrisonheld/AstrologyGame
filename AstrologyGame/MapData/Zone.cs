@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 using System.Xml;
 
@@ -19,8 +18,8 @@ namespace AstrologyGame.MapData
 {
     public static class Zone
     {
-        public const int WIDTH = 16;
-        public const int HEIGHT = 9;
+        public const int WIDTH = 32;
+        public const int HEIGHT = 18;
 
         // array of all the tiles
         private static Tile[,] tiles { get; set; } = new Tile[WIDTH, HEIGHT];
@@ -30,11 +29,12 @@ namespace AstrologyGame.MapData
         public static Entity Player { get; set; }
 
         // all the systems. they are in the order they will be run
-        private static ISystem[] systems { get; set; } = new ISystem[3]
+        private static ISystem[] systems { get; set; } = new ISystem[4]
         {
             new EnergyRechargingSystem(),
             new HealthSystem(),
-            new AISystem()
+            new AISystem(),
+            new PlayerInputSystem(),
         };
 
         // Clears all tiles and remove all objects
@@ -80,12 +80,12 @@ namespace AstrologyGame.MapData
             }
         }
 
-        public static void Tick()
+        public async static void Tick()
         {
             // RUN ALL SYSTEMS
             foreach(ISystem system in systems)
             {
-                system.Run();
+                await Task.Run( () => system.Run() );
             }
         }
 

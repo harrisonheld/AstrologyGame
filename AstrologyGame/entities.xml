@@ -56,7 +56,6 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	<entity id="devsuperitem" >
 		<Display Color="#FFD700" Name="Dev Super Item" TextureName="watch" Lore="cool item for testing stuff"/>
 		<Book BookId="MasterOfTheMoon" />
-		<DevComponent />
 		<Item />
 	</entity>
 	

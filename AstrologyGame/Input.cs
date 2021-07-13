@@ -15,7 +15,7 @@ namespace AstrologyGame
         {
             KeyboardState kbState = Keyboard.GetState();
 
-            controls.Clear();
+            Clear();
 
             #region Directional Keys
             if (kbState.IsKeyDown(Keys.Up))
@@ -78,6 +78,11 @@ namespace AstrologyGame
             if (kbState.IsKeyDown(Keys.D3))
                 controls.Add(Control.DevFunc3);
             #endregion
+        }
+
+        public static void Clear()
+        {
+            controls.Clear();
         }
 
         public static OrderedPair ControlsToMovePair(List<Control> controls)
