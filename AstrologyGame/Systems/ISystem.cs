@@ -10,7 +10,11 @@ namespace AstrologyGame.Systems
     public interface ISystem
     {
         // filter used to find relevant components for the System
-        ComponentFilter Filter { get; }
+        protected ComponentFilter Filter { get; }
+
+        // some systems (namely the PlayerInputSystem) take multiple frames to run
+        // most systems only take one frame to run so they are Finished by default.
+        public bool Finished { get { return true; } }
 
         // TODO: cache relevant components so they don't have to be found every time the system is run
         public sealed void Run()
@@ -20,6 +24,8 @@ namespace AstrologyGame.Systems
                 OperateOnEntity(e);
         }
 
+        // call this on systems after they are done running
+        public void Reset() { }
         protected void OperateOnEntity(Entity entity);
     }
 }

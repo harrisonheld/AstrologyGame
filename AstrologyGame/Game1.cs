@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using System.Threading;
 using System.Linq;
 
 using Microsoft.Xna.Framework;
@@ -45,6 +46,10 @@ namespace AstrologyGame
         private bool inputLastFrame = false; // did the player do any input the frame prior?
         private OrderedPair movePair;
 
+        // gametime
+        private static int deltaTime = 0; // ellappsed miliseconds
+        public static int DeltaTime { get { return deltaTime; } }
+
         // menu
         private static List<Menu> menus = new List<Menu>();
         private static LookMenu lookMenu;
@@ -77,8 +82,6 @@ namespace AstrologyGame
 
         private static GameState gameState = GameState.FreeRoam;
         private static InteractType interactType = InteractType.General;
-        // should the zone do a tick this frame?
-        private bool doTick = false; 
 
         // dev stuff
         Color DEBUG_COLOR = Color.White;
@@ -135,8 +138,10 @@ namespace AstrologyGame
 
         protected override void Update(GameTime gameTime)
         {
-            Input.Update();
-            timeSinceLastInput += gameTime.ElapsedGameTime.Milliseconds;
+            deltaTime = gameTime.ElapsedGameTime.Milliseconds;
+            Zone.Update();
+
+            /*timeSinceLastInput += gameTime.ElapsedGameTime.Milliseconds;
             
             // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
             // and if the user pressed a control
@@ -179,13 +184,6 @@ namespace AstrologyGame
                     graphicsDeviceManager.ToggleFullScreen();
                 }
 
-                // tick the level
-                if (doTick)
-                {
-                    Zone.Tick();
-                    doTick = false;
-                }
-
                 timeSinceLastInput = 0;
             }
 
@@ -194,7 +192,7 @@ namespace AstrologyGame
             else
                 inputLastFrame = true;
 
-            base.Update(gameTime);
+            base.Update(gameTime);*/
         }
 
         private void Update_FreeRoam()
@@ -262,11 +260,6 @@ namespace AstrologyGame
 
                 return;
             }
-            else if (Input.Controls.Contains(Control.Here))
-            {
-                doTick = true;
-                return;
-            }
 
             OrderedPair movePair = Input.ControlsToMovePair(Input.Controls);
             OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
@@ -283,7 +276,6 @@ namespace AstrologyGame
             if (moveSuccessful)
             {
                 // THIS CODE IS EXECUTED WHEN THE PLAYER SUCCESSFULLY MOVES TO A NEW TILE
-                doTick = true;
 
                 // generate a new zone if the player exits the current one
                 if (newX >= Zone.WIDTH || newX < 0 || newY >= Zone.HEIGHT || newY < 0)
@@ -355,7 +347,6 @@ namespace AstrologyGame
 
                 // do the first interaction in the list
                 interactions[0].Perform(Zone.Player);
-                doTick = true;
             }
         }
 
@@ -450,8 +441,9 @@ namespace AstrologyGame
                 _spriteBatch.DrawString(font, $"Gamestate: {gameState}", new Vector2(0, 40), DEBUG_COLOR);
                 Color fpsColor = gameTime.IsRunningSlowly ? DEBUG_COLOR_BAD : DEBUG_COLOR; // change color depending on if game is running slow
                 _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 60), fpsColor);
+                _spriteBatch.DrawString(font, $"Tick Count: {Zone.tickCount}", new Vector2(0, 80), DEBUG_COLOR);
 
-                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 80));
+                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 100));
             }
 
             _spriteBatch.End();

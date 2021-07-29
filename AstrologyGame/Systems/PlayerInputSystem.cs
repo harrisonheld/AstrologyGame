@@ -13,14 +13,40 @@ namespace AstrologyGame.Systems
         ComponentFilter ISystem.Filter => new ComponentFilter()
              .AddNecessary(typeof(PlayerControlled));
 
+        private bool finished = false;
+        public bool Finished { get { return finished;  } }
+
+        private int timeSinceLastInput = 0; // in milliseconds
+        private bool inputLastUpdate = false;
+
         void ISystem.OperateOnEntity(Entity entity)
         {
-            while(Input.Controls.Count == 0)
+            Input.Update();
+
+            timeSinceLastInput += Game1.DeltaTime;
+
+            // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
+            // and if the user pressed a control
+            if ((timeSinceLastInput > Utility.INPUT_STAGGER || !inputLastUpdate) && Input.Controls.Count != 0)
             {
-                Utility.Log("holy fuck");
+                // this loop executing means we should handle the input
+                if(Input.Controls.Contains(Control.Favorites))
+                {
+                    finished = true;
+                }
+
+                timeSinceLastInput = 0;
             }
 
-            Utility.Log(Input.Controls[0]);
+            if (Input.Controls.Count == 0)
+                inputLastUpdate = false;
+            else
+                inputLastUpdate = true;
+        }
+
+        public void Reset()
+        {
+            finished = false;
         }
     }
 }

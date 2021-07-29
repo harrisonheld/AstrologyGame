@@ -28,6 +28,8 @@ namespace AstrologyGame.MapData
         public static List<Entity> Entities { get { return entities; } }
         public static Entity Player { get; set; }
 
+        public static int tickCount = 0;
+
         // all the systems. they are in the order they will be run
         private static ISystem[] systems { get; set; } = new ISystem[4]
         {
@@ -36,6 +38,8 @@ namespace AstrologyGame.MapData
             new AISystem(),
             new PlayerInputSystem(),
         };
+        // index of the system we are running
+        private static int systemIndex = 0;
 
         // Clears all tiles and remove all objects
         public static void Clear()
@@ -80,13 +84,25 @@ namespace AstrologyGame.MapData
             }
         }
 
-        public async static void Tick()
+        public static void Update()
         {
-            // RUN ALL SYSTEMS
-            foreach(ISystem system in systems)
+            // when this loop is exited, a full Tick will have been completed.
+            while (systemIndex < systems.Length)
             {
-                await Task.Run( () => system.Run() );
+                ISystem system = systems[systemIndex];
+                system.Run();
+
+                // if system isn't done, return so we can pick up work on the next Update
+                if (!system.Finished)
+                    return;
+                // else
+                    system.Reset();
+                    systemIndex++;
             }
+
+            tickCount++;
+
+            systemIndex = 0;
         }
 
         public static void AddEntity(Entity e)
