@@ -12,6 +12,8 @@ namespace AstrologyGame.Entities
 
         ~Entity()
         {
+            // is a finalizer even necessary for this sort of thing
+            // fuck if i know
             components.Clear();
         }
 

@@ -46,7 +46,7 @@ namespace AstrologyGame.Menus
         public override void SelectionMade()
         {
             // close this menu when a selection is made
-            Game1.CloseMenu(this);
+            Game1.RemoveMenu(this);
 
             // do the interaction
             interactions[selectedIndex].Perform(interactor);

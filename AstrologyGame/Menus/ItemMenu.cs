@@ -51,7 +51,7 @@ namespace AstrologyGame.Menus
                     // TODO: PICKUP ALL THE ITEMS
                 }
 
-                Game1.CloseMenu(this);
+                Game1.RemoveMenu(this);
             }
         }
 
@@ -61,7 +61,7 @@ namespace AstrologyGame.Menus
             InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, selected);
             // put the menu at the place of the cursor
             interactionMenu.Position = cursorCoords;
-            Game1.OpenMenu(interactionMenu);
+            Game1.AddMenu(interactionMenu);
         }
     }
 }

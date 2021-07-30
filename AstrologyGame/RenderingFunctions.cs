@@ -6,7 +6,7 @@ using AstrologyGame.MapData;
 using AstrologyGame.Entities;
 using AstrologyGame.Components;
 
-namespace AstrologyGame.Systems
+namespace AstrologyGame
 {
     public static class RenderingFunctions
     {

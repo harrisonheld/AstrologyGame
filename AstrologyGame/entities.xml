@@ -26,12 +26,6 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Health MaxHitPoints="25" HitPoints="25"/>
 		<ActionTaker />
 	</entity>
-
-	<entity id="chestplatesteel">
-		<Display Name="Steel Chest Plate" TextureName="chestplate" Lore="Chungus plate."/>
-		<Item />
-		<Equippable Slot="Body" />
-	</entity>
 	
 	<entity id="chestplatemythril">
 		<Display Name="Mythril Chest Plate" TextureName="chestplate" Lore="WOW RUNESCAPE ARMOR SO COOL." Color="#2020B0" />
@@ -57,6 +51,11 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Display Color="#FFD700" Name="Dev Super Item" TextureName="watch" Lore="cool item for testing stuff"/>
 		<Book BookId="MasterOfTheMoon" />
 		<Item />
+	</entity>
+
+	<entity id="gascloud">
+		<Display Name="gas cloud" TextureName="speckled4" Lore="a stanky ass fart"/>
+		<Gas Density="4" Viscosity="10"/>
 	</entity>
 	
 </entities>

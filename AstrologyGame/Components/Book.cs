@@ -24,7 +24,7 @@ namespace AstrologyGame.Components
         private void Read()
         {
             BookMenu menu = new BookMenu(BookId);
-            Game1.OpenMenu(menu);
+            Game1.AddMenu(menu);
         }
     }
 }

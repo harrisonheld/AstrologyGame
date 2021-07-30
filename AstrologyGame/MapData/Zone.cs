@@ -31,15 +31,21 @@ namespace AstrologyGame.MapData
         public static int tickCount = 0;
 
         // all the systems. they are in the order they will be run
-        private static ISystem[] systems { get; set; } = new ISystem[4]
+        private static ISystem[] systems { get; set; } = new ISystem[5]
         {
             new EnergyRechargingSystem(),
             new HealthSystem(),
             new AISystem(),
             new PlayerInputSystem(),
+            new GasSystem()
         };
         // index of the system we are running
         private static int systemIndex = 0;
+
+        public static void Initialize()
+        {
+            // TODO: use reflection to automatically register all the systems so we don't have that big array defining them
+        }
 
         // Clears all tiles and remove all objects
         public static void Clear()

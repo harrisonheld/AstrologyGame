@@ -60,7 +60,7 @@ namespace AstrologyGame.Menus
         }
 
         // should opening this menu cause the GameState to change to InMenu
-        public bool PauseWhenOpened { get; set; } = true;
+        public bool TakesInput { get; set; } = true;
 
         public static void Initialize()
         {
@@ -69,7 +69,7 @@ namespace AstrologyGame.Menus
         }
         public Menu()
         {
-            PauseWhenOpened = true;
+            TakesInput = true;
             rect = new Rectangle(5, 5, 300, 9*64); // also an arbitrary size
         }
         public virtual void Refresh()
@@ -95,7 +95,7 @@ namespace AstrologyGame.Menus
         public virtual void HandleInput(List<Control> controls)
         {
             if (controls.Contains(Control.Back))
-                Game1.CloseMenu(this);
+                Game1.RemoveMenu(this);
         }
     }
 }

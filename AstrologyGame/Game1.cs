@@ -40,29 +40,20 @@ namespace AstrologyGame
             }
         }
 
-        // for input
-        private const int INPUT_STAGGER = 1000 / 8; // the input stagger in milliseconds
-        private int timeSinceLastInput = 0; // in milliseconds
-        private bool inputLastFrame = false; // did the player do any input the frame prior?
-        private OrderedPair movePair;
-
-        // gametime
-        private static int deltaTime = 0; // ellappsed miliseconds
+        // ellapsed miliseconds
+        private static int deltaTime = 0; 
         public static int DeltaTime { get { return deltaTime; } }
 
         // menu
         private static List<Menu> menus = new List<Menu>();
         private static LookMenu lookMenu;
         // an easy way to get the last menu in the list, which is the only one that should accept input
-        private static Menu CurrentMenu
+        public static Menu InputMenu
         {
             get
             {
-                if (menus.Count == 0)
-                    return null;
-
                 // return the last element in menus
-                return menus.Last();
+                return menus.FindLast((Menu m) => m.TakesInput);
             }
         }
         // should we refresh the menus this frame?
@@ -79,9 +70,6 @@ namespace AstrologyGame
                 return new OrderedPair(cursorX, cursorY);
             }
         }
-
-        private static GameState gameState = GameState.FreeRoam;
-        private static InteractType interactType = InteractType.General;
 
         // dev stuff
         Color DEBUG_COLOR = Color.White;
@@ -140,175 +128,9 @@ namespace AstrologyGame
         {
             deltaTime = gameTime.ElapsedGameTime.Milliseconds;
             Zone.Update();
-
-            /*timeSinceLastInput += gameTime.ElapsedGameTime.Milliseconds;
-            
-            // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
-            // and if the user pressed a control
-            if((timeSinceLastInput > INPUT_STAGGER || !inputLastFrame) && Input.Controls.Count != 0)
-            {
-                // THIS LOOP EXECUTING MEANS A TURN IS HAPPENING!
-                movePair = Input.ControlsToMovePair(Input.Controls);
-
-                switch (gameState)
-                {
-                    case GameState.FreeRoam:
-                        Update_FreeRoam();
-                        break;
-
-                    case GameState.InMenu:
-                        Update_InMenu();
-                        break;
-
-                    case GameState.InteractMode:
-                        Update_Interacting();
-                        break;
-
-                    case GameState.LookMode:
-                        Update_Looking();
-                        break;
-                }
-
-                // Toggle fullscreen
-                if (Input.Controls.Contains(Control.Fullscreen))
-                {
-                    if (graphicsDeviceManager.IsFullScreen)
-                    {
-                        ScreenSize = (1024, 576);
-                    }
-                    else
-                    {
-                        ScreenSize = (1920, 1080);
-                    }
-
-                    graphicsDeviceManager.ToggleFullScreen();
-                }
-
-                timeSinceLastInput = 0;
-            }
-
-            if (Input.Controls.Count == 0)
-                inputLastFrame = false;
-            else
-                inputLastFrame = true;
-
-            base.Update(gameTime);*/
         }
 
-        private void Update_FreeRoam()
-        {
-            // TODO: we have a lot of if-else statements chained together, and it runs every frame. not good.
-            // a switch statement might be suitable, but we don't have just one control, we have a list of them,
-            // and the user may be pressing multiple at once.
-
-            // open the pause menu
-            if (Input.Controls.Contains(Control.Back))
-            {
-                Menu pauseMenu = new Menu();
-                pauseMenu.Text = "[Paused]";
-                OpenMenu(pauseMenu);
-                return;
-            }
-            // open the dev menu
-            if (Input.Controls.Contains(Control.DevFunc1))
-            {
-                DevSpawnMenu devMenu = new DevSpawnMenu();
-                OpenMenu(devMenu);
-                return;
-            }
-            // start interact mode
-            else if (Input.Controls.Contains(Control.Interact))
-            {
-                gameState = GameState.InteractMode;
-
-                if (Input.Controls.Contains(Control.Alternate))
-                    interactType = InteractType.Specific;
-                else
-                    interactType = InteractType.General;
-
-                return;
-            }
-            // open the get menu
-            else if(Input.Controls.Contains(Control.Get))
-            {
-                List<Entity> itemsHere = new List<Entity>();
-
-                foreach(Entity o in Zone.GetEntitiesAtPosition(Zone.Player.GetComponent<Position>().Pos))
-                {
-                    if(o.HasComponent<Item>())
-                        itemsHere.Add(o);
-                }
-
-                Menu getMenu = new ItemMenu( itemsHere);
-                OpenMenu(getMenu);
-                return;
-            }
-            else if (Input.Controls.Contains(Control.Look))
-            {
-                // put the cursor at the player
-                OrderedPair cursorPos = Zone.Player.GetComponent<Position>().Pos;
-                cursorX = cursorPos.X;
-                cursorY = cursorPos.Y;
-                gameState = GameState.LookMode;
-                return;
-            }
-            else if (Input.Controls.Contains(Control.Inventory))
-            {
-                // open inventory here
-                Menu menu = new ItemMenu(Zone.Player.GetComponent<Inventory>().Contents);
-                OpenMenu(menu);
-
-                return;
-            }
-
-            OrderedPair movePair = Input.ControlsToMovePair(Input.Controls);
-            OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
-
-            if (movePair.Equals(OrderedPair.Zero)) // no movent given. stop here
-                return;
-
-            int newX = playerPos.X + movePair.X;
-            int newY = playerPos.Y + movePair.Y;
-
-            Zone.Player.GetComponent<Position>().Pos = (newX, newY);
-            bool moveSuccessful = true; // TODO: check if there was a rock in the way or some shit
-
-            if (moveSuccessful)
-            {
-                // THIS CODE IS EXECUTED WHEN THE PLAYER SUCCESSFULLY MOVES TO A NEW TILE
-
-                // generate a new zone if the player exits the current one
-                if (newX >= Zone.WIDTH || newX < 0 || newY >= Zone.HEIGHT || newY < 0)
-                {
-                    if (newX >= Zone.WIDTH)
-                    {
-                        Zone.Player.GetComponent<Position>().X = 0;
-                        World.ZoneX += 1;
-                    }
-                    else if (newX < 0)
-                    {
-                        Zone.Player.GetComponent<Position>().X = Zone.WIDTH - 1;
-                        World.ZoneX -= 1;
-                    }
-                    if (newY >= Zone.HEIGHT)
-                    {
-                        Zone.Player.GetComponent<Position>().Y = 0;
-                        World.ZoneY -= 1;
-                    }
-                    else if (newY < 0)
-                    {
-                        Zone.Player.GetComponent<Position>().Y = Zone.HEIGHT - 1;
-                        World.ZoneY += 1;
-                    }
-
-                    World.GenerateCurrentZone();
-                }
-            }
-        }
-        private void Update_InMenu()
-        {
-            CurrentMenu.HandleInput(Input.Controls);
-        }
+        /*
         private void Update_Interacting()
         {
             // player wants to leave Interact mode, change to free roam and return
@@ -398,6 +220,7 @@ namespace AstrologyGame
                 Look(objectToLookAt);
             }
         }
+        */
 
         /// <summary>
         /// Create and open a LookMenu for the given object.
@@ -406,7 +229,7 @@ namespace AstrologyGame
         private void Look(Entity o)
         {
             lookMenu = new LookMenu(o);
-            OpenMenu(lookMenu);
+            AddMenu(lookMenu);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -422,12 +245,15 @@ namespace AstrologyGame
             RenderingFunctions.RenderZone();
 
             // draw the look cursor
+            /*
             if (gameState == GameState.LookMode)
             {
                 Rectangle destinationRectangle = new Rectangle(
                     cursorX * Utility.SCALE, cursorY * Utility.SCALE, Utility.SCALE, Utility.SCALE);
                 _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
             }
+            */
+
             // draw all the menus
             foreach (Menu m in menus)
                 m.Draw();
@@ -438,7 +264,6 @@ namespace AstrologyGame
                 OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
                 _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
                 _spriteBatch.DrawString(font, $"Player Pos: ({playerPos.X}, {playerPos.Y})", new Vector2(0, 20), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"Gamestate: {gameState}", new Vector2(0, 40), DEBUG_COLOR);
                 Color fpsColor = gameTime.IsRunningSlowly ? DEBUG_COLOR_BAD : DEBUG_COLOR; // change color depending on if game is running slow
                 _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 60), fpsColor);
                 _spriteBatch.DrawString(font, $"Tick Count: {Zone.tickCount}", new Vector2(0, 80), DEBUG_COLOR);
@@ -451,27 +276,29 @@ namespace AstrologyGame
             base.Draw(gameTime);
         }
 
-        public static void OpenMenu(Menu newMenu)
+       
+        public static void AddMenu(Menu newMenu)
         {
             menus.Add(newMenu);
-
-            if (newMenu.PauseWhenOpened)
-                gameState = GameState.InMenu;
         }
-        public static void CloseMenu(Menu menuToClose)
+        public static void RemoveMenu(Menu menuToClose)
         {
             menus.Remove(menuToClose);
-
-            // if none of the remaining open menus have .pauseWhenOpened, set gamestate to FreeRoam.
-            if(gameState == GameState.InMenu)
-            {
-                foreach (Menu m in menus)
-                    if (m.PauseWhenOpened)
-                        return;
-
-                gameState = GameState.FreeRoam;
-            }
         }
+
+        /// <summary>
+        /// Returns true if any menus are open that are interactable.
+        /// </summary>
+        /// <returns></returns>
+        public static bool PauseMenuOpen()
+        {
+            foreach (Menu m in menus)
+                if (m.TakesInput)
+                    return true;
+
+            return false;
+        }
+
         public static void QueueRefreshAllMenus()
         {
             // i wrote this method to prevent RefreshAllMenus from being called multiple times a frame
@@ -483,20 +310,6 @@ namespace AstrologyGame
                 menu.Refresh();
 
             refreshAllMenusQueued = false;
-        }
-
-        public enum GameState
-        {
-            FreeRoam, //the player is walking around
-            InMenu, // the player is in a menu and must exit it before doing anything else
-            InteractMode, // the player wants to interact with an adjacent tile
-            LookMode // the player is looking at things
-        }
-
-        public enum InteractType
-        {
-            General, // the chosen object will have its first interaction chosen automatically
-            Specific // the chosen object will bring up a list of possible interactions
         }
     }
 }

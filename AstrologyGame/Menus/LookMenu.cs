@@ -9,7 +9,7 @@ namespace AstrologyGame.Menus
     {
         public LookMenu(Entity o)
         {
-            PauseWhenOpened = false;
+            TakesInput = false;
 
             Display d = o.GetComponent<Display>();
 
