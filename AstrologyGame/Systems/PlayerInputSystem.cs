@@ -211,7 +211,7 @@ namespace AstrologyGame.Systems
             Interacting, // the player wants to interact with an adjacent tile
             Looking // the player is looking at things
         }
-        public enum InteractType
+        private enum InteractType
         {
             General, // the chosen object will have its first interaction chosen automatically
             Specific // the chosen object will bring up a list of possible interactions

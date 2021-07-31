@@ -15,8 +15,18 @@ namespace AstrologyGame.Entities.Factories
     {
         public static Component ComponentFromXmlNode(XmlNode node)
         {
-            // make a component of the right type, and throw an error if no class of that name exists
-            Type componentType = Type.GetType("AstrologyGame.Components." + node.Name, true);
+            string componentName = node.Name;
+            // make a component of the right type
+            Type componentType = Type.GetType("AstrologyGame.Components." + componentName, false);
+            // handle the case in which no component with that name exists
+            if (componentType == null)
+            {
+                // throw an exception
+                Exception exception = new Exception($"No component of name '{componentName}' exists. " +
+                    $"Check {Utility.ENTITIES_PATH} and make sure there are no errors.");
+                throw (exception);
+            }
+
             Component component = Activator.CreateInstance(componentType) as Component;
 
             // set the properties of the component
@@ -26,6 +36,15 @@ namespace AstrologyGame.Entities.Factories
                 string propertyValueAsString = attribute.Value;
 
                 PropertyInfo propertyInfo = componentType.GetProperty(propertyName);
+
+                // handle the case where the component does not have the specified property
+                if(propertyInfo == null)
+                {
+                    // throw an exception
+                    Exception exception = new Exception($"The component '{componentName}' does not have a property named '{propertyName}'. " +
+                        $"Check {Utility.ENTITIES_PATH} and make sure there are no errors.");
+                    throw (exception);
+                }
                 Type propertyType = propertyInfo.PropertyType;
 
                 object propertyValue;

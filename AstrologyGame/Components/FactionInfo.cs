@@ -31,6 +31,7 @@ namespace AstrologyGame.Components
 
     public enum Faction
     {
+        None,
         Human,
         Horror, // cosmic horrors that fit into no specific group
     }

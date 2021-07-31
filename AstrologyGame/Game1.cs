@@ -94,6 +94,7 @@ namespace AstrologyGame
             Zone.AddEntity(knight);
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);
+            pisces.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
             pisces.AddComponent(new AI());
             Zone.AddEntity(pisces);
 

@@ -46,18 +46,24 @@ namespace AstrologyGame.Systems
             // currently just sets the target to the first Human found
 
             AI ai = requiresTarget.GetComponent<AI>();
-            ai.Target = null;
+            FactionInfo faction = requiresTarget.GetComponent<FactionInfo>();
 
             foreach (Entity potentialTarget in Zone.Entities)
             {
                 if (potentialTarget.HasComponent<FactionInfo>())
-                    if (potentialTarget.GetComponent<FactionInfo>().Faction == Faction.Human)
+                {
+                    // faction of the potential target
+                    Faction targetFaction = potentialTarget.GetComponent<FactionInfo>().Faction;
+
+                    if (faction.GetReputation(targetFaction) < 0)
                     {
                         ai.Target = potentialTarget;
                         return true;
                     }
+                }
             }
 
+            ai.Target = null;
             return false;
         }
     }
