@@ -88,11 +88,14 @@ namespace AstrologyGame
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = EntityFactory.EntityFromId("knight", 0, 0);
+            Entity knight = EntityFactory.EntityFromId("knight", 5, 5);
             knight.AddComponent(new PlayerControlled());
             knight.GetComponent<Equipment>().SlotDict.Add(Slot.Body, null);
             Zone.AddEntity(knight);
-            Zone.Player = knight;
+
+            Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);
+            pisces.AddComponent(new AI());
+            Zone.AddEntity(pisces);
 
             // is the game fullscreen
             graphicsDeviceManager.PreferredBackBufferWidth = ScreenSize.X;
@@ -261,14 +264,11 @@ namespace AstrologyGame
             // draw debug info
             if (Input.Controls.Contains(Control.DevInfo))
             {
-                OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
-                _spriteBatch.DrawString(font, $"Zone: ({World.ZoneX}, {World.ZoneY})", new Vector2(0, 0), DEBUG_COLOR);
-                _spriteBatch.DrawString(font, $"Player Pos: ({playerPos.X}, {playerPos.Y})", new Vector2(0, 20), DEBUG_COLOR);
                 Color fpsColor = gameTime.IsRunningSlowly ? DEBUG_COLOR_BAD : DEBUG_COLOR; // change color depending on if game is running slow
-                _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 60), fpsColor);
-                _spriteBatch.DrawString(font, $"Tick Count: {Zone.tickCount}", new Vector2(0, 80), DEBUG_COLOR);
+                _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 0), fpsColor);
+                _spriteBatch.DrawString(font, $"Tick Count: {Zone.tickCount}", new Vector2(0, 20), DEBUG_COLOR);
 
-                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 100));
+                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 40));
             }
 
             _spriteBatch.End();

@@ -92,7 +92,7 @@ namespace AstrologyGame.Systems
                                     itemsHere.Add(o);
                             }
 
-                            Menu getMenu = new ItemMenu(itemsHere);
+                            Menu getMenu = new ItemMenu(entity, itemsHere);
                             OpenMenu(getMenu);
                             return;
                         }
@@ -107,7 +107,7 @@ namespace AstrologyGame.Systems
                         else if (Input.Controls.Contains(Control.Inventory))
                         {
                             // open inventory here
-                            Menu menu = new ItemMenu(entity.GetComponent<Inventory>().Contents);
+                            Menu menu = new ItemMenu(entity, entity.GetComponent<Inventory>().Contents);
                             OpenMenu(menu);
 
                             return;
@@ -169,6 +169,10 @@ namespace AstrologyGame.Systems
 
                             // do the first interaction in the list
                             interactions[0].Perform(entity);
+
+                            // if we're stil in interact mode, go back to Free Roam
+                            if (inputMode == InputMode.Interacting)
+                                inputMode = InputMode.FreeRoam;
                         }
 
                         break;
@@ -195,22 +199,9 @@ namespace AstrologyGame.Systems
             finished = false;
         }
 
-
         private void OpenMenu(Menu toOpen)
         {
-            if (toOpen.TakesInput)
-                inputMode = InputMode.MenuInput;
-
             Game1.AddMenu(toOpen);
-        }
-        private void CloseMenu(Menu toClose)
-        {
-            Game1.RemoveMenu(toClose);
-            // if none of the remaining open menus have .pauseWhenOpened, set gamestate to FreeRoam.
-            if (inputMode == InputMode.MenuInput && !Game1.PauseMenuOpen())
-            {
-                inputMode = InputMode.FreeRoam;
-            }
         }
 
         private enum InputMode

@@ -11,11 +11,11 @@ namespace AstrologyGame.Systems
     public sealed class EnergyRechargingSystem : ISystem
     {
         ComponentFilter ISystem.Filter => new ComponentFilter()
-             .AddNecessary(typeof(ActionTaker));
+             .AddNecessary(typeof(EnergyHaver));
 
         void ISystem.OperateOnEntity(Entity entity)
         {
-            ActionTaker comp = entity.GetComponent<ActionTaker>();
+            EnergyHaver comp = entity.GetComponent<EnergyHaver>();
             comp.Energy += comp.Speed;
 
             if (comp.Energy >= Utility.ENERGY_CAP)

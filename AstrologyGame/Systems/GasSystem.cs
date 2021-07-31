@@ -12,14 +12,15 @@ namespace AstrologyGame.Systems
     public sealed class GasSystem : ISystem
     {
         ComponentFilter ISystem.Filter => new ComponentFilter()
-             .AddNecessary(typeof(Gas));
+            .AddNecessary(typeof(Gas))
+            .AddNecessary(typeof(Position));
 
         void ISystem.OperateOnEntity(Entity entity)
         {
             Gas gasComp = entity.GetComponent<Gas>();
             gasComp.Density--; // decrease density
 
-            // if gas is depleted, destroy the object and move on            
+            // if gas is depleted, destroy the object and stop there         
             if(gasComp.Density == 0)
             {
                 Zone.RemoveEntity(entity);

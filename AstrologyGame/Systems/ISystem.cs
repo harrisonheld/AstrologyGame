@@ -16,11 +16,14 @@ namespace AstrologyGame.Systems
         // most systems only take one frame to run so they are Finished by default.
         public bool Finished { get { return true; } }
 
-        // TODO: cache relevant components so they don't have to be found every time the system is run
         public sealed void Run()
         {
-            // operate on each entity matching this system's criteria
-            foreach (Entity e in Zone.Entities.FindAll(Filter.Match))
+            OperateOnAllEntities(Zone.Entities.FindAll(Filter.Match));
+        }
+
+        protected void OperateOnAllEntities(List<Entity> entities)
+        {
+            foreach (Entity e in entities)
                 OperateOnEntity(e);
         }
 

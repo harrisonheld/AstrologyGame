@@ -26,7 +26,6 @@ namespace AstrologyGame.MapData
         // list of all entities in the zone
         private static List<Entity> entities { get; set; } = new List<Entity>() { };
         public static List<Entity> Entities { get { return entities; } }
-        public static Entity Player { get; set; }
 
         public static int tickCount = 0;
 
@@ -81,12 +80,6 @@ namespace AstrologyGame.MapData
                         }
                     }
                 }
-            }
-
-            // if there was a player in the zone prior, include him in the new one
-            if (Player != null)
-            {
-                entities.Add(Player);
             }
         }
 

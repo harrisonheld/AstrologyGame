@@ -16,7 +16,8 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Inventory />
 		<Health MaxHitPoints="25" HitPoints="25"/>
 		<Attributes />
-		<ActionTaker Speed="334" />
+		<EnergyHaver Speed="334" />
+		<FactionInfo Faction="Horror" />
 	</entity>
 	
 	<entity id="knight">
@@ -24,7 +25,8 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Inventory />
 		<Equipment />
 		<Health MaxHitPoints="25" HitPoints="25"/>
-		<ActionTaker />
+		<EnergyHaver />
+		<FactionInfo Faction="Human" />
 	</entity>
 	
 	<entity id="chestplatemythril">

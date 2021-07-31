@@ -55,9 +55,6 @@ namespace AstrologyGame
         /// Load an entire folder of content. Got this from
         /// https://danielsaidi.com/blog/2010/01/26/load-all-assets-in-a-folder-in-xna
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="contentFolder"></param>
-        /// <returns></returns>
         public static Dictionary<string, T> LoadContent<T>(string contentFolder)
         {
             //Load directory info, abort if none
@@ -103,6 +100,30 @@ namespace AstrologyGame
             }
 
             return tex;
+        }
+
+        /// <summary>
+        /// Returns an ordered pair that points from one position to another 
+        /// and who's X and Y values are both within the bounds of [-1, 1].
+        /// </summary>
+        /// <param name="from">The position from which to point from.</param>
+        /// <param name="to">The position to point to</param>
+        /// <returns></returns>
+        public static OrderedPair OrderedPairTowards(OrderedPair from, OrderedPair to)
+        {
+            OrderedPair towards = to - from;
+
+            if (towards.X > 0)
+                towards.X = 1;
+            else if (towards.X < 0)
+                towards.X = -1;
+
+            if (towards.Y > 0)
+                towards.Y = 1;
+            else if (towards.Y < 0)
+                towards.Y = -1;
+
+            return towards;
         }
 
         /// <summary>

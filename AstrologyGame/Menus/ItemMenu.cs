@@ -11,9 +11,11 @@ namespace AstrologyGame.Menus
     public class ItemMenu : SelectMenu
     {
         private List<Entity> entities;
+        private Entity interactor;
 
-        public ItemMenu(List<Entity> _entities)
+        public ItemMenu(Entity _interactor, List<Entity> _entities)
         {
+            this.interactor = _interactor;
             this.entities = _entities;
             Refresh();
         }
@@ -58,7 +60,7 @@ namespace AstrologyGame.Menus
         public override void SelectionMade()
         {
             Entity selected = entities[selectedIndex];
-            InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, selected);
+            InteractionMenu interactionMenu = new InteractionMenu(interactor, selected);
             // put the menu at the place of the cursor
             interactionMenu.Position = cursorCoords;
             Game1.AddMenu(interactionMenu);
