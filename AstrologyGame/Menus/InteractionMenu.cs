@@ -16,8 +16,6 @@ namespace AstrologyGame.Menus
         {
             this.interactor = interactor;
 
-            BackgroundColor = Color.Black;
-
             interactions = objectToInteractWith.GetInteractions();
             selectionCount = interactions.Count;
 
@@ -45,11 +43,11 @@ namespace AstrologyGame.Menus
 
         public override void SelectionMade()
         {
-            // close this menu when a selection is made
-            Game1.RemoveMenu(this);
-
             // do the interaction
             interactions[selectedIndex].Perform(interactor);
+
+            // close this menu when a selection is made
+            Game1.RemoveMenu(this);
 
             // refresh the menus incase this interaction changed them
             Game1.QueueRefreshAllMenus();

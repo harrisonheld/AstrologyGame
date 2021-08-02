@@ -46,8 +46,7 @@ namespace AstrologyGame
 
         // menu
         private static List<Menu> menus = new List<Menu>();
-        private static LookMenu lookMenu;
-        // an easy way to get the last menu in the list, which is the only one that should accept input
+
         public static Menu InputMenu
         {
             get
@@ -58,18 +57,6 @@ namespace AstrologyGame
         }
         // should we refresh the menus this frame?
         private static bool refreshAllMenusQueued = false;
-
-        // the look cursor
-        private static Texture2D cursor;
-        private static int cursorX = 0;
-        private static int cursorY = 0;
-        public static OrderedPair CursorPosition
-        {
-            get
-            {
-                return new OrderedPair(cursorX, cursorY);
-            }
-        }
 
         // dev stuff
         Color DEBUG_COLOR = Color.White;
@@ -84,7 +71,6 @@ namespace AstrologyGame
 
         protected override void Initialize()
         {
-            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
@@ -95,8 +81,9 @@ namespace AstrologyGame
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);
             pisces.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
-            pisces.AddComponent(new AI());
             Zone.AddEntity(pisces);
+
+            menus.Add(new StatusMenu(knight));
 
             // is the game fullscreen
             graphicsDeviceManager.PreferredBackBufferWidth = ScreenSize.X;
@@ -110,14 +97,9 @@ namespace AstrologyGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Utility.Initialize(Content, GraphicsDevice, _spriteBatch);
-            cursor = Utility.GetTexture("cursor1");
             font = Content.Load<SpriteFont>("font1");
 
-            Menu.Font = font;
-            Utility.Font = font;
-
-            Menu.Initialize();
+            Utility.Initialize(Content, GraphicsDevice, _spriteBatch, font);
         }
 
         protected override void UnloadContent()
@@ -135,46 +117,6 @@ namespace AstrologyGame
         }
 
         /*
-        private void Update_Interacting()
-        {
-            // player wants to leave Interact mode, change to free roam and return
-            if (Input.Controls.Contains(Control.Back))
-            {
-                gameState = GameState.FreeRoam;
-                return;
-            }
-
-            // if the player didnt use a directional key, or select his current space, do nothing and return
-            if (movePair.X == 0 && movePair.Y == 0 && !Input.Controls.Contains(Control.Here) )
-                return;
-
-            OrderedPair playerPos = Zone.Player.GetComponent<Position>().Pos;
-            int interactX = playerPos.X + movePair.X;
-            int interactY = playerPos.Y + movePair.Y;
-
-            List<Entity> entitiesHere = Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY));
-            // there are no entities here, return
-            if (entitiesHere.Count == 0)
-                return;
-
-            Entity toInteractWith = entitiesHere.Last();
-
-            if(interactType == InteractType.Specific)
-            {
-                InteractionMenu interactionMenu = new InteractionMenu(Zone.Player, toInteractWith);
-                OpenMenu(interactionMenu);
-            }
-            else // interactType == InteractType.General
-            {
-                List<Interaction> interactions = toInteractWith.GetInteractions();
-                // if entity has no interactions, return
-                if (interactions.Count == 0)
-                    return;
-
-                // do the first interaction in the list
-                interactions[0].Perform(Zone.Player);
-            }
-        }
 
         private void Update_Looking()
         {
@@ -226,16 +168,6 @@ namespace AstrologyGame
         }
         */
 
-        /// <summary>
-        /// Create and open a LookMenu for the given object.
-        /// </summary>
-        /// <param name="o"></param>
-        private void Look(Entity o)
-        {
-            lookMenu = new LookMenu(o);
-            AddMenu(lookMenu);
-        }
-
         protected override void Draw(GameTime gameTime)
         {
             if (refreshAllMenusQueued)
@@ -258,9 +190,8 @@ namespace AstrologyGame
             }
             */
 
-            // draw all the menus
-            foreach (Menu m in menus)
-                m.Draw();
+            // draw the menus
+            RenderingFunctions.RenderMenus(menus);
 
             // draw debug info
             if (Input.Controls.Contains(Control.DevInfo))

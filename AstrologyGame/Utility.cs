@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Content;
 using AstrologyGame.MapData;
 using AstrologyGame.Entities;
 using AstrologyGame.Components;
+using AstrologyGame.Menus;
 
 namespace AstrologyGame
 {
@@ -39,12 +40,12 @@ namespace AstrologyGame
         private static ContentManager content;
         private static GraphicsDevice graphics;
         private static SpriteBatch spriteBatch;
+        private static SpriteFont font;
 
         public static ContentManager Content { get { return content; } }
         public static GraphicsDevice Graphics { get { return graphics; } }
         public static SpriteBatch SpriteBatch { get { return spriteBatch; } }
-
-        public static SpriteFont Font { get; set; }
+        public static SpriteFont Font { get { return font; } }
 
         // go from string to texture2d
         private static Dictionary<string, Texture2D> textureDict { get; set; } = new Dictionary<string, Texture2D>() { };
@@ -78,11 +79,12 @@ namespace AstrologyGame
             //Return the result
             return result;
         }
-        public static void Initialize(ContentManager _content, GraphicsDevice _graphics, SpriteBatch _spriteBatch)
+        public static void Initialize(ContentManager _content, GraphicsDevice _graphics, SpriteBatch _spriteBatch, SpriteFont _font)
         {
             content = _content;
             graphics = _graphics;
             spriteBatch = _spriteBatch;
+            font = _font;
 
             textureDict = LoadContent<Texture2D>("textures");
         }
@@ -103,44 +105,20 @@ namespace AstrologyGame
         }
 
         /// <summary>
-        /// Returns an ordered pair that points from one position to another 
-        /// and who's X and Y values are both within the bounds of [-1, 1].
-        /// </summary>
-        /// <param name="from">The position from which to point from.</param>
-        /// <param name="to">The position to point to</param>
-        /// <returns></returns>
-        public static OrderedPair OrderedPairTowards(OrderedPair from, OrderedPair to)
-        {
-            OrderedPair towards = to - from;
-
-            if (towards.X > 0)
-                towards.X = 1;
-            else if (towards.X < 0)
-                towards.X = -1;
-
-            if (towards.Y > 0)
-                towards.Y = 1;
-            else if (towards.Y < 0)
-                towards.Y = -1;
-
-            return towards;
-        }
-
-        /// <summary>
         /// Puts line breaks in <paramref name="text"/> so it won't go off screen. Not written by Zodiac Dev. See 
         /// <see href="https://stackoverflow.com/questions/15986473/how-do-i-implement-word-wrap"/>.
         /// </summary>
-        public static string WrapText(SpriteFont spriteFont, string text, float maxLineWidth)
+        public static string WrapText(string text, float maxLineWidth)
         {
             // split into words
             string[] words = text.Split(DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
             StringBuilder sb = new StringBuilder();
             float lineWidth = 0f;
-            float spaceWidth = spriteFont.MeasureString(" ").X;
+            float spaceWidth = Font.MeasureString(" ").X;
 
             for (int i = 0; i < words.Length; i++)
             {
-                Vector2 size = spriteFont.MeasureString(words[i]);
+                Vector2 size = Font.MeasureString(words[i]);
 
                 if (lineWidth + size.X < maxLineWidth)
                 {
@@ -173,6 +151,26 @@ namespace AstrologyGame
 
             Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
             spriteBatch.Draw(GetTexture(displayComponent.TextureName), destinationRectangle, displayComponent.Color);
+        }
+        public static void DrawMenu(Menu menu)
+        {
+            // draw the background
+            spriteBatch.Draw(GetTexture("blank"), menu.Rectangle, Color.Black);
+            // draw the text
+            Vector2 textPos = menu.Position + new OrderedPair(5);
+            string wrappedText = WrapText(menu.Text, menu.Size.X);
+            spriteBatch.DrawString(Font, wrappedText, textPos, Color.White);
+
+            // draw cursor if its a select menu
+            if(menu is SelectMenu)
+            {
+                SelectMenu selectMenu = menu as SelectMenu;
+                if(selectMenu.DrawCursor)
+                {
+                    Rectangle cursorRect = new Rectangle(new Point((int)textPos.X + 250, (int)textPos.Y + selectMenu.SelectedIndex * 23), new Point(16));
+                    spriteBatch.Draw(GetTexture("marble"), cursorRect, Color.White);
+                }
+            }
         }
 
         // Using .GetHashCode() is inconsistent across application restarts.

@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
+using System.Xml.Serialization;
+using System.IO;
+
 using AstrologyGame.Components;
 
 namespace AstrologyGame.Entities
 {
     public class Entity
     {
-        private List<Component> components = new List<Component>();
+        public List<Component> components = new List<Component>();
 
         ~Entity()
         {
@@ -27,7 +31,6 @@ namespace AstrologyGame.Entities
         {
             return components.Remove(componentToRemove);
         }
-
         public bool RemoveComponentsOfType<T>()
             where T : Component
         {
@@ -69,13 +72,11 @@ namespace AstrologyGame.Entities
 
             return component;
         }
-
         public List<T> GetComponents<T>()
             where T : Component
         {
             return components.OfType<T>().ToList();
         }
-
 
         public List<Interaction> GetInteractions()
         {

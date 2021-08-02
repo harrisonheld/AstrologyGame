@@ -9,11 +9,12 @@ namespace AstrologyGame.Menus
 {
     public class BookMenu : SelectMenu
     {
+        public override bool DrawCursor => false;
+
         private readonly string bookId;
 
         public BookMenu(string _bookId)
         {
-            DrawCursor = false;
             IncrementControl = Control.Right;
             DecrementControl = Control.Left;
 
@@ -25,21 +26,7 @@ namespace AstrologyGame.Menus
             // add two blank lines
             Text =  GetPageText(0);
         }
-
-        public override void Draw()
-        {
-            base.Draw();
-
-            // draw the page number in the top right
-            string pageNumString = (selectedIndex + 1).ToString() + " / " + selectionCount;
-            OrderedPair pageNumPadding = new OrderedPair(5, 5);
-
-            OrderedPair pageNumSize = (OrderedPair)Font.MeasureString(pageNumString);
-            OrderedPair pageNumPos = Position + new OrderedPair(Size.X, Size.Y) - pageNumSize;
-            pageNumPos -= pageNumPadding;
-            Utility.SpriteBatch.DrawString(Font, pageNumString, pageNumPos, Color.White);
-
-        }
+        
         public override void HandleInput(List<Control> controls)
         {
             base.HandleInput(controls);

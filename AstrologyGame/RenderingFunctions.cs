@@ -5,6 +5,9 @@ using System.Text;
 using AstrologyGame.MapData;
 using AstrologyGame.Entities;
 using AstrologyGame.Components;
+using AstrologyGame.Menus;
+
+using Microsoft.Xna.Framework;
 
 namespace AstrologyGame
 {
@@ -24,8 +27,16 @@ namespace AstrologyGame
                 if(e.HasComponent<Position>() && e.HasComponent<Display>())
                 {
                     Position p = e.GetComponent<Position>();
-                    Utility.DrawEntity(e, p.X, p.Y);
+                    Utility.DrawEntity(e, p.Pos.X, p.Pos.Y);
                 }
+            }
+        }
+
+        public static void RenderMenus(List<Menu> menus)
+        {
+            foreach(Menu m in menus)
+            {
+                Utility.DrawMenu(m);
             }
         }
     }

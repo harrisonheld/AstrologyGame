@@ -17,22 +17,31 @@ namespace AstrologyGame.Systems
 
         void ISystem.OperateOnEntity(Entity e)
         {
-            EnergyHaver actionTakerComp = e.GetComponent<EnergyHaver>();
+            EnergyHaver energyComp = e.GetComponent<EnergyHaver>();
             AI ai = e.GetComponent<AI>();
 
             if (ai.Target == null)
-                if (!AssignTarget(e))
-                    return;
+                AssignTarget(e);
 
-            if (actionTakerComp.CanTakeAction())
+            if (ai.State == AIState.Pursuing && energyComp.CanTakeAction())
             {
-                actionTakerComp.Energy -= Utility.COST_MOVE;
-
                 Position posComp = e.GetComponent<Position>();
                 Position targetPosComp = ai.Target.GetComponent<Position>();
 
-                OrderedPair towards = Utility.OrderedPairTowards(posComp.Pos, targetPosComp.Pos);
-                posComp.Pos += towards;
+                // if the entity is adjacent to its target
+                if (OrderedPair.Adjacent(posComp.Pos, targetPosComp.Pos))
+                {
+                    // attack the target
+                    energyComp.Energy -= Utility.COST_ATTACK;
+                    AttackFunctions.BumpAttack(e, ai.Target);
+                }
+                else
+                {
+                    // move towards the target
+                    energyComp.Energy -= Utility.COST_MOVE;
+                    OrderedPair towards = OrderedPair.Towards(posComp.Pos, targetPosComp.Pos);
+                    MoveFunctions.Move(e, posComp.Pos + towards);
+                }
             }
         }
 
@@ -58,12 +67,14 @@ namespace AstrologyGame.Systems
                     if (faction.GetReputation(targetFaction) < 0)
                     {
                         ai.Target = potentialTarget;
+                        ai.State = AIState.Pursuing;
                         return true;
                     }
                 }
             }
 
             ai.Target = null;
+            ai.State = AIState.Idle;
             return false;
         }
     }

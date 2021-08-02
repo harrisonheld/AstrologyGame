@@ -4,26 +4,26 @@ using System.Text;
 
 namespace AstrologyGame.Components
 {
-    class FactionInfo : Component
+    public class FactionInfo : Component
     {
         /// <summary> What factions is this entity in. </summary>
-        public Faction Faction { get; set; }
+        public Faction Faction { get; set; } = Faction.None;
         /// <summary> Integer values of this entity's feelings on other factions. </summary>
-        private Dictionary<Faction, int> repDict { get; set; }
+        public SerializableDictionary<Faction, int> ReputationDictionary { get; set; } = new SerializableDictionary<Faction, int>();
 
         public void SetReputation(Faction faction, int rep)
         {
-            if (repDict.ContainsKey(faction))
-                repDict[faction] = rep;
+            if (ReputationDictionary.ContainsKey(faction))
+                ReputationDictionary[faction] = rep;
             else
-                repDict.Add(faction, rep);
+                ReputationDictionary.Add(faction, rep);
         }
         public int GetReputation(Faction faction)
         {
             // return value in dict, if its not in the dict return 0
 
-            if (repDict.ContainsKey(faction))
-                return repDict[faction];
+            if (ReputationDictionary.ContainsKey(faction))
+                return ReputationDictionary[faction];
 
             return 0;
         }

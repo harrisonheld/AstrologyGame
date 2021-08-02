@@ -14,5 +14,8 @@ namespace AstrologyGame.Components
         public int Concentration { get; set; } = 10; // ability cooldown, crit chance
 
         public int Quickness { get; set; } = 100;
+
+        public int MaxHealth { get; set; } = 25;
+        public int Health { get; set; } = 25;
     }
 }

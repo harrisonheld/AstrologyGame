@@ -24,7 +24,7 @@ namespace AstrologyGame.Entities.Factories
         public static Entity EntityFromId(string entityId, int xPos, int yPos)
         {
             Entity entity = EntityFromId(entityId);
-            entity.AddComponent(new Position { X = xPos, Y = yPos });
+            entity.AddComponent(new Position { Pos = new OrderedPair(xPos, yPos) });
             return entity;
         }
 

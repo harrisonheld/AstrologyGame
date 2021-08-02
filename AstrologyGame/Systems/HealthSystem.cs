@@ -11,14 +11,14 @@ namespace AstrologyGame.Systems
     public sealed class HealthSystem : ISystem
     {
         ComponentFilter ISystem.Filter => new ComponentFilter()
-            .AddNecessary(typeof(Health));
+            .AddNecessary(typeof(Attributes));
 
         void ISystem.OperateOnEntity(Entity entity)
         {
-            Health comp = entity.GetComponent<Health>();
+            Attributes comp = entity.GetComponent<Attributes>();
 
             // remove the enemy if its HP has run out
-            if (comp.HitPoints <= 0)
+            if (comp.Health <= 0)
                 Zone.RemoveEntity(entity);
         }
     }

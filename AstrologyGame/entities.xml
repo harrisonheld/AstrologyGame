@@ -14,18 +14,21 @@
 		<Display Name="Pisces" TextureName="pisces2" Color="#78ceeb" Lore="He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
 Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that this confusion is unintentional."/>
 		<Inventory />
-		<Health MaxHitPoints="25" HitPoints="25"/>
+		<Equipment />
 		<Attributes />
 		<EnergyHaver Speed="334" />
-		<FactionInfo Faction="Horror" />
+		<AI />
+		<Solid />
+		<FactionInfo Faction="Horror"/>
 	</entity>
 	
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
 		<Equipment />
-		<Health MaxHitPoints="25" HitPoints="25"/>
+		<Attributes />
 		<EnergyHaver />
+		<Solid />
 		<FactionInfo Faction="Human" />
 	</entity>
 	
@@ -41,7 +44,7 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 
 	<entity id="chest">
 		<Display Name="chest" TextureName="chest" Lore="It stores things." />
-		<Inventory />
+		<Inventory OtherEntitiesCanOpen="true"/>
 	</entity>
 	
 	<entity id="flintlock">
@@ -56,8 +59,9 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	</entity>
 
 	<entity id="gascloud">
-		<Display Name="gas cloud" TextureName="speckled4" Lore="a stanky ass fart"/>
+		<Display Name="blocking gas" TextureName="speckled4" Lore="nobody can move through this mwahaha"/>
 		<Gas Density="4" Viscosity="10"/>
+		<Solid />
 	</entity>
 	
 </entities>

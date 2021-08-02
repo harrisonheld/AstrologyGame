@@ -11,7 +11,7 @@ namespace AstrologyGame.Systems
     {
         public static void BumpAttack(Entity attacker, Entity reciever)
         {
-            reciever.GetComponent<Health>().HitPoints -= reciever.GetComponent<Attributes>().Prowess;
+            reciever.GetComponent<Attributes>().Health -= reciever.GetComponent<Attributes>().Prowess;
         }
     }
 }
