@@ -19,7 +19,6 @@ namespace AstrologyGame.Menus
             DecrementControl = Control.Left;
 
             bookId = _bookId;
-            selectionCount = GetPageCount(); // how many pages there are
 
             Size = new OrderedPair(500, 500);
 

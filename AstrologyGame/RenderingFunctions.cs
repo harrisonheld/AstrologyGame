@@ -36,6 +36,7 @@ namespace AstrologyGame
         {
             foreach(Menu m in menus)
             {
+                m.Refresh();
                 Utility.DrawMenu(m);
             }
         }

@@ -16,8 +16,7 @@ namespace AstrologyGame.Menus
         {
             this.interactor = interactor;
 
-            interactions = objectToInteractWith.GetInteractions();
-            selectionCount = interactions.Count;
+            items.AddRange(objectToInteractWith.GetInteractions());
 
             int idx = 0;
             while(idx < interactions.Count)
@@ -28,9 +27,8 @@ namespace AstrologyGame.Menus
                 if (!interaction.Condition(interactor))
                 {
                     // remove it from the list
-                    interactions.RemoveAt(idx);
+                    items.RemoveAt(idx);
                     // reduce the amount of selections in the menu
-                    selectionCount--;
                     continue;
                 }
 
@@ -48,9 +46,6 @@ namespace AstrologyGame.Menus
 
             // close this menu when a selection is made
             Game1.RemoveMenu(this);
-
-            // refresh the menus incase this interaction changed them
-            Game1.QueueRefreshAllMenus();
         }
     }
 }

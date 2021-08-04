@@ -11,15 +11,29 @@ namespace AstrologyGame.Menus
     {
         public override bool TakesInput => false;
 
-        public StatusMenu(Entity e)
+        private Entity entity;
+
+        public StatusMenu(Entity _entity)
         {
-            Attributes attributes = e.GetComponent<Attributes>();
+            Size = new OrderedPair(200, 150);
+            Position = new OrderedPair(400, 200);
+
+            entity = _entity;
+            Refresh();
+        }
+
+        public override void Refresh()
+        {
+            Attributes attributes = entity.GetComponent<Attributes>();
             Text = $"P: {attributes.Prowess}\n" +
                 $"F: {attributes.Concentration}\n" +
                 $"C: {attributes.Concentration}\n" +
                 $"V: {attributes.Vigor}\n\n" +
-                
+
                 $"Health: {attributes.Health}/{attributes.MaxHealth}";
+
+            Random rand = new Random();
+            Position += new OrderedPair(rand.Next(-2, 3), rand.Next(-2, 3));
         }
     }
 }

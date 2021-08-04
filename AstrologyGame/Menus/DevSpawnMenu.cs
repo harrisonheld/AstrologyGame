@@ -15,7 +15,6 @@ namespace AstrologyGame.Menus
         public DevSpawnMenu()
         {
             ids = EntityFactory.GetIdsInXML();
-            selectionCount = ids.Count;
 
             foreach(string id in ids)
             {

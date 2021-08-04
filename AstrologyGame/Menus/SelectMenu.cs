@@ -11,12 +11,11 @@ namespace AstrologyGame.Menus
         // should the menu draw a cursor next to the selected item?
         public virtual bool DrawCursor => true;
 
+        protected List<IMenuItem> items = new List<IMenuItem>();
+        public List<IMenuItem> Items { get => items; }
+
         protected int selectedIndex = 0;
-        protected int selectionCount = 1; // how many things are there to select?
-
         public int SelectedIndex { get { return selectedIndex; } }
-
-        protected OrderedPair cursorCoords;
 
         // what controls are used to move the selection
         protected Control IncrementControl { get; set; } = Control.Down;
@@ -33,7 +32,7 @@ namespace AstrologyGame.Menus
             base.HandleInput(controls);
 
             // if no options, theres nothing to do
-            if (selectionCount == 0)
+            if (items.Count == 0)
                 return;
 
             // increment or decrement index
@@ -47,10 +46,10 @@ namespace AstrologyGame.Menus
             }
 
             // use modulo to wrap around if the index is too high
-            selectedIndex %= selectionCount;
+            selectedIndex %= items.Count;
             // if the index is negative, add the selectionCount to wrap it
             if (selectedIndex < 0)
-                selectedIndex += selectionCount;
+                selectedIndex += items.Count;
 
             // make a selection if user hits select, and there is something to select
             if (controls.Contains(SelectControl))

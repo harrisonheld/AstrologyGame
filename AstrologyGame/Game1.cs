@@ -44,8 +44,11 @@ namespace AstrologyGame
         private static int deltaTime = 0; 
         public static int DeltaTime { get { return deltaTime; } }
 
-        // menu
+        // menus
+        private static StatusMenu statusMenu;
         private static List<Menu> menus = new List<Menu>();
+
+        public static StatusMenu StatusMenu { get => statusMenu; }
 
         public static Menu InputMenu
         {
@@ -77,13 +80,18 @@ namespace AstrologyGame
             Entity knight = EntityFactory.EntityFromId("knight", 5, 5);
             knight.AddComponent(new PlayerControlled());
             knight.GetComponent<Equipment>().SlotDict.Add(Slot.Body, null);
+
+            for (int i = 0; i < 10; i++)
+                knight.GetComponent<Inventory>().Contents.Add(EntityFactory.EntityFromId("flintlock"));
+
             Zone.AddEntity(knight);
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);
             pisces.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
             Zone.AddEntity(pisces);
 
-            menus.Add(new StatusMenu(knight));
+            statusMenu = new StatusMenu(knight);
+            menus.Add(statusMenu);
 
             // is the game fullscreen
             graphicsDeviceManager.PreferredBackBufferWidth = ScreenSize.X;
@@ -170,9 +178,6 @@ namespace AstrologyGame
 
         protected override void Draw(GameTime gameTime)
         {
-            if (refreshAllMenusQueued)
-                RefreshAllMenus();
-
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(default, default, SamplerState.PointClamp);
@@ -229,19 +234,6 @@ namespace AstrologyGame
                     return true;
 
             return false;
-        }
-
-        public static void QueueRefreshAllMenus()
-        {
-            // i wrote this method to prevent RefreshAllMenus from being called multiple times a frame
-            refreshAllMenusQueued = true;
-        }
-        private static void RefreshAllMenus()
-        {
-            foreach (Menu menu in menus)
-                menu.Refresh();
-
-            refreshAllMenusQueued = false;
         }
     }
 }

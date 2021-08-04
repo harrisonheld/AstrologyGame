@@ -161,14 +161,23 @@ namespace AstrologyGame
             string wrappedText = WrapText(menu.Text, menu.Size.X);
             spriteBatch.DrawString(Font, wrappedText, textPos, Color.White);
 
-            // draw cursor if its a select menu
             if(menu is SelectMenu)
             {
                 SelectMenu selectMenu = menu as SelectMenu;
+
+                // draw the cursor
                 if(selectMenu.DrawCursor)
                 {
                     Rectangle cursorRect = new Rectangle(new Point((int)textPos.X + 250, (int)textPos.Y + selectMenu.SelectedIndex * 23), new Point(16));
                     spriteBatch.Draw(GetTexture("marble"), cursorRect, Color.White);
+                }
+
+                // draw the menu items
+                foreach (IMenuItem item in selectMenu.Items)
+                {
+                    string itemText = item.GetText();
+                    spriteBatch.DrawString(Font, itemText, textPos, Color.White);
+                    textPos.Y += 23;
                 }
             }
         }

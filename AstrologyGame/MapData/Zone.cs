@@ -30,13 +30,12 @@ namespace AstrologyGame.MapData
         public static int tickCount = 0;
 
         // all the systems. they are in the order they will be run
-        private static ISystem[] systems { get; set; } = new ISystem[5]
+        private static ISystem[] systems { get; set; } = new ISystem[4]
         {
             new EnergyRechargingSystem(),
-            new HealthSystem(),
+            new GasSystem(),
             new AISystem(),
             new PlayerInputSystem(),
-            new GasSystem()
         };
         // index of the system we are running
         private static int systemIndex = 0;

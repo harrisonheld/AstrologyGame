@@ -56,7 +56,7 @@ namespace AstrologyGame.Systems
                             Menu pauseMenu = new Menu();
                             pauseMenu.Text = "[Paused]";
                             OpenMenu(pauseMenu);
-                            return;
+                            break;
                         }
 
                         // open the dev menu
@@ -64,7 +64,14 @@ namespace AstrologyGame.Systems
                         {
                             DevSpawnMenu devMenu = new DevSpawnMenu();
                             OpenMenu(devMenu);
-                            return;
+                            break;
+                        }
+
+                        // pass the turn
+                        if (Input.Controls.Contains(Control.Here))
+                        {
+                            finished = true;
+                            break;
                         }
 
                         // start interact mode
@@ -77,7 +84,7 @@ namespace AstrologyGame.Systems
                             else
                                 interactType = InteractType.General;
 
-                            return;
+                            break;
                         }
 
                         // open the get menu
@@ -94,13 +101,13 @@ namespace AstrologyGame.Systems
 
                             Menu getMenu = new ItemMenu(entity, itemsHere);
                             OpenMenu(getMenu);
-                            return;
+                            break;
                         }
                         // go to look mode
                         else if(Input.Controls.Contains(Control.Look))
                         {
                             inputMode = InputMode.Looking;
-                            return;
+                            break;
                         }
 
                         // open the inventory
@@ -110,11 +117,11 @@ namespace AstrologyGame.Systems
                             Menu menu = new ItemMenu(entity, entity.GetComponent<Inventory>().Contents);
                             OpenMenu(menu);
 
-                            return;
+                            break;
                         }
 
                         if (movePair.Equals(OrderedPair.Zero)) // no movent given. stop here
-                            return;
+                            break;
 
                         OrderedPair newPos = entityPos + movePair;
                         bool moveSuccessful = MoveFunctions.CanMove(entity, newPos);
@@ -138,12 +145,12 @@ namespace AstrologyGame.Systems
                         if (Input.Controls.Contains(Control.Back))
                         {
                             inputMode = InputMode.FreeRoam;
-                            return;
+                            break;
                         }
 
                         // if the player didnt use a directional key, or select his current space, do nothing and return
                         if (movePair.X == 0 && movePair.Y == 0 && !Input.Controls.Contains(Control.Here))
-                            return;
+                            break;
 
                         int interactX = entityPos.X + movePair.X;
                         int interactY = entityPos.Y + movePair.Y;
@@ -151,7 +158,7 @@ namespace AstrologyGame.Systems
                         List<Entity> entitiesHere = Zone.GetEntitiesAtPosition(new OrderedPair(interactX, interactY));
                         // there are no entities here, return
                         if (entitiesHere.Count == 0)
-                            return;
+                            break;
 
                         Entity toInteractWith = entitiesHere.Last();
 
@@ -165,7 +172,7 @@ namespace AstrologyGame.Systems
                             List<Interaction> interactions = toInteractWith.GetInteractions();
                             // if entity has no interactions, return
                             if (interactions.Count == 0)
-                                return;
+                                break;
 
                             // do the first interaction in the list
                             interactions[0].Perform(entity);

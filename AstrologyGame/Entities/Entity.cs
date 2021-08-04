@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
-using System.Xml.Serialization;
-using System.IO;
-
 using AstrologyGame.Components;
 
 namespace AstrologyGame.Entities
 {
-    public class Entity
+    public class Entity : Menus.IMenuItem
     {
         public List<Component> components = new List<Component>();
 
@@ -88,6 +84,15 @@ namespace AstrologyGame.Entities
             }
 
             return interactions;
+        }
+
+        // IMenuItem implementations
+        string Menus.IMenuItem.GetText()
+        {
+            if (HasComponent<Display>())
+                return GetComponent<Display>().Name;
+
+            return "THIS COMPONENT HAS NO NAME";
         }
     }
 }

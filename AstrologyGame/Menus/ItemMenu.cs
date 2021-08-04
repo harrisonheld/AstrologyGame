@@ -10,35 +10,13 @@ namespace AstrologyGame.Menus
 {
     public class ItemMenu : SelectMenu
     {
-        private List<Entity> entities;
         private Entity interactor;
 
-        public ItemMenu(Entity _interactor, List<Entity> _entities)
+        public ItemMenu(Entity interactor, List<Entity> entities)
         {
-            this.interactor = _interactor;
-            this.entities = _entities;
+            this.interactor = interactor;
+            items.AddRange(entities);
             Refresh();
-        }
-        public override void Refresh()
-        {
-            // add all the item names to the text
-            StringBuilder sb = new StringBuilder();
-
-            foreach (Entity entity in entities)
-            {
-                sb.Append(entity.GetComponent<Display>().Name);
-
-                // add item count if its more than 1
-                int count = entity.GetComponent<Item>().Count;
-                if (count > 1)
-                    sb.Append($" (x{count})");
-
-                sb.Append("\n");
-            }
-
-            selectionCount = entities.Count;
-            Text = sb.ToString();
-            base.Refresh();
         }
 
         public override void HandleInput(List<Control> controls)
@@ -48,7 +26,7 @@ namespace AstrologyGame.Menus
             // if player hits tab, get all items
             if(controls.Contains(Control.Tab))
             {
-                foreach (Entity e in entities)
+                foreach (Entity e in items)
                 {
                     // TODO: PICKUP ALL THE ITEMS
                 }
@@ -59,10 +37,8 @@ namespace AstrologyGame.Menus
 
         public override void SelectionMade()
         {
-            Entity selected = entities[selectedIndex];
+            Entity selected = items[selectedIndex] as Entity;
             InteractionMenu interactionMenu = new InteractionMenu(interactor, selected);
-            // put the menu at the place of the cursor
-            interactionMenu.Position = cursorCoords;
             Game1.AddMenu(interactionMenu);
         }
     }
