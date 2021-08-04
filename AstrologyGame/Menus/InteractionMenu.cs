@@ -9,7 +9,6 @@ namespace AstrologyGame.Menus
 {
     public class InteractionMenu : SelectMenu
     {
-        List<Interaction> interactions;
         Entity interactor;
 
         public InteractionMenu(Entity interactor, Entity objectToInteractWith)
@@ -19,9 +18,9 @@ namespace AstrologyGame.Menus
             items.AddRange(objectToInteractWith.GetInteractions());
 
             int idx = 0;
-            while(idx < interactions.Count)
+            while(idx < items.Count)
             {
-                Interaction interaction = interactions[idx];
+                Interaction interaction = items[idx] as Interaction;
 
                 // if the interactor does not meet the condition to perform this interaction
                 if (!interaction.Condition(interactor))
@@ -42,7 +41,8 @@ namespace AstrologyGame.Menus
         public override void SelectionMade()
         {
             // do the interaction
-            interactions[selectedIndex].Perform(interactor);
+            Interaction interaction = items[selectedIndex] as Interaction;
+            interaction.Perform(interactor);
 
             // close this menu when a selection is made
             Game1.RemoveMenu(this);

@@ -9,8 +9,7 @@ namespace AstrologyGame.Components
 {
     public class Equippable : Component
     {
-        public Equipment ContainingEquipment { get; set; }
-        public Slot Slot { get; set; }
+        public SlotType SlotType { get; set; }
 
         public Equippable()
         {
@@ -19,8 +18,8 @@ namespace AstrologyGame.Components
                 new Interaction()
                 {
                     Name = "Equip",
-                    Perform = (Entity equipper) => InventoryFunctions.Equip(this, equipper),
-                    Condition = (Entity equipper) => InventoryFunctions.CanEquip(this, equipper)
+                    Perform = (Entity equipper) => InventoryFunctions.Equip(Owner, equipper),
+                    Condition = (Entity equipper) => InventoryFunctions.CanEquip(Owner, equipper)
                 }
             };
         }

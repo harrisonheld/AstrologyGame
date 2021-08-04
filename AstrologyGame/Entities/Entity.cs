@@ -86,13 +86,13 @@ namespace AstrologyGame.Entities
             return interactions;
         }
 
-        // IMenuItem implementations
+        // IMenuItem implementation
         string Menus.IMenuItem.GetText()
         {
             if (HasComponent<Display>())
                 return GetComponent<Display>().Name;
 
-            return "THIS COMPONENT HAS NO NAME";
+            return "THIS ENTITY HAS NO DISPLAY COMPONENT";
         }
     }
 }

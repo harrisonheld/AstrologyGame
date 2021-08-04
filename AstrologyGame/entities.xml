@@ -14,7 +14,6 @@
 		<Display Name="Pisces" TextureName="pisces2" Color="#78ceeb" Lore="He wears a sky-blue flare dress lined with white. Mirrored on both hands, each of five nails is painted a different pastel color. Mascaraed lashes frame his doe eyes. Most notably, white cat-ears protrude from his blonde hair.
 Under the psuedonym 'Pisces', he writes treatises about the state of the Universe. Laymen often accept his writing without question, believing him to be Pisces of Cydonia, who founded celestial esotericism thousands of years ago. Pisces maintains that this confusion is unintentional."/>
 		<Inventory />
-		<Equipment />
 		<Attributes />
 		<EnergyHaver Speed="334" />
 		<AI />
@@ -25,7 +24,6 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
-		<Equipment />
 		<Attributes />
 		<EnergyHaver />
 		<Solid />
@@ -35,7 +33,7 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 	<entity id="chestplatemythril">
 		<Display Name="Mythril Chest Plate" TextureName="chestplate" Lore="WOW RUNESCAPE ARMOR SO COOL." Color="#2020B0" />
 		<Item />
-		<Equippable Slot="Body" />
+		<Equippable />
 	</entity>
 
 	<entity id="swordsmanOfJudas">

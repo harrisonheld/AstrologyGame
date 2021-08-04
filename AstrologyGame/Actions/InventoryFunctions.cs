@@ -46,21 +46,30 @@ namespace AstrologyGame.Systems
             itemComp.OnGround = true;
         }
 
-        public static void Equip(Equippable equippable, Entity equipper)
+        public static void Equip(Entity equippableEntity, Entity equipper, Slot preferredSlot = null)
         {
             // put the equippable entity into the equipment slot
-            Entity equippableEntity = equippable.Owner;
-            Slot slot = equippable.Slot;
+            Equippable equippableComp = equippableEntity.GetComponent<Equippable>();
+            SlotType slotType = equippableComp.SlotType;
 
-            Equipment equipment = equipper.GetComponent<Equipment>();
+            Inventory inventory = equipper.GetComponent<Inventory>();
 
-            // if there is already an equippable in this slot, unequip it
-            if (equipment.SlotDict[slot] != null)
-                UnEquip(equipment.SlotDict[slot].GetComponent<Equippable>());
+            if (inventory.Contents.Contains(equippableEntity))
+                PutInInventory(equippableEntity.GetComponent<Item>(), inventory);
 
-            // put the equippable in the slot
-            equipment.SlotDict[slot] = equippableEntity;
-            equippable.ContainingEquipment = equipment;
+            // if a preferred slot was picked
+            if(preferredSlot != null)
+            {
+                /*// if something is already in it, remove it
+                if (preferredSlot.Entity != null)
+                    UnEquip(preferredSlot.Entity);*/
+
+                preferredSlot.Entity = equippableEntity;
+            }
+            else
+            {
+                // find the first appropriate slot
+            }
 
             Inventory owningInventory = equippableEntity.GetComponent<Item>().ContainingInventory;
             if (owningInventory == null)
@@ -74,40 +83,23 @@ namespace AstrologyGame.Systems
                 owningInventory.Contents.Remove(equippableEntity);
             }
         }
-        public static bool CanEquip(Equippable equippable, Entity equipper)
+        public static bool CanEquip(Entity toEquip, Entity equipper)
         {
-            // if the equipper does not have an Equipment component
-            if(!equipper.HasComponent<Equipment>() )
+            // check for necessary components
+            if(!(equipper.HasComponent<Inventory>() && toEquip.HasComponent<Equippable>()))
                 return false;
+
+            Inventory inventory = equipper.GetComponent<Inventory>();
+            Equippable equippableComp = toEquip.GetComponent<Equippable>();
 
             // if the Equipment does not have the appropriate slot
-            Equipment equipment = equipper.GetComponent<Equipment>();
-            if (!equipment.SlotDict.ContainsKey(equippable.Slot))
-                return false;
-
-            return true;
-        }
-
-        public static void UnEquip(Equippable equippable)
-        {
-            Slot slot = equippable.Slot;
-            Equipment containingEquipment = equippable.ContainingEquipment;
-            Entity equippableEntity = equippable.Owner;
-
-            containingEquipment.SlotDict[slot] = null;
-            Entity entityWhoHadThisEquipped = containingEquipment.Owner;
-
-            // put this back in the inventory if this has one, otherwise drop it
-            if (entityWhoHadThisEquipped.HasComponent<Inventory>())
-                PutInInventory(equippableEntity.GetComponent<Item>(), entityWhoHadThisEquipped.GetComponent<Inventory>());
-            else
+            foreach (Slot slot in inventory.Slots)
             {
-                Position dropperPos = entityWhoHadThisEquipped.GetComponent<Position>();
-                Position thisPos = new Position();
-                thisPos.Pos = dropperPos.Pos;
-                equippableEntity.AddComponent(thisPos);
+                if (slot.Type == equippableComp.SlotType)
+                    return true;
             }
-                
+
+            return false;
         }
     }
 }

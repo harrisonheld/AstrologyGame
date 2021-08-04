@@ -79,11 +79,11 @@ namespace AstrologyGame
 
             Entity knight = EntityFactory.EntityFromId("knight", 5, 5);
             knight.AddComponent(new PlayerControlled());
-            knight.GetComponent<Equipment>().SlotDict.Add(Slot.Body, null);
-
-            for (int i = 0; i < 10; i++)
-                knight.GetComponent<Inventory>().Contents.Add(EntityFactory.EntityFromId("flintlock"));
-
+            knight.GetComponent<Inventory>().Slots.AddRange(new List<Slot>()
+            {
+                new Slot { Type = SlotType.Body },
+                new Slot { Type = SlotType.Legs }
+            });
             Zone.AddEntity(knight);
 
             Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);

@@ -80,6 +80,10 @@ namespace AstrologyGame.MapData
                     }
                 }
             }
+
+            Entity armor = EntityFactory.EntityFromId("chestplatemythril", 0, 0);
+            armor.GetComponent<Equippable>().SlotType = SlotType.Body;
+            AddEntity(armor);
         }
 
         public static void Update()
