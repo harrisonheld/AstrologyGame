@@ -15,7 +15,16 @@ namespace AstrologyGame.Menus
         public ItemMenu(Entity interactor, List<Entity> entities)
         {
             this.interactor = interactor;
-            items.AddRange(entities);
+
+            foreach(Entity entity in entities)
+            {
+                // create the menu item
+                MenuItem menuItem = new MenuItem();
+                menuItem.Item = entity;
+                menuItem.Text = entity.ToString(); //TODO: get name from display component
+                items.Add(menuItem);
+            }
+
             Refresh();
         }
 
@@ -26,7 +35,7 @@ namespace AstrologyGame.Menus
             // if player hits tab, get all items
             if(controls.Contains(Control.Tab))
             {
-                foreach (Entity e in items)
+                foreach (MenuItem e in items)
                 {
                     // TODO: PICKUP ALL THE ITEMS
                 }
@@ -37,7 +46,7 @@ namespace AstrologyGame.Menus
 
         public override void SelectionMade()
         {
-            Entity selected = items[selectedIndex] as Entity;
+            Entity selected = items[selectedIndex].Item as Entity;
             InteractionMenu interactionMenu = new InteractionMenu(interactor, selected);
             Game1.AddMenu(interactionMenu);
         }

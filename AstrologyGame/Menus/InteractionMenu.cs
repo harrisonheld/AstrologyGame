@@ -15,33 +15,27 @@ namespace AstrologyGame.Menus
         {
             this.interactor = interactor;
 
-            items.AddRange(objectToInteractWith.GetInteractions());
-
-            int idx = 0;
-            while(idx < items.Count)
+            foreach (Interaction interaction in objectToInteractWith.GetInteractions())
             {
-                Interaction interaction = items[idx] as Interaction;
-
-                // if the interactor does not meet the condition to perform this interaction
-                if (!interaction.Condition(interactor))
+                // if the interactor meets the condition to perform the interaction
+                if (interaction.Condition(interactor))
                 {
-                    // remove it from the list
-                    items.RemoveAt(idx);
-                    // reduce the amount of selections in the menu
-                    continue;
+                    // make a new menu item
+                    MenuItem menuItem = new MenuItem();
+                    menuItem.Item = interaction;
+                    menuItem.Text = interaction.Name;
+                    items.Add(menuItem);
+
+                    // add text to the menu
+                    Text += interaction.Name + "\n";
                 }
-
-
-                Text += interaction.Name + "\n";
-
-                idx++;
             }
         }
 
         public override void SelectionMade()
         {
             // do the interaction
-            Interaction interaction = items[selectedIndex] as Interaction;
+            Interaction interaction = items[selectedIndex].Item as Interaction;
             interaction.Perform(interactor);
 
             // close this menu when a selection is made

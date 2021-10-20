@@ -67,6 +67,29 @@ namespace AstrologyGame.Systems
                             break;
                         }
 
+                        // show all entities in the entity pool
+                        if (Input.Controls.Contains(Control.DevFunc2))
+                        {
+                            Menu menu = new Menu();
+                            StringBuilder textBuilder = new StringBuilder();
+
+                            for(int i = 0; i < Zone.Entities.Count; i++)
+                            {
+                                textBuilder.AppendLine("Entity " + i);
+                                for(int j = 0; j < Zone.Entities[i].components.Count; j++)
+                                {
+                                    Component component = Zone.Entities[i].components[j];
+                                    string line = $"[{j}] {component}";
+                                    textBuilder.AppendLine("  " + line);
+                                }
+                            }
+
+                            menu.Text = textBuilder.ToString();
+                            OpenMenu(menu);
+
+                            break;
+                        }
+
                         // pass the turn
                         if (Input.Controls.Contains(Control.Here))
                         {

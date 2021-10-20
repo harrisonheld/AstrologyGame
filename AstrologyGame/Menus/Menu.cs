@@ -49,7 +49,7 @@ namespace AstrologyGame.Menus
 
         public Menu()
         {
-            rect = new Rectangle(5, 5, 300, 9*64); // an arbitrary size
+            rect = new Rectangle(5, 5, 18*64, 9*64); // an arbitrary size
         }
         public virtual void Refresh()
         {

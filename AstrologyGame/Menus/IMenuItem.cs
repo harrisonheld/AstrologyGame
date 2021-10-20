@@ -5,10 +5,11 @@ using System.Text;
 namespace AstrologyGame.Menus
 {
     /// <summary>
-    /// An interface representing the ability to be listed and selected in a menu.
+    /// An struct containing an item to be listed in a menu.
     /// </summary>
-    public interface IMenuItem
+    public struct MenuItem
     {
-        public string GetText() { return "[THIS ITEM DOES NOT IMPLEMENT GetText()]"; }
+        public object Item { get; set; }
+        public string Text { get; set; }
     }
 }

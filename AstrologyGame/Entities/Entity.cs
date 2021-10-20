@@ -6,7 +6,7 @@ using AstrologyGame.Components;
 
 namespace AstrologyGame.Entities
 {
-    public class Entity : Menus.IMenuItem
+    public class Entity
     {
         public List<Component> components = new List<Component>();
 
@@ -84,15 +84,6 @@ namespace AstrologyGame.Entities
             }
 
             return interactions;
-        }
-
-        // IMenuItem implementation
-        string Menus.IMenuItem.GetText()
-        {
-            if (HasComponent<Display>())
-                return GetComponent<Display>().Name;
-
-            return "THIS ENTITY HAS NO DISPLAY COMPONENT";
         }
     }
 }

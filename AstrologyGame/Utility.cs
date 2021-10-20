@@ -22,9 +22,9 @@ namespace AstrologyGame
     // this is a helper class. it contains miscellaneous functions that are helpful everywhere
     public static class Utility
     {
-        public const string BOOK_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\books.xml";
-        public const string ABILITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\abilities.xml";
-        public const string ENTITIES_PATH = @"C:\Users\Held\source\repos\AstrologyGame\AstrologyGame\entities.xml";
+        public const string BOOK_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\books.xml";
+        public const string ABILITIES_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\abilities.xml";
+        public const string ENTITIES_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\entities.xml";
         const string ERROR_TEXTURE_NAME = "error";
 
         // control options
@@ -35,7 +35,7 @@ namespace AstrologyGame
         public const int COST_ATTACK = 1000;
         public const int ENERGY_CAP = 2000;
 
-        public const int SCALE = 32; // how many pixels high and wide sprites should be drawn as
+        public const int SCALE = 32 * 4; // how many pixels high and wide sprites should be drawn as
 
         private static ContentManager content;
         private static GraphicsDevice graphics;
@@ -173,9 +173,9 @@ namespace AstrologyGame
                 }
 
                 // draw the menu items
-                foreach (IMenuItem item in selectMenu.Items)
+                foreach (MenuItem item in selectMenu.Items)
                 {
-                    string itemText = item.GetText();
+                    string itemText = item.Text;
                     spriteBatch.DrawString(Font, itemText, textPos, Color.White);
                     textPos.Y += 23;
                 }

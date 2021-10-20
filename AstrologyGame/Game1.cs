@@ -24,7 +24,7 @@ namespace AstrologyGame
         private static SpriteBatch _spriteBatch;
         private static SpriteFont font;
 
-        private static OrderedPair screenSize = new OrderedPair(1024, 576);
+        private static OrderedPair screenSize = new OrderedPair(1024*2, 576*2);
         public static OrderedPair ScreenSize
         {
             get

@@ -11,8 +11,8 @@ namespace AstrologyGame.Menus
         // should the menu draw a cursor next to the selected item?
         public virtual bool DrawCursor => true;
 
-        protected List<IMenuItem> items = new List<IMenuItem>();
-        public List<IMenuItem> Items { get => items; }
+        protected List<MenuItem> items = new List<MenuItem>();
+        public List<MenuItem> Items { get => items; }
 
         protected int selectedIndex = 0;
         public int SelectedIndex { get { return selectedIndex; } }

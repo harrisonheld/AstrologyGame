@@ -10,21 +10,21 @@ namespace AstrologyGame.Menus
 {
     public class DevSpawnMenu : SelectMenu
     {
-        List<string> ids;
-
         public DevSpawnMenu()
         {
-            ids = EntityFactory.GetIdsInXML();
-
-            foreach(string id in ids)
+            foreach (string id in EntityFactory.GetIdsInXML())
             {
-                Text += id + "\n";
+                // append a menu item
+                MenuItem menuItem = new MenuItem();
+                menuItem.Item = id;
+                menuItem.Text = id;
+                items.Add(menuItem);
             }
         }
 
         public override void SelectionMade()
         {
-            string id = ids[selectedIndex];
+            string id = items[selectedIndex].Item as string;
             Entity e = EntityFactory.EntityFromId(id, 0, 0);
             Zone.AddEntity(e);
         }
