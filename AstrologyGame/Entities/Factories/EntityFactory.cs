@@ -14,7 +14,7 @@ namespace AstrologyGame.Entities.Factories
         {
             // get the xml node by id
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(Utility.ENTITIES_PATH);
+            xmlDoc.Load(GameManager.ENTITIES_PATH);
             XmlNode entityNode = xmlDoc.GetElementById(entityId);
 
             // create an entity with it
@@ -59,7 +59,7 @@ namespace AstrologyGame.Entities.Factories
         public static List<string> GetIdsInXML()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(Utility.ENTITIES_PATH);
+            xmlDoc.Load(GameManager.ENTITIES_PATH);
 
             List<string> ids = new List<string>();
 

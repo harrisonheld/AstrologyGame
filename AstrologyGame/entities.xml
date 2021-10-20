@@ -20,12 +20,22 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Solid />
 		<FactionInfo Faction="Horror"/>
 	</entity>
-	
+
+  <entity id="micky">
+    <Display Name="El Micky" TextureName="human1" Color="#DD4444" Lore="On all fours, a red blur bounds towards you at 55 kilometers per hour."/>
+    <Inventory />
+    <Attributes />
+    <EnergyHaver Speed="3000"/>
+    <AI />
+    <Solid />
+    <FactionInfo Faction="Horror"/>
+  </entity>
+  
 	<entity id="knight">
 		<Display Name="Knight of Cydonia" TextureName="human2" Lore="After years of service in the Cydonian sands, the martian sand has visibly gnawed at his armor." />
 		<Inventory />
 		<Attributes />
-		<EnergyHaver />
+		<EnergyHaver Speed="200" />
 		<Solid />
 		<FactionInfo Faction="Human" />
 	</entity>

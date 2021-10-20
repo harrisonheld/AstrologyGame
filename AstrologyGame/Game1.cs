@@ -24,7 +24,7 @@ namespace AstrologyGame
         private static SpriteBatch _spriteBatch;
         private static SpriteFont font;
 
-        private static OrderedPair screenSize = new OrderedPair(1024*2, 576*2);
+        private static OrderedPair screenSize = new OrderedPair(1024*3, 576*3);
         public static OrderedPair ScreenSize
         {
             get
@@ -77,7 +77,7 @@ namespace AstrologyGame
             World.Seed = "nuts 2";
             World.GenerateCurrentZone();
 
-            Entity knight = EntityFactory.EntityFromId("knight", 5, 5);
+            Entity knight = EntityFactory.EntityFromId("knight", 20, 5);
             knight.AddComponent(new PlayerControlled());
             knight.GetComponent<Inventory>().Slots.AddRange(new List<Slot>()
             {
@@ -89,6 +89,10 @@ namespace AstrologyGame
             Entity pisces = EntityFactory.EntityFromId("pisces", 0, 0);
             pisces.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
             Zone.AddEntity(pisces);
+
+            Entity micky = EntityFactory.EntityFromId("micky", 0, 0);
+            micky.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
+            Zone.AddEntity(micky);
 
             statusMenu = new StatusMenu(knight);
             menus.Add(statusMenu);
@@ -107,7 +111,7 @@ namespace AstrologyGame
 
             font = Content.Load<SpriteFont>("font1");
 
-            Utility.Initialize(Content, GraphicsDevice, _spriteBatch, font);
+            GameManager.Initialize(Content, GraphicsDevice, _spriteBatch, font);
         }
 
         protected override void UnloadContent()
@@ -184,17 +188,8 @@ namespace AstrologyGame
 
             // draw the game
             RenderingFunctions.RenderZone();
-
             // draw the look cursor
-            /*
-            if (gameState == GameState.LookMode)
-            {
-                Rectangle destinationRectangle = new Rectangle(
-                    cursorX * Utility.SCALE, cursorY * Utility.SCALE, Utility.SCALE, Utility.SCALE);
-                _spriteBatch.Draw(cursor, destinationRectangle, Color.White);
-            }
-            */
-
+            RenderingFunctions.RenderLookCursor();
             // draw the menus
             RenderingFunctions.RenderMenus(menus);
 
@@ -205,7 +200,7 @@ namespace AstrologyGame
                 _spriteBatch.DrawString(font, $"FPS: {1000 / gameTime.ElapsedGameTime.Milliseconds}", new Vector2(0, 0), fpsColor);
                 _spriteBatch.DrawString(font, $"Tick Count: {Zone.tickCount}", new Vector2(0, 20), DEBUG_COLOR);
 
-                Utility.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 40));
+                GameManager.RenderMarkupText("That's an awfully <c:#ee5612>hot</c> <c:#814428>coffee</c> pot", new Vector2(0, 40));
             }
 
             _spriteBatch.End();

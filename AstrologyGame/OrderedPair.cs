@@ -67,7 +67,7 @@ namespace AstrologyGame
 
         /// <summary>
         /// Returns true only if two OrderedPairs are adjacent. 
-        /// Returns false if they are overlapping.
+        /// (If two OrderedPairs are equal in value, they are NOT considered adjacent.)
         /// </summary>
         public static bool Adjacent(OrderedPair a, OrderedPair b)
         {

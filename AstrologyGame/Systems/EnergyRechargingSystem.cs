@@ -18,8 +18,8 @@ namespace AstrologyGame.Systems
             EnergyHaver comp = entity.GetComponent<EnergyHaver>();
             comp.Energy += comp.Speed;
 
-            if (comp.Energy >= Utility.ENERGY_CAP)
-                comp.Energy = Utility.ENERGY_CAP;
+            if (comp.Energy >= GameManager.ENERGY_CAP)
+                comp.Energy = GameManager.ENERGY_CAP;
         }
     }
 }

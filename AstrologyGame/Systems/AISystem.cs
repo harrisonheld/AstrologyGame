@@ -20,27 +20,32 @@ namespace AstrologyGame.Systems
             EnergyHaver energyComp = e.GetComponent<EnergyHaver>();
             AI ai = e.GetComponent<AI>();
 
-            if (ai.Target == null)
-                AssignTarget(e);
-
-            if (ai.State == AIState.Pursuing && energyComp.CanTakeAction())
+            // keep taking moves until out of energy
+            while(energyComp.CanTakeAction())
             {
-                Position posComp = e.GetComponent<Position>();
-                Position targetPosComp = ai.Target.GetComponent<Position>();
+                // assign a target if needed
+                if (ai.Target == null)
+                    AssignTarget(e);
 
-                // if the entity is adjacent to its target
-                if (OrderedPair.Adjacent(posComp.Pos, targetPosComp.Pos))
+                if (ai.State == AIState.Pursuing)
                 {
-                    // attack the target
-                    energyComp.Energy -= Utility.COST_ATTACK;
-                    AttackFunctions.BumpAttack(e, ai.Target);
-                }
-                else
-                {
-                    // move towards the target
-                    energyComp.Energy -= Utility.COST_MOVE;
-                    OrderedPair towards = OrderedPair.Towards(posComp.Pos, targetPosComp.Pos);
-                    MoveFunctions.Move(e, posComp.Pos + towards);
+                    Position posComp = e.GetComponent<Position>();
+                    Position targetPosComp = ai.Target.GetComponent<Position>();
+
+                    // if the entity is adjacent to its target
+                    if (OrderedPair.Adjacent(posComp.Pos, targetPosComp.Pos))
+                    {
+                        // attack the target
+                        energyComp.Energy -= GameManager.COST_ATTACK;
+                        AttackFunctions.BumpAttack(e, ai.Target);
+                    }
+                    else
+                    {
+                        // move towards the target
+                        energyComp.Energy -= GameManager.COST_MOVE;
+                        OrderedPair towards = OrderedPair.Towards(posComp.Pos, targetPosComp.Pos);
+                        MoveFunctions.Move(e, posComp.Pos + towards);
+                    }
                 }
             }
         }

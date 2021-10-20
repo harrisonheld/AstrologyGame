@@ -16,7 +16,7 @@ namespace AstrologyGame.MapData
         public static int ZoneY { get; set; }
 
         private static string worldSeedString = Environment.TickCount.ToString(); // a string who's hash will be used to generate the World
-        private static int worldSeedInt = Utility.SHA1Hash(worldSeedString); // the true integer seed of the World
+        private static int worldSeedInt = GameManager.SHA1Hash(worldSeedString); // the true integer seed of the World
         public static string Seed
         {
             get
@@ -26,7 +26,7 @@ namespace AstrologyGame.MapData
             set
             {
                 worldSeedString = value;
-                worldSeedInt = Utility.SHA1Hash(worldSeedString);
+                worldSeedInt = GameManager.SHA1Hash(worldSeedString);
             }
         }
 
@@ -47,7 +47,7 @@ namespace AstrologyGame.MapData
 
             // temporary solution is to just take the hash
             string s = (ZoneY * WIDTH + ZoneX + worldSeedInt).ToString();
-            return Utility.SHA1Hash(s);
+            return GameManager.SHA1Hash(s);
         }
         public static void GenerateCurrentZone()
         {

@@ -23,7 +23,7 @@ namespace AstrologyGame.Entities.Factories
             {
                 // throw an exception
                 Exception exception = new Exception($"No component of name '{componentName}' exists. " +
-                    $"Check {Utility.ENTITIES_PATH} and make sure there are no errors.");
+                    $"Check {GameManager.ENTITIES_PATH} and make sure there are no errors.");
                 throw (exception);
             }
 
@@ -42,7 +42,7 @@ namespace AstrologyGame.Entities.Factories
                 {
                     // throw an exception
                     Exception exception = new Exception($"The component '{componentName}' does not have a property named '{propertyName}'. " +
-                        $"Check {Utility.ENTITIES_PATH} and make sure there are no errors.");
+                        $"Check {GameManager.ENTITIES_PATH} and make sure there are no errors.");
                     throw (exception);
                 }
                 Type propertyType = propertyInfo.PropertyType;
@@ -51,7 +51,7 @@ namespace AstrologyGame.Entities.Factories
 
                 if (propertyType == typeof(Color))
                 {
-                    propertyValue = Utility.ColorFromString(propertyValueAsString);
+                    propertyValue = GameManager.ColorFromString(propertyValueAsString);
                 }
                 else
                 {

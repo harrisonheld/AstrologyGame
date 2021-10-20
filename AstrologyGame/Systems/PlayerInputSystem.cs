@@ -13,17 +13,19 @@ namespace AstrologyGame.Systems
     public sealed class PlayerInputSystem : ISystem
     {
         ComponentFilter ISystem.Filter => new ComponentFilter()
-             .AddNecessary(typeof(PlayerControlled));
+            .AddNecessary(typeof(PlayerControlled))
+            .AddNecessary(typeof(EnergyHaver));
 
         private bool finished = false;
-        public bool Finished { get { return finished;  } }
+        public bool Finished { get => finished; }
 
         private InputMode inputMode = InputMode.FreeRoam;
         private InteractType interactType = InteractType.General;
         private int timeSinceLastInput = 0; // in milliseconds
         private bool inputLastUpdate = false;
 
-        void ISystem.OperateOnEntity(Entity entity)
+        /// <param name="controlledEntity">The entity which is currently being controlled by the User.</param>
+        void ISystem.OperateOnEntity(Entity controlledEntity)
         {
             Input.Update();
 
@@ -31,11 +33,13 @@ namespace AstrologyGame.Systems
 
             // if the Input Stagger time has elapsed, or if the user didn't press anything during the last frame
             // and if the user pressed a control
-            if ((timeSinceLastInput > Utility.INPUT_STAGGER || !inputLastUpdate) && Input.Controls.Count != 0)
+            if ((timeSinceLastInput > GameManager.INPUT_STAGGER || !inputLastUpdate) && Input.Controls.Count != 0)
             {
                 // define some variables that are generally useful in all Input Modes
                 OrderedPair movePair = Input.ControlsToMovePair(Input.Controls);
-                OrderedPair entityPos = entity.GetComponent<Position>().Pos;
+                OrderedPair entityPos = controlledEntity.GetComponent<Position>().Pos;
+
+                EnergyHaver energyComp = controlledEntity.GetComponent<EnergyHaver>();
 
                 // if player was just in menu mode, but no menu requires input
                 if (inputMode == InputMode.MenuInput)
@@ -114,7 +118,7 @@ namespace AstrologyGame.Systems
                         else if (Input.Controls.Contains(Control.Get))
                         {
                             List<Entity> itemsHere = new List<Entity>();
-                            OrderedPair pos = entity.GetComponent<Position>().Pos;
+                            OrderedPair pos = controlledEntity.GetComponent<Position>().Pos;
 
                             foreach (Entity o in Zone.GetEntitiesAtPosition(pos))
                             {
@@ -122,13 +126,14 @@ namespace AstrologyGame.Systems
                                     itemsHere.Add(o);
                             }
 
-                            Menu getMenu = new ItemMenu(entity, itemsHere);
+                            Menu getMenu = new ItemMenu(controlledEntity, itemsHere);
                             OpenMenu(getMenu);
                             break;
                         }
                         // go to look mode
                         else if(Input.Controls.Contains(Control.Look))
                         {
+                            GameManager.LookCursorPos = entityPos;
                             inputMode = InputMode.Looking;
                             break;
                         }
@@ -137,7 +142,7 @@ namespace AstrologyGame.Systems
                         else if (Input.Controls.Contains(Control.Inventory))
                         {
                             // open inventory here
-                            Menu menu = new ItemMenu(entity, entity.GetComponent<Inventory>().Contents);
+                            Menu menu = new ItemMenu(controlledEntity, controlledEntity.GetComponent<Inventory>().Contents);
                             OpenMenu(menu);
 
                             break;
@@ -147,11 +152,11 @@ namespace AstrologyGame.Systems
                             break;
 
                         OrderedPair newPos = entityPos + movePair;
-                        bool moveSuccessful = MoveFunctions.CanMove(entity, newPos);
+                        bool moveSuccessful = MoveFunctions.CanMove(controlledEntity, newPos);
 
                         if(moveSuccessful)
                         {
-                            MoveFunctions.Move(entity, newPos);
+                            MoveFunctions.Move(controlledEntity, newPos);
                             finished = true;
                         }
 
@@ -187,7 +192,7 @@ namespace AstrologyGame.Systems
 
                         if (interactType == InteractType.Specific)
                         {
-                            InteractionMenu interactionMenu = new InteractionMenu(entity, toInteractWith);
+                            InteractionMenu interactionMenu = new InteractionMenu(controlledEntity, toInteractWith);
                             OpenMenu(interactionMenu);
                         }
                         else // interactType == InteractType.General
@@ -198,7 +203,7 @@ namespace AstrologyGame.Systems
                                 break;
 
                             // do the first interaction in the list
-                            interactions[0].Perform(entity);
+                            interactions[0].Perform(controlledEntity);
 
                             // if we're stil in interact mode, go back to Free Roam
                             if (inputMode == InputMode.Interacting)
@@ -209,7 +214,39 @@ namespace AstrologyGame.Systems
                     #endregion
                     #region Look Mode
                     case InputMode.Looking:
-                        // do stuff
+                        // if user hit back
+                        if(Input.Controls.Contains(Control.Back))
+                        {
+                            Game1.RemoveMenu(GameManager.LookMenu);
+                            GameManager.LookCursorPos = null;
+                            GameManager.LookMenu = null;
+                            inputMode = InputMode.FreeRoam;
+                            return;
+                        }
+                        // if user not moving cursor, return here.
+                        if (movePair == OrderedPair.Zero)
+                        {
+                            return;
+                        }
+
+                        // the cursor moved, so close the look menu if its open
+                        if(GameManager.LookMenu != null)
+                        {
+                            Game1.RemoveMenu(GameManager.LookMenu);
+                            GameManager.LookMenu = null;
+                        }
+
+                        // move the cursor
+                        GameManager.LookCursorPos += movePair;
+
+                        // open a look menu
+                        Entity lookedAt = Zone.GetEntitiesAtPosition(GameManager.LookCursorPos).FirstOrDefault();
+                        if (lookedAt != null)
+                        {
+                            GameManager.LookMenu = new LookMenu(lookedAt);
+                            OpenMenu(GameManager.LookMenu);
+                        }
+
                         break;
                     #endregion
                 }

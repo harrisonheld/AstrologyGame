@@ -20,12 +20,13 @@ using AstrologyGame.Menus;
 namespace AstrologyGame
 {
     // this is a helper class. it contains miscellaneous functions that are helpful everywhere
-    public static class Utility
+    public static class GameManager
     {
         public const string BOOK_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\books.xml";
         public const string ABILITIES_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\abilities.xml";
         public const string ENTITIES_PATH = @"C:\Users\johnd\Source\Repos\AstrologyGame\AstrologyGame\entities.xml";
-        const string ERROR_TEXTURE_NAME = "error";
+        public const string ERROR_TEXTURE_NAME = "error";
+        public const string LOOK_CURSOR_TEXTURE_NAME = "cursor1";
 
         // control options
         public const int INPUT_STAGGER = 1000 / 8; // when a key is held down, how many milliseconds must pass to repeat it 
@@ -36,6 +37,11 @@ namespace AstrologyGame
         public const int ENERGY_CAP = 2000;
 
         public const int SCALE = 32 * 4; // how many pixels high and wide sprites should be drawn as
+
+        // game variables
+        /// <summary>The position of the look cursor. If the user is not in Look Mode, this will be null.</summary>
+        public static OrderedPair LookCursorPos { get; set; }
+        public static LookMenu LookMenu { get; set; }
 
         private static ContentManager content;
         private static GraphicsDevice graphics;
@@ -139,6 +145,13 @@ namespace AstrologyGame
             return sb.ToString();
         }
 
+        public static void DrawSprite(string textureName, int x, int y, Color color)
+        {
+            int drawX = x * SCALE;
+            int drawY = y * SCALE;
+            Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
+            spriteBatch.Draw(GetTexture(textureName), destinationRectangle, color);
+        }
         public static void DrawEntity(Entity entityToDraw, int x, int y)
         {
             Display displayComponent = entityToDraw.GetComponent<Display>();
@@ -146,11 +159,7 @@ namespace AstrologyGame
             if (!displayComponent.ShouldRender)
                 return;
 
-            int drawX = x * SCALE;
-            int drawY = y * SCALE;
-
-            Rectangle destinationRectangle = new Rectangle(drawX, drawY, SCALE, SCALE);
-            spriteBatch.Draw(GetTexture(displayComponent.TextureName), destinationRectangle, displayComponent.Color);
+           
         }
         public static void DrawMenu(Menu menu)
         {

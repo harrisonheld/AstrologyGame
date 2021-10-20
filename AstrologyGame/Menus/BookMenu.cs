@@ -41,7 +41,7 @@ namespace AstrologyGame.Menus
         private int GetPageCount()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(Utility.BOOK_PATH);
+            xmlDoc.Load(GameManager.BOOK_PATH);
 
             XmlNode bookNode = xmlDoc.GetElementById(bookId);
             int pageCount = bookNode.ChildNodes.Count;
@@ -54,7 +54,7 @@ namespace AstrologyGame.Menus
 
             // load the book from xml
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(Utility.BOOK_PATH);
+            xmlDoc.Load(GameManager.BOOK_PATH);
             XmlNode bookNode = xmlDoc.GetElementById(bookId);
 
             // append the title in brackets and add some whitespace
