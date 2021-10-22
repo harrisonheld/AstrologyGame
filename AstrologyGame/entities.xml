@@ -66,9 +66,9 @@ Under the psuedonym 'Pisces', he writes treatises about the state of the Univers
 		<Item />
 	</entity>
 
-	<entity id="gascloud">
+	<entity id="blockinggas">
 		<Display Name="blocking gas" TextureName="speckled4" Lore="nobody can move through this mwahaha"/>
-		<Gas Density="4" Viscosity="10"/>
+		<Gas Density="4" Viscosity="1"/>
 		<Solid />
 	</entity>
 	

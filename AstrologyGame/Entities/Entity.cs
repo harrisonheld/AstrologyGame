@@ -17,6 +17,14 @@ namespace AstrologyGame.Entities
             components.Clear();
         }
 
+        /// <summary>
+        /// Returns a shallow copy of this Entity.
+        /// </summary>
+        public Entity Clone()
+        {
+            return (Entity)this.MemberwiseClone();
+        }
+
         public void AddComponent(Component componentToAdd)
         {
             componentToAdd.Owner = this;

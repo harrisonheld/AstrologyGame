@@ -46,7 +46,11 @@ namespace AstrologyGame.Systems
                         OrderedPair towards = OrderedPair.Towards(posComp.Pos, targetPosComp.Pos);
                         MoveFunctions.Move(e, posComp.Pos + towards);
                     }
+
+                    continue;
                 }
+
+                break;
             }
         }
 

@@ -90,10 +90,6 @@ namespace AstrologyGame
             pisces.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
             Zone.AddEntity(pisces);
 
-            Entity micky = EntityFactory.EntityFromId("micky", 0, 0);
-            micky.GetComponent<FactionInfo>().SetReputation(Faction.Human, -100);
-            Zone.AddEntity(micky);
-
             statusMenu = new StatusMenu(knight);
             menus.Add(statusMenu);
 
